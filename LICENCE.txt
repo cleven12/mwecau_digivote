@@ -1,0 +1,16 @@
+
+---
+
+## License
+
+This project is licensed under a **Proprietary License**. All rights to the software and associated documentation files (the "Software") are owned by the **MWECAU ICT Club**. Unauthorized use, copying, modification, merging, publishing, distribution, sublicensing, or selling of the Software is strictly prohibited.
+
+### Terms of Use:
+
+* You may only use the Software as explicitly granted by the **MWECAU ICT Club** under a separate commercial agreement or license.
+* Redistribution, reverse engineering, and sublicensing of the Software is prohibited.
+* The Software is provided "as-is," and **MWECAU ICT Club** does not offer any warranties, express or implied. In no event shall the authors or copyright holders be held liable for any damages arising from the use of the Software.
+
+For licensing inquiries, commercial usage, or other permissions, please contact **MWECAU ICT Club** at [mwecauictclub@gmail.com](mailto:mwecauictclub@gmail.com).
+
+---
