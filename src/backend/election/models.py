@@ -24,7 +24,7 @@ class ElectionLevel(models.Model):
     
     class Meta:
         indexes = [
-            models.Index(fields=['code']),  # Added for faster lookups in analytics tasks
+            models.Index(fields=['code']),
         ]
 
 class Election(models.Model):
@@ -77,9 +77,19 @@ class Election(models.Model):
             return now - self.end_date
         return None
     
+    def save(self, *args, **kwargs):
+        """Trigger Celery task to send emails and generate VoterTokens when election is activated.
+        # Added to notify eligible voters (e.g., by state for State Leader) with VoterToken.
+        """
+        from .tasks import notify_voters_of_active_election
+        was_active = self.pk and Election.objects.filter(pk=self.pk).values_list('is_active', flat=True).first()
+        super().save(*args, **kwargs)
+        if self.is_active and was_active is False:
+            notify_voters_of_active_election.delay(self.id)
+    
     class Meta:
         indexes = [
-            models.Index(fields=['is_active', 'start_date', 'end_date']),  # Added for faster election status queries
+            models.Index(fields=['is_active', 'start_date', 'end_date']),
         ]
 
 class Position(models.Model):
@@ -111,7 +121,7 @@ class Position(models.Model):
             ['election_level', 'title', 'gender_restriction', 'state', 'course']
         ]
         indexes = [
-            models.Index(fields=['election_level', 'state', 'course']),  # Added for faster position queries
+            models.Index(fields=['election_level', 'state', 'course']),
         ]
 
 class Candidate(models.Model):
@@ -121,7 +131,7 @@ class Candidate(models.Model):
     position = models.ForeignKey(Position, on_delete=models.CASCADE)
     bio = models.TextField(blank=True)
     platform = models.TextField(blank=True)
-    vote_count = models.PositiveIntegerField(default=0)  # Added to cache vote totals for analytics
+    vote_count = models.PositiveIntegerField(default=0)
     
     def __str__(self):
         return f"{self.user.get_full_name()} - {self.position} ({self.election.title})"
@@ -131,29 +141,22 @@ class Candidate(models.Model):
             ['user', 'election', 'position']
         ]
         indexes = [
-            models.Index(fields=['election', 'position']),  # Added for faster vote aggregation
+            models.Index(fields=['election', 'position']),
         ]
     
     def get_vote_percentage(self, total=None):
-        """Get the percentage of votes for this candidate.
-        # Modified to use vote_count field for efficiency.
-        """
+        """Get the percentage of votes for this candidate."""
         if total is None:
             total = sum(c.vote_count for c in Candidate.objects.filter(
                 election=self.election,
                 position=self.position
             ))
-            
         if total == 0:
             return 0
-            
         return (self.vote_count / total) * 100
 
 class VoterToken(models.Model):
-    """Model for anonymous voting tokens.
-    # Added to support anonymous voting by linking to User.voter_id and Election,
-    # ensuring votes cannot be traced to registration_number or voter_id.
-    """
+    """Model for anonymous voting tokens."""
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     election = models.ForeignKey(Election, on_delete=models.CASCADE)
     token = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
@@ -172,34 +175,35 @@ class VoterToken(models.Model):
     
     class Meta:
         unique_together = [
-            ['user', 'election'],  # One token per user per election
+            ['user', 'election'],
         ]
         indexes = [
-            models.Index(fields=['token']),  # Fast token lookups
-            models.Index(fields=['election', 'is_used']),  # Fast validation queries
+            models.Index(fields=['token']),
+            models.Index(fields=['election', 'is_used']),
         ]
 
 class Vote(models.Model):
-    """Model representing a vote cast by a voter.
-    # Modified to use VoterToken for anonymity and added election field to fix unique_together bug.
-    """
+    """Model representing a vote cast by a voter."""
     token = models.ForeignKey(VoterToken, on_delete=models.CASCADE)
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
-    election = models.ForeignKey(Election, on_delete=models.CASCADE)  # Added to directly reference Election
+    election = models.ForeignKey(Election, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
         return f"Vote for {self.candidate} at {self.timestamp}"
     
     def save(self, *args, **kwargs):
-        """Ensure election matches candidate.election.
-        # Added to enforce consistency between Vote.election and Candidate.election.
-        """
+        """Ensure election matches candidate.election."""
         if self.candidate and self.election != self.candidate.election:
             raise ValueError("Vote election must match candidate's election")
         super().save(*args, **kwargs)
     
     class Meta:
         unique_together = [
-            ['token', 'election'],  # Fixed to use direct election field for one vote per user per election
+            ['token', 'election'],
+        ]
+        indexes = [
+            models.Index(fields=['token', 'candidate']),
+            models.Index(fields=['candidate', 'timestamp']),
+            models.Index(fields=['election']),
         ]
