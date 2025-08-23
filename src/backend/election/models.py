@@ -181,20 +181,25 @@ class VoterToken(models.Model):
 
 class Vote(models.Model):
     """Model representing a vote cast by a voter.
-    # Modified to use VoterToken instead of User for anonymity.
+    # Modified to use VoterToken for anonymity and added election field to fix unique_together bug.
     """
     token = models.ForeignKey(VoterToken, on_delete=models.CASCADE)
     candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
+    election = models.ForeignKey(Election, on_delete=models.CASCADE)  # Added to directly reference Election
     timestamp = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
         return f"Vote for {self.candidate} at {self.timestamp}"
     
+    def save(self, *args, **kwargs):
+        """Ensure election matches candidate.election.
+        # Added to enforce consistency between Vote.election and Candidate.election.
+        """
+        if self.candidate and self.election != self.candidate.election:
+            raise ValueError("Vote election must match candidate's election")
+        super().save(*args, **kwargs)
+    
     class Meta:
         unique_together = [
-            ['token', 'candidate__election'],  # One vote per user per election
-        ]
-        indexes = [
-            models.Index(fields=['token', 'candidate']),  # Fast vote validation
-            models.Index(fields=['candidate', 'timestamp']),  # Fast analytics queries
+            ['token', 'election'],  # Fixed to use direct election field for one vote per user per election
         ]

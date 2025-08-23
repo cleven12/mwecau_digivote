@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import RegexValidator
 import secrets
+import uuid
 
 class UserManager(BaseUserManager):
     """Define a model manager for User model with registration number authentication."""
@@ -43,9 +44,8 @@ class UserManager(BaseUserManager):
         return self._create_user(registration_number, password, **extra_fields)
 
     def create_from_college_data(self, college_data_id):
-        """Create a User from CollegeData, generating a default password and voter ID.
-        # Modified to generate voter_id for anonymity in voting, supporting VoterToken creation.
-        # Ensures async user creation tasks with Celery are robust and secure.
+        """Create a User from CollegeData, generating a secure voter_id and password.
+        # Modified to use UUID for voter_id for stronger anonymity and consistency with VoterToken.
         """
         from .models import CollegeData
         college_data = CollegeData.objects.get(id=college_data_id)
@@ -54,7 +54,7 @@ class UserManager(BaseUserManager):
         
         # Generate random password and voter_id
         default_password = secrets.token_hex(8)
-        voter_id = secrets.token_hex(16)  # Unique voter_id for anonymity
+        voter_id = str(uuid.uuid4())  # Use UUID for secure, unique voter_id
         
         user = self.create_user(
             registration_number=college_data.registration_number,
@@ -63,12 +63,35 @@ class UserManager(BaseUserManager):
             last_name=college_data.last_name,
             course=college_data.course,
             email=college_data.email,
-            voter_id=voter_id,  # Set voter_id
+            voter_id=voter_id,
             is_verified=False
         )
         
         college_data.mark_as_used()
         return user, default_password
+
+    def generate_voter_token(self, user_id, election_id):
+        """Generate a VoterToken for a user and election.
+        # Added to support async VoterToken creation for anonymous voting.
+        """
+        from election.models import VoterToken, Election
+        user = self.get(id=user_id)
+        if not user.can_vote():
+            raise ValueError('User is not eligible to vote')
+        
+        election = Election.objects.get(id=election_id)
+        if not election.is_ongoing():
+            raise ValueError('Election is not ongoing')
+        
+        token, created = VoterToken.objects.get_or_create(
+            user=user,
+            election=election,
+            defaults={'token': uuid.uuid4()}
+        )
+        if not created and token.is_used:
+            raise ValueError('Voter token already used')
+        
+        return token
 
 class State(models.Model):
     """Model representing a state/region."""
@@ -138,7 +161,7 @@ class User(AbstractUser):
             regex=r'^[A-Z0-9/]+$',
             message='Registration number must contain only uppercase letters, numbers, or slashes.'
         )],
-        help_text="University registration number (e.g., MWU/1234/2023)"
+        help_text="University registration number (e.g., T/XXX/202X/XXX)"
     )
     email = models.EmailField(
         _('email address'),
@@ -146,11 +169,11 @@ class User(AbstractUser):
         help_text="Required email for notifications and password resets"
     )
     voter_id = models.CharField(
-        max_length=32,  # Increased length for secure random voter_id
+        max_length=36,  # Increased to fit UUID format
         unique=True,
         null=True,
         blank=True,
-        help_text="Unique voter ID for anonymous voting, auto-generated"
+        help_text="Unique voter ID for anonymous voting, auto-generated UUID"
     )
     gender = models.CharField(
         max_length=10,
@@ -219,9 +242,7 @@ class User(AbstractUser):
         return self.role == self.ROLE_COMMISSIONER
     
     def can_vote(self):
-        """Check if user can participate in voting.
-        # Modified to require voter_id for anonymous voting eligibility.
-        """
+        """Check if user can participate in voting."""
         return self.is_verified and self.voter_id and (self.is_voter() or self.is_candidate())
     
     def can_manage_elections(self):
@@ -232,6 +253,17 @@ class User(AbstractUser):
         """Check if user can upload college data."""
         return self.is_class_leader() or self.is_commissioner() or self.is_staff
     
+    def has_voted_in_election(self, election_id):
+        """Check if user has voted in a specific election.
+        # Added to support vote validation in Celery tasks.
+        """
+        from election.models import VoterToken
+        return VoterToken.objects.filter(
+            user=self,
+            election_id=election_id,
+            is_used=True
+        ).exists()
+    
     class Meta:
         db_table = 'users'
         indexes = [
@@ -240,7 +272,7 @@ class User(AbstractUser):
             models.Index(fields=['state', 'course']),
             models.Index(fields=['email']),
             models.Index(fields=['gender']),
-            models.Index(fields=['voter_id']),  # Added for faster VoterToken lookups
+            models.Index(fields=['voter_id']),
         ]
 
 class CollegeData(models.Model):
@@ -260,11 +292,11 @@ class CollegeData(models.Model):
         help_text="Required email for user account creation"
     )
     voter_id = models.CharField(
-        max_length=32,  # Increased length for secure voter_id
+        max_length=36,  # Increased to fit UUID format
         unique=True,
         null=True,
         blank=True,
-        help_text="Unique voter ID for anonymous voting, auto-generated"  # Added for VoterToken
+        help_text="Unique voter ID for anonymous voting, auto-generated UUID"
     )
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
     uploaded_by = models.ForeignKey(
@@ -293,10 +325,14 @@ class CollegeData(models.Model):
         return f"{self.first_name} {self.last_name} ({self.registration_number})"
     
     def mark_as_used(self):
-        """Mark this college data as used for user creation."""
+        """Mark this college data as used for user creation.
+        # Modified to set voter_id if not provided.
+        """
+        if not self.voter_id:
+            self.voter_id = str(uuid.uuid4())
         self.is_used = True
         self.status = 'processed'
-        self.save(update_fields=['is_used', 'status'])
+        self.save(update_fields=['is_used', 'status', 'voter_id'])
     
     class Meta:
         db_table = 'college_data'
@@ -306,5 +342,5 @@ class CollegeData(models.Model):
             models.Index(fields=['registration_number']),
             models.Index(fields=['course', 'is_used']),
             models.Index(fields=['status']),
-            models.Index(fields=['voter_id']),  # Added for VoterToken integration
+            models.Index(fields=['voter_id']),
         ]
