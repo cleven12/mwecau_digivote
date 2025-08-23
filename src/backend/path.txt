@@ -1,0 +1,54 @@
+.
+├── core
+│   ├── admin.py
+│   ├── apps.py
+│   ├── __init__.py
+│   ├── migrations
+│   │   ├── __init__.py
+│   │   └── __pycache__
+│   │       └── __init__.cpython-313.pyc
+│   ├── models.py
+│   ├── __pycache__
+│   │   ├── admin.cpython-313.pyc
+│   │   ├── apps.cpython-313.pyc
+│   │   ├── __init__.cpython-313.pyc
+│   │   ├── models.cpython-313.pyc
+│   │   └── urls.cpython-313.pyc
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
+├── db.sqlite3
+├── election
+│   ├── admin.py
+│   ├── apps.py
+│   ├── __init__.py
+│   ├── migrations
+│   │   ├── __init__.py
+│   │   └── __pycache__
+│   │       └── __init__.cpython-313.pyc
+│   ├── models.py
+│   ├── __pycache__
+│   │   ├── admin.cpython-313.pyc
+│   │   ├── apps.cpython-313.pyc
+│   │   ├── __init__.cpython-313.pyc
+│   │   ├── models.cpython-313.pyc
+│   │   └── urls.cpython-313.pyc
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
+├── manage.py
+├── mw_es
+│   ├── asgi.py
+│   ├── __init__.py
+│   ├── __pycache__
+│   │   ├── __init__.cpython-313.pyc
+│   │   ├── settings.cpython-313.pyc
+│   │   ├── urls.cpython-313.pyc
+│   │   └── wsgi.cpython-313.pyc
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+├── path.txt
+└── README.md
+
+11 directories, 41 files

@@ -137,7 +137,15 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+STATICFILES_DRS = [
+    BASE_DIR / 'static/',
+]
+STATICFILES_URL =  BASE_DIR / 'staticfiles'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Authentication & Authorization Model
+AUTH_USER_MODEL = 'core.models.User'
