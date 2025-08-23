@@ -148,4 +148,4 @@ STATICFILES_URL =  BASE_DIR / 'staticfiles'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Authentication & Authorization Model
-AUTH_USER_MODEL = 'core.models.User'
+AUTH_USER_MODEL = 'core.User'
