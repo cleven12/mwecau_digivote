@@ -12,6 +12,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.conf import settings
+from django.core.mail import send_mail
 
 from core import serializers
 from .models import User, CollegeData, State, Course
@@ -40,7 +41,7 @@ def send_verification_email(user_id, voter_token=None):
     if voter_token:
         message += f"- Voter Token for {voter_token.election.title}: {voter_token.token}\n"
     message += "Log in at http://localhost:8000/api/auth/login/ to participate in elections."
-    send_mail(
+    send_mail( 
         subject=subject,
         message=message,
         from_email=settings.EMAIL_HOST_USER,

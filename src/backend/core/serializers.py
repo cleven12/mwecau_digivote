@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..election.models import User, State, Course
+from election.models import User, State, Course
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
