@@ -95,9 +95,12 @@ class UserRegisterView(APIView):
                 # 'email': email, # Optional: Omit if null/empty as per desired response
                 # 'is_verified': False, # Not needed in pre-check response
                 # 'role': 'voter', # Not needed in pre-check response
-                'course': course_name # Use the fetched course name
+                'course': {
+                    'id': course.pk,       # Include Course ID
+                    'name': course_name    # Include Course Name
+                }
             }
-            
+
             # Validate the data structure using the serializer (without saving)
             serializer_data_for_validation = {
                  'registration_number': reg_number,
@@ -106,8 +109,29 @@ class UserRegisterView(APIView):
                  'email': email,
                  'is_verified': False,
                  'role': 'voter',
-                 'course': course.pk # Use course ID for validation
+                 'course': course.pk # Use course ID for validation (as before)
             }
+            # v[01]
+            # response_data = {
+            #     'registration_number': reg_number,
+            #     'first_name': college_data.first_name,
+            #     'last_name': college_data.last_name,
+            #     # 'email': email, # Optional: Omit if null/empty as per desired response
+            #     # 'is_verified': False, # Not needed in pre-check response
+            #     # 'role': 'voter', # Not needed in pre-check response
+            #     'course': course_name # Use the fetched course name
+            # }
+            
+            # # Validate the data structure using the serializer (without saving)
+            # serializer_data_for_validation = {
+            #      'registration_number': reg_number,
+            #      'first_name': college_data.first_name,
+            #      'last_name': college_data.last_name,
+            #      'email': email,
+            #      'is_verified': False,
+            #      'role': 'voter',
+            #      'course': course.pk # Use course ID for validation
+            # }
             
             logger.debug(f"Serializer data for validation: {serializer_data_for_validation}")
             serializer = UserSerializer(data=serializer_data_for_validation)
@@ -123,8 +147,95 @@ class UserRegisterView(APIView):
 
         
 
-
 class CompleteRegistrationView(APIView):
+    """API endpoint to complete user registration with email, password, state, and course."""
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        # Validate input using serializer FIRST
+        # The serializer handles converting course ID to course object
+        serializer = UserSerializer(data=request.data) 
+        if not serializer.is_valid():
+            logger.error(f"CompleteRegistration serializer errors: {serializer.errors}")
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        # If valid, extract validated data
+        reg_number = serializer.validated_data.get('registration_number')
+        # Note: serializer.validated_data['course'] is now a Course object due to to_internal_value
+        # But we still need state and password from request.data as they are not in UserSerializer
+        state_id = request.data.get('state') 
+        email = request.data.get('email', '').lower()
+        password = request.data.get('password')
+        # Get course_id from the validated data if needed, or use request.data
+        # It's safer to get it from request.data since it's what the client sent
+        course_id = request.data.get('course') 
+
+        logger.debug(f"CompleteRegistration data - Reg: {reg_number}, State: {state_id}, Email: {email}, Course ID: {course_id}")
+
+        if not all([reg_number, state_id, email, password, course_id]):
+            logger.warning("CompleteRegistration: Missing required fields")
+            return Response({'error': 'All fields (registration_number, state, email, password, course) are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if User.objects.filter(email=email).exists():
+            logger.warning(f"CompleteRegistration: Email {email} already registered")
+            return Response({'error': 'Email already registered'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # 1. Get CollegeData (must exist and be unused)
+            college_data = CollegeData.objects.get(registration_number=reg_number, is_used=False)
+            logger.debug(f"Found CollegeData: {college_data.id}")
+
+            # 2. Get State and Course objects based on IDs provided
+            state = State.objects.get(id=state_id)
+            course = Course.objects.get(id=course_id) # Use ID from request.data
+            logger.debug(f"Resolved State: {state.name}, Course: {course.name}")
+
+            # 3. Create user using the manager method (this sets voter_id, default password)
+            user, generated_password_unused = User.objects.create_from_college_data(college_data.id)
+            logger.debug(f"Created user: {user.registration_number}")
+
+            # 4. Update user with provided details
+            user.email = email
+            user.state = state
+            # The course might already be set by create_from_college_data, but override with selected one
+            user.course = course 
+            # IMPORTANT: Use the provided password, not the generated one
+            user.set_password(password) 
+            user.is_verified = True # Mark as verified upon completion
+            user.date_verified = timezone.now()
+            user.save()
+            logger.debug("User details updated and saved")
+
+            # 5. Send welcome email WITHOUT voter tokens (as per updated logic)
+            # Pass only user ID to the task
+            send_verification_email.delay(user.id) 
+            logger.debug("Verification email task queued")
+
+            return Response({
+                'message': 'Registration successful, welcome email sent',
+                'user': {
+                    'registration_number': user.registration_number,
+                    'full_name': user.get_full_name(),
+                    'email': user.email,
+                    'course': user.course.name if user.course else None,
+                    'state': user.state.name if user.state else None,
+                    'voter_id': user.voter_id,
+                }
+                # 'voter_tokens': [] # Removed voter tokens from registration response
+            }, status=status.HTTP_201_CREATED)
+            
+        except CollegeData.DoesNotExist:
+             logger.error(f"CompleteRegistration: College data for {reg_number} not found or already used")
+             return Response({'error': 'College data not found or already used'}, status=status.HTTP_404_NOT_FOUND)
+        except (State.DoesNotExist, Course.DoesNotExist) as e:
+             logger.error(f"CompleteRegistration: Invalid state or course ID provided: {e}")
+             return Response({'error': 'Invalid state or course selected'}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e: # Catch other potential errors during user creation/update
+            logger.error(f"Error during CompleteRegistration for {reg_number}: {str(e)}", exc_info=True) # Log full traceback
+            return Response({'error': 'Registration completion failed. Please try again or contact support.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+# v[01]
+# class CompleteRegistrationView(APIView):
     """API endpoint to complete user registration with email, password, state, and course."""
     permission_classes = [AllowAny]
 
