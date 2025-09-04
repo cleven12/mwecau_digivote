@@ -452,3 +452,22 @@ Response :
   "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU2OTk2NTcwLCJpYXQiOjE3NTY5OTI5NzAsImp0aSI6IjUwYjU2ODc2YTZjZDQ5Y2Y5YWVlZjQ0ZmQwZDMyMzg5IiwidXNlcl9pZCI6IjM0In0.dbGIunEdJnArSAi7wzIglZYsHY-jlXdZqf_6m7PTrJI"
 }
 ```
+
+4. LogOut
+Method: POST
+URL: http://localhost:8000/api/auth/logout/
+Headers: Authorization: Bearer <access-token>, Content-Type: application/json
+Body:
+{
+  "refresh": "<refresh-token>"
+}
+
+
+
+
+
+
+Accept: */*
+User-Agent: Thunder Client (https://www.thunderclient.com)
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzU2OTk2NTcwLCJpYXQiOjE3NTY5OTI5NzAsImp0aSI6IjUwYjU2ODc2YTZjZDQ5Y2Y5YWVlZjQ0ZmQwZDMyMzg5IiwidXNlcl9pZCI6IjM0In0.dbGIunEdJnArSAi7wzIglZYsHY-jlXdZqf_6m7PTrJI
+Content-Type: application/json
