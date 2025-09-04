@@ -236,56 +236,56 @@ class CompleteRegistrationView(APIView):
 
 # v[01]
 # class CompleteRegistrationView(APIView):
-    """API endpoint to complete user registration with email, password, state, and course."""
-    permission_classes = [AllowAny]
+#     """API endpoint to complete user registration with email, password, state, and course."""
+#     permission_classes = [AllowAny]
 
-    def post(self, request):
-        serializer = UserSerializer(data=request.data)
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#     def post(self, request):
+#         serializer = UserSerializer(data=request.data)
+#         if not serializer.is_valid():
+#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        reg_number = request.data.get('registration_number')
-        state_id = request.data.get('state') # Expecting state ID
-        email = request.data.get('email', '').lower()
-        password = request.data.get('password')
-        course_id = request.data.get('course') # Expecting course ID
+#         reg_number = request.data.get('registration_number')
+#         state_id = request.data.get('state') # Expecting state ID
+#         email = request.data.get('email', '').lower()
+#         password = request.data.get('password')
+#         course_id = request.data.get('course') # Expecting course ID
 
-        if not all([reg_number, state_id, email, password, course_id]):
-            return Response({'error': 'All fields are required'}, status=status.HTTP_400_BAD_REQUEST)
+#         if not all([reg_number, state_id, email, password, course_id]):
+#             return Response({'error': 'All fields are required'}, status=status.HTTP_400_BAD_REQUEST)
 
-        if User.objects.filter(email=email).exists():
-            return Response({'error': 'Email already registered'}, status=status.HTTP_400_BAD_REQUEST)
+#         if User.objects.filter(email=email).exists():
+#             return Response({'error': 'Email already registered'}, status=status.HTTP_400_BAD_REQUEST)
 
-        try:
-            college_data = CollegeData.objects.get(registration_number=reg_number, is_used=False)
-            state = State.objects.get(id=state_id)
-            course = Course.objects.get(id=course_id)
+#         try:
+#             college_data = CollegeData.objects.get(registration_number=reg_number, is_used=False)
+#             state = State.objects.get(id=state_id)
+#             course = Course.objects.get(id=course_id)
             
-            # Create user using the manager method
-            user, generated_password = User.objects.create_from_college_data(college_data.id)
-            user.email = email
-            user.state = state
-            user.course = course
-            user.set_password(password) # Use provided password, not generated one
-            user.is_verified = True
-            user.date_verified = timezone.now()
-            user.save()
+#             # Create user using the manager method
+#             user, generated_password = User.objects.create_from_college_data(college_data.id)
+#             user.email = email
+#             user.state = state
+#             user.course = course
+#             user.set_password(password) # Use provided password, not generated one
+#             user.is_verified = True
+#             user.date_verified = timezone.now()
+#             user.save()
 
-            # Send welcome email WITHOUT voter tokens (as per updated logic)
-            send_verification_email.delay(user.id) # Pass only user ID
+#             # Send welcome email WITHOUT voter tokens (as per updated logic)
+#             send_verification_email.delay(user.id) # Pass only user ID
 
-            return Response({
-                'message': 'Registration successful, welcome email sent',
-                'voter_id': user.voter_id,
-                # 'voter_tokens': [] # Removed voter tokens from registration response
-            }, status=status.HTTP_201_CREATED)
-        except CollegeData.DoesNotExist:
-             return Response({'error': 'College data not found or already used'}, status=status.HTTP_404_NOT_FOUND)
-        except (State.DoesNotExist, Course.DoesNotExist):
-             return Response({'error': 'Invalid state or course selected'}, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as e:
-            logger.error(f"Error during registration: {str(e)}")
-            return Response({'error': 'Registration failed'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+#             return Response({
+#                 'message': 'Registration successful, welcome email sent',
+#                 'voter_id': user.voter_id,
+#                 # 'voter_tokens': [] # Removed voter tokens from registration response
+#             }, status=status.HTTP_201_CREATED)
+#         except CollegeData.DoesNotExist:
+#              return Response({'error': 'College data not found or already used'}, status=status.HTTP_404_NOT_FOUND)
+#         except (State.DoesNotExist, Course.DoesNotExist):
+#              return Response({'error': 'Invalid state or course selected'}, status=status.HTTP_400_BAD_REQUEST)
+#         except Exception as e:
+#             logger.error(f"Error during registration: {str(e)}")
+#             return Response({'error': 'Registration failed'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class VerificationRequestView(APIView):
     """API endpoint for users to request verification."""

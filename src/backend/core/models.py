@@ -43,32 +43,171 @@ class UserManager(BaseUserManager):
 
         return self._create_user(registration_number, password, **extra_fields)
 
+    # ---- CORRECTION: Ensure this method starts at the same indentation level as other methods ----
     def create_from_college_data(self, college_data_id):
         """Create a User from CollegeData, generating a secure voter_id and password.
-        # Modified to use UUID for voter_id for stronger anonymity and consistency with VoterToken.
+        Uses email from CollegeData if available and valid, otherwise defers email setting.
+        Modified to use UUID for voter_id.
         """
         from .models import CollegeData
         college_data = CollegeData.objects.get(id=college_data_id)
         if college_data.is_used:
             raise ValueError('College data already used')
-        
+
         # Generate random password and voter_id
         default_password = secrets.token_hex(8)
         voter_id = str(uuid.uuid4())  # Use UUID for secure, unique voter_id
-        
-        user = self.create_user(
-            registration_number=college_data.registration_number,
-            password=default_password,
-            first_name=college_data.first_name,
-            last_name=college_data.last_name,
-            course=college_data.course,
-            email=college_data.email,
-            voter_id=voter_id,
-            is_verified=False
-        )
-        
+
+        # Prepare user creation arguments
+        user_creation_kwargs = {
+            'registration_number': college_data.registration_number,
+            'password': default_password,
+            'first_name': college_data.first_name,
+            'last_name': college_data.last_name,
+            'course': college_data.course,
+            'voter_id': voter_id,
+            'is_verified': False
+        }
+
+        # Only pass email if it's present and not just whitespace in CollegeData
+        # This prevents passing '' which causes the unique constraint error
+        # Check if college_data.email exists and is not just whitespace
+        college_data_email = getattr(college_data, 'email', None) # Safer way to get attribute
+        if college_data_email and college_data_email.strip():
+            user_creation_kwargs['email'] = college_data_email.strip() # Use stripped email
+
+        # Create user with prepared arguments
+        user = self.create_user(**user_creation_kwargs)
+
         college_data.mark_as_used()
         return user, default_password
+    # ---- END CORRECTION ----
+
+    def generate_voter_token(self, user_id, election_id):
+        """Generate a VoterToken for a user and election."""
+        from election.models import VoterToken, Election
+        user = self.get(id=user_id)
+        if not user.can_vote():
+            raise ValueError('User is not eligible to vote')
+        
+        election = Election.objects.get(id=election_id)
+        if not election.is_ongoing():
+            raise ValueError('Election is not ongoing')
+        
+        token, created = VoterToken.objects.get_or_create(
+            user=user,
+            election=election,
+            defaults={'token': uuid.uuid4()}
+        )
+        if not created and token.is_used:
+            raise ValueError('Voter token already used')
+        
+        return token
+
+
+# V[01]
+# class UserManager(BaseUserManager):
+#     """Define a model manager for User model with registration number authentication."""
+
+#     use_in_migrations = True
+
+#     def _create_user(self, registration_number, password, **extra_fields):
+#         """Create and save a User with the given registration number and password."""
+#         if not registration_number:
+#             raise ValueError('The given registration number must be set')
+        
+#         # Normalize email
+#         email = extra_fields.get('email')
+#         if email:
+#             extra_fields['email'] = self.normalize_email(email)
+            
+#         user = self.model(registration_number=registration_number, **extra_fields)
+#         user.set_password(password)
+#         user.save(using=self._db)
+#         return user
+
+#     def create_user(self, registration_number, password=None, **extra_fields):
+#         """Create and save a regular User with the given registration number."""
+#         extra_fields.setdefault('is_staff', False)
+#         extra_fields.setdefault('is_superuser', False)
+#         return self._create_user(registration_number, password, **extra_fields)
+
+#     def create_superuser(self, registration_number, password, **extra_fields):
+#         """Create and save a SuperUser with the given registration number."""
+#         extra_fields.setdefault('is_staff', True)
+#         extra_fields.setdefault('is_superuser', True)
+
+#         if extra_fields.get('is_staff') is not True:
+#             raise ValueError('Superuser must have is_staff=True.')
+#         if extra_fields.get('is_superuser') is not True:
+#             raise ValueError('Superuser must have is_superuser=True.')
+
+        # return self._create_user(registration_number, password, **extra_fields)
+
+        
+def create_from_college_data(self, college_data_id):
+    """Create a User from CollegeData, generating a secure voter_id and password.
+    Uses email from CollegeData if available and valid, otherwise defers email setting.
+    Modified to use UUID for voter_id.
+    """
+    from .models import CollegeData
+    college_data = CollegeData.objects.get(id=college_data_id)
+    if college_data.is_used:
+        raise ValueError('College data already used')
+
+    # Generate random password and voter_id
+    default_password = secrets.token_hex(8)
+    voter_id = str(uuid.uuid4())  # Use UUID for secure, unique voter_id
+
+    # Prepare user creation arguments
+    user_creation_kwargs = {
+        'registration_number': college_data.registration_number,
+        'password': default_password,
+        'first_name': college_data.first_name,
+        'last_name': college_data.last_name,
+        'course': college_data.course,
+        'voter_id': voter_id,
+        'is_verified': False
+    }
+
+    # Only pass email if it's present and not just whitespace in CollegeData
+    # This prevents passing '' which causes the unique constraint error
+    if college_data.email and college_data.email.strip():
+        user_creation_kwargs['email'] = college_data.email
+
+    # Create user with prepared arguments
+    user = self.create_user(**user_creation_kwargs)
+
+    college_data.mark_as_used()
+    return user, default_password
+
+# V[01]
+    # def create_from_college_data(self, college_data_id):
+    #     """Create a User from CollegeData, generating a secure voter_id and password.
+    #     # Modified to use UUID for voter_id for stronger anonymity and consistency with VoterToken.
+    #     """
+    #     from .models import CollegeData
+    #     college_data = CollegeData.objects.get(id=college_data_id)
+    #     if college_data.is_used:
+    #         raise ValueError('College data already used')
+        
+    #     # Generate random password and voter_id
+    #     default_password = secrets.token_hex(8)
+    #     voter_id = str(uuid.uuid4())  # Use UUID for secure, unique voter_id
+        
+    #     user = self.create_user(
+    #         registration_number=college_data.registration_number,
+    #         password=default_password,
+    #         first_name=college_data.first_name,
+    #         last_name=college_data.last_name,
+    #         course=college_data.course,
+    #         email=college_data.email,
+    #         voter_id=voter_id,
+    #         is_verified=False
+    #     )
+        
+    #     college_data.mark_as_used()
+    #     return user, default_password
 
     def generate_voter_token(self, user_id, election_id):
         """Generate a VoterToken for a user and election.
