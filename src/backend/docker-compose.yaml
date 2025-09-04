@@ -1,0 +1,27 @@
+version: "3.9"
+services:
+  web:
+    build: .
+    container_name: django_app
+    command: gunicorn mw_es.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+
+  celery:
+    build: .
+    container_name: celery_worker
+    command: celery -A mw_es.celery_app worker --loglevel=info -Q email_queue
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7
+    container_name: redis_server
+    ports:
+      - "6379:6379"
