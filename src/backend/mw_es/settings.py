@@ -153,3 +153,10 @@ LOGGING = {
         '': {'handlers': ['console', 'file'], 'level': 'DEBUG', 'propagate': True},
     },
 }
+
+
+
+
+# Media Config(i.e images)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
