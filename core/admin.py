@@ -80,7 +80,7 @@ class CollegeDataAdmin(admin.ModelAdmin):
     mark_as_processed.short_description = "Mark selected records as Processed"
 
 
-admin.site.site_header = "MWECAU Election Administration"
-admin.site.site_title = "MWECAU Admin Portal"
-admin.site.index_title = "Welcome to the MWECAU Digital Voting System Admin Portal"
+# admin.site.site_header = "MWECAU Election Administration"
+# admin.site.site_title = "MWECAU Admin Portal"
+# admin.site.index_title = "Welcome to the MWECAU Digital Voting System Admin Portal"
 

@@ -86,11 +86,12 @@ class UserRegisterView(APIView):
                 'registration_number': reg_number,
                 'first_name': college_data.first_name,
                 'last_name': college_data.last_name,
-                # 'email': email, # used if null/empty as per desired response
-                # 'is_verified': False, # not in pre-check response
-                # 'role': 'voter', # '' '' in pre-check response
+                'email': email, # used if null/empty as per desired response
+                'is_verified': False, # not in pre-check response
+                'role': 'voter', # '' '' in pre-check response
                 'course': {
-                    'id': course.pk,      
+                    'id' : course.pk,
+                    'code': course.code,      
                     'name': course_name  
                 },
                 'gender': gender
@@ -104,7 +105,7 @@ class UserRegisterView(APIView):
                  'email': email,
                  'is_verified': False,
                  'role': 'voter',
-                 'course': course.pk # Use course ID for validation (as before)
+                 'course': course.pk # course ID for validation
             }
             
             logger.debug(f"Serializer data for validation: {serializer_data_for_validation}")
@@ -126,7 +127,7 @@ class CompleteRegistrationView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        # The serializer handles converting course ID to course object - Input Validation Serialization
+        # The serializer handles course ID to course object - Input Validation Serialization
         serializer = UserSerializer(data=request.data) 
         if not serializer.is_valid():
             logger.error(f"CompleteRegistration serializer errors: {serializer.errors}")
@@ -176,8 +177,8 @@ class CompleteRegistrationView(APIView):
             logger.debug("User details updated and saved")
 
             # 5. Send welcome email 
-            send_verification_email.delay(user.id) 
-            logger.debug("Verification email task queued")
+            # send_verification_email(user.id) 
+            # logger.debug("Verification email task queued")
 
             return Response({
                 'message': 'Registration successful, welcome email sent',
@@ -217,7 +218,7 @@ class VerificationRequestView(APIView):
             college_data.status = 'pending' 
             college_data.save()
             # Notify commissioners
-            send_commissioner_contact_email.delay(
+            send_commissioner_contact_email(
                 user.id,
                 f"Verification request for {user.registration_number}"
             )
@@ -245,7 +246,7 @@ class VerifyUserView(APIView):
 
             # Send welcome email WITH voter tokens IF elections are active
             # This task will handle checking for active elections internally
-            send_verification_email.delay(user.id)
+            send_verification_email(user.id)
 
             return Response({'message': 'User verified, welcome email sent'}, status=status.HTTP_200_OK)
         except User.DoesNotExist:
@@ -290,7 +291,7 @@ class ForgotPasswordView(APIView):
             new_password = secrets.token_hex(8)
             user.set_password(new_password)
             user.save()
-            send_password_reset_email.delay(user.id, new_password)
+            # send_password_reset_email(user.id, new_password)
             return Response({'message': 'Password reset email sent'}, status=status.HTTP_200_OK)
         except User.DoesNotExist:
             return Response({'error': 'User not found or details do not match'}, status=status.HTTP_404_NOT_FOUND)
@@ -324,5 +325,5 @@ class ContactCommissionerView(APIView):
         if not message_content:
             return Response({'error': 'Message is required'}, status=status.HTTP_400_BAD_REQUEST)
         # Send message via Celery task
-        send_commissioner_contact_email.delay(request.user.id, message_content)
+        send_commissioner_contact_email(request.user.id, message_content)
         return Response({'message': 'Message sent to commissioners'}, status=status.HTTP_200_OK)

@@ -10,7 +10,7 @@ load_dotenv(BASE_DIR / ".env")
 # Security
 SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = os.getenv("DEBUG", "False").lower() == "true"
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['127.0.0.1','localhost']
 
 # Applications
 DJANGO_APPS = [
@@ -66,7 +66,7 @@ WSGI_APPLICATION = 'mw_es.wsgi.application'
 # Database
 DATABASES = {
     'default': {
-        'ENGINE': os.getenv("DB_ENGINE"),
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': os.getenv("DB_NAME"),
         'HOST': os.getenv("DB_HOST"),
         'USER': os.getenv("DB_USER"),

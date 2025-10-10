@@ -1,6 +1,5 @@
 .env
 /venv
-*/__pycache__/
-/venv_2
+__pycache__
 db.sqlite3
-
+docs/
