@@ -1,0 +1,97 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Results - {{ election.title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0"><i class="fas fa-chart-bar me-2"></i>{{ election.title }} - Results</h3>
+                </div>
+                <div class="card-body">
+                    <p class="lead">{{ election.description }}</p>
+                    
+                    <div class="alert alert-info">
+                        <div class="d-flex">
+                            <div class="me-3">
+                                <i class="fas fa-info-circle fa-2x"></i>
+                            </div>
+                            <div>
+                                <h5 class="alert-heading">Election Information</h5>
+                                <p class="mb-0">Election ended: {{ election.end_date|date:"F d, Y, H:i" }}</p>
+                                <p class="mb-0">Time since election ended: <span class="fw-bold" data-countdown="{{ election.end_date|date:'c' }}" data-countdown-type="since">Loading...</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            {% for position, info in position_results.items %}
+            <div class="results-card card mb-4">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">{{ position.title }}</h4>
+                    
+                    {% if position.gender_restriction != 'any' %}
+                    <span class="badge {% if position.gender_restriction == 'male' %}bg-primary{% else %}bg-danger{% endif %}">
+                        {{ position.get_gender_restriction_display }}
+                    </span>
+                    {% endif %}
+                </div>
+                
+                <div class="card-body">
+                    <div class="mb-3">
+                        {% if position.election_level.code == 'president' %}
+                        <span class="badge bg-info">Presidential Level</span>
+                        {% elif position.election_level.code == 'state' %}
+                        <span class="badge bg-secondary">State Level: {{ position.state.name }}</span>
+                        {% elif position.election_level.code == 'course' %}
+                        <span class="badge bg-success">Course Level: {{ position.course.name }}</span>
+                        {% endif %}
+                        
+                        <span class="ms-2 text-muted">Total votes: {{ info.total_votes }}</span>
+                    </div>
+                    
+                    {% for candidate_data in info.candidates %}
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between mb-1">
+                            <div>
+                                <strong>{{ candidate_data.candidate.user.get_full_name }}</strong>
+                                {% if forloop.first %}
+                                <span class="winner-badge">Winner</span>
+                                {% endif %}
+                            </div>
+                            <div>
+                                {{ candidate_data.vote_count }} votes ({{ candidate_data.vote_percentage|floatformat:1 }}%)
+                            </div>
+                        </div>
+                        
+                        <div class="result-bar">
+                            <div class="result-fill" style="width: {{ candidate_data.vote_percentage }}%"></div>
+                            <div class="result-text">{{ candidate_data.vote_percentage|floatformat:1 }}%</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% empty %}
+            <div class="alert alert-warning">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                No results are available for you to view in this election.
+            </div>
+            {% endfor %}
+            
+            <div class="d-grid gap-2 mb-5">
+                <a href="{% url 'dashboard' %}" class="btn btn-outline-primary btn-lg">
+                    <i class="fas fa-arrow-left me-2"></i>Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/dashboard.js"></script>
+{% endblock %}

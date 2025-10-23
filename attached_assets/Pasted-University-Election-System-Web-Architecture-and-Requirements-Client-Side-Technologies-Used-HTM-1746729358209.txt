@@ -1,0 +1,168 @@
+University Election System - Web Architecture and Requirements
+
+🔧 Client-Side Technologies Used
+HTML (with Bootstrap): for structure and styling
+Very minimal JavaScript: mainly for form validation and countdown
+📄 Pages Overview
+Registration & Validation Page
+Input registration number
+Validate against college database
+State Selection + Email Input Page
+Dropdown for state
+Input for email
+Auto-fill course
+Generate voter ID
+Dashboard
+Sections for:
+Ongoing Elections
+Upcoming Elections
+Past Elections
+Countdown timers:
+Time until elections start
+Time until elections end
+Time since last election
+Voting Interface
+Vote for:
+President
+State Leader (Male/Female)
+Course Leader (Male/Female)
+View Results Page
+Results shown per election level
+Per-user: only their state, course, and president results
+Candidate Page
+Candidates view:
+Total votes received
+Percentage results
+Commissioner Dashboard (Restricted access)
+Manage elections
+Monitor status
+Oversee system-wide activities
+Class Leader Upload Page
+Upload students and course data to DB
+
+📊 System Architecture (Layered Overview)
+1. Presentation Layer (Frontend)
+HTML + Bootstrap for UI
+JS for countdown and form validations
+2. Controller Layer (Views in Django)
+Handles:
+Registration and validation
+State/email collection
+Candidate vote tracking and result viewing
+Dashboard logic with countdowns
+Role-Based Access Control
+3. Business Logic Layer (Models + Views)
+Core app:
+User registration & validation
+Role management (Voter, Candidate, Commissioner, Class Leader)
+Election app:
+Election creation
+Voting logic and restrictions
+Result aggregation
+4. Data Layer (Database)
+Pre-uploaded college data (by Class Leaders)
+Election and vote records
+Candidate profiles and positions
+
+🏆 Election Levels & Structure
+Level
+Voter Access
+Position(s)
+Voting Rule
+President
+All users
+President + Assistant
+Single vote (President only)
+State Leader
+By State
+Male State Leader, Female State Leader
+One male & one female
+Course Leader
+By Course
+Male Course Leader, Female Course Leader
+One male & one female
+
+
+✅ Use Case List
+ID
+Use Case
+Description
+UC01
+Validate Registration
+Check entered reg no against college DB
+UC02
+Confirm User Info
+Show fetched name, college, course
+UC03
+Select State
+User selects current state of residence
+UC04
+Submit Email
+Collect active email + generate voter ID
+UC05
+Access Dashboard
+Display election phases + countdowns
+UC06
+Cast Vote
+Vote based on allowed levels
+UC07
+View Election Results
+Show user's results after election ends
+UC08
+Candidate Result Page
+Candidates see their own votes + percentages
+UC09
+Upload College DB
+Class Leaders upload student-course info
+UC10
+Admin Commissioner Panel
+Election Commissioner oversees entire system
+
+
+📝 Django Application Structure
+.
+├── core
+│   ├── models.py         # Voter, User roles
+│   ├── views.py          # Registration, Role checks
+│   └── urls.py
+├── election
+│   ├── models.py         # Election, Candidate, Vote, Result
+│   ├── views.py          # Voting, results, candidate stats
+│   └── urls.py
+├── static
+│   ├── css/registration.css
+│   └── js/registration.js
+├── templates
+│   ├── core/
+│   │   ├── base.html
+│   │   ├── dashboard.html
+│   │   └── register.html
+│   └── election/
+│       ├── voting.html
+│       ├── results.html
+│       └── candidate_stats.html
+
+🏠 Role-Based Access Control (RBAC)
+Role
+Access Areas
+Voter
+Register, Vote, Dashboard, View Results
+Candidate
+View personal vote count and percentage
+Class Leader
+Upload course-based student data
+Election Commissioner
+Full control: dashboards, result monitoring, system management
+
+
+📆 Countdown Functionalities
+Until election starts: Timer before elections are live
+Until election ends: Timer until closing
+Since last election: Show duration since previous
+Displayed on user dashboard.
+
+🌐 Color Scheme
+#3B2A68 / rgb(59, 42, 104)
+#513F81 / rgb(81, 63, 129)
+#6C757D / rgb(108, 117, 125)
+#F8F9FA / rgb(248, 249, 250)

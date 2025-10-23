@@ -1,0 +1,118 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Vote - {{ election.title }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0"><i class="fas fa-vote-yea me-2"></i>{{ election.title }}</h3>
+                </div>
+                <div class="card-body">
+                    <p class="lead">{{ election.description }}</p>
+                    
+                    <div class="alert alert-info">
+                        <div class="d-flex">
+                            <div class="me-3">
+                                <i class="fas fa-info-circle fa-2x"></i>
+                            </div>
+                            <div>
+                                <h5 class="alert-heading">Voting Information</h5>
+                                <p class="mb-0">Election ends in: <span class="fw-bold" data-countdown="{{ election.end_date|date:'c' }}" data-countdown-type="until">Loading...</span></p>
+                                <p class="mb-0">You can vote for positions based on your eligibility.</p>
+                                <p class="mb-0">Your votes are confidential and secure.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <form id="voting-form" method="post">
+                {% csrf_token %}
+                
+                <div id="voting-error" class="alert alert-danger d-none"></div>
+                
+                {% for position, info in position_candidates.items %}
+                <div class="position-card card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center position" 
+                         data-position-id="{{ position.id }}" 
+                         data-position-name="{{ position.title }}"
+                         data-required="true">
+                        <h4 class="mb-0">{{ position.title }}</h4>
+                        
+                        {% if position.gender_restriction != 'any' %}
+                        <span class="badge {% if position.gender_restriction == 'male' %}bg-primary{% else %}bg-danger{% endif %}">
+                            {{ position.get_gender_restriction_display }}
+                        </span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="card-body">
+                        <div class="mb-3">
+                            {% if position.election_level.code == 'president' %}
+                            <span class="badge bg-info">Presidential Level</span>
+                            {% elif position.election_level.code == 'state' %}
+                            <span class="badge bg-secondary">State Level: {{ position.state.name }}</span>
+                            {% elif position.election_level.code == 'course' %}
+                            <span class="badge bg-success">Course Level: {{ position.course.name }}</span>
+                            {% endif %}
+                        </div>
+                        
+                        {% for candidate in info.candidates %}
+                        <div class="candidate-option {% if info.user_vote == candidate %}voted selected{% endif %}">
+                            <div class="candidate-info">
+                                <div class="form-check me-3">
+                                    <input class="form-check-input" type="radio" 
+                                           name="position_{{ position.id }}" 
+                                           id="candidate_{{ candidate.id }}" 
+                                           value="{{ candidate.id }}"
+                                           {% if info.user_vote == candidate %}checked{% endif %}>
+                                </div>
+                                
+                                <div class="candidate-details">
+                                    <div class="candidate-name">{{ candidate.user.get_full_name }}</div>
+                                    
+                                    {% if candidate.bio %}
+                                    <div class="candidate-bio text-muted small">{{ candidate.bio|truncatewords:15 }}</div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            {% if candidate.platform %}
+                            <div class="candidate-platform mt-2 small">
+                                <strong>Platform:</strong> {{ candidate.platform|truncatewords:30 }}
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% empty %}
+                <div class="alert alert-warning">
+                    <i class="fas fa-exclamation-triangle me-2"></i>
+                    You are not eligible to vote for any positions in this election.
+                </div>
+                {% endfor %}
+                
+                {% if position_candidates %}
+                <div class="d-grid gap-2 mb-5">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-check-circle me-2"></i>Submit Your Vote
+                    </button>
+                    <small class="text-center text-muted mt-2">
+                        By submitting your vote, you confirm that your selections are final.
+                    </small>
+                </div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/dashboard.js"></script>
+<script src="/static/js/voting.js"></script>
+{% endblock %}

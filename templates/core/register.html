@@ -1,0 +1,100 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Registration - University Election System{% endblock %}
+
+{% block extra_css %}
+<link href="/static/css/registration.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="registration-container">
+        <div class="registration-header">
+            <h2><i class="fas fa-user-plus me-2"></i>Student Registration</h2>
+            <p class="text-muted">Register to participate in university elections</p>
+        </div>
+        
+        {% if step == 'complete_profile' %}
+        <!-- Step 2: Complete profile with state and email -->
+        <div class="verified-info mb-4">
+            <h5 class="mb-2">Registration Verified</h5>
+            <div class="profile-info">
+                <div class="info-item">
+                    <div class="info-label">Registration Number</div>
+                    <div class="info-value">{{ request.session.validated_reg_number }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Name</div>
+                    <div class="info-value">{{ full_name }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Course</div>
+                    <div class="info-value">{{ course.name }}</div>
+                </div>
+            </div>
+            <p class="mb-0">Please complete your profile below.</p>
+        </div>
+        
+        <form method="post" id="complete-profile-form" class="registration-form">
+            {% csrf_token %}
+            
+            <div class="form-group mb-3">
+                <label for="state">State of Residence</label>
+                <select class="form-select" id="state" name="state" required>
+                    <option value="">Select your state</option>
+                    {% for state in states %}
+                    <option value="{{ state.id }}">{{ state.name }}</option>
+                    {% endfor %}
+                </select>
+                <div class="invalid-feedback"></div>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label for="email">Email Address</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email address" required>
+                <div class="invalid-feedback"></div>
+                <small class="form-text text-muted">Your email will be used for login and important notifications.</small>
+            </div>
+            
+            <div class="form-group mb-3">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Create a password" required>
+                <div class="invalid-feedback"></div>
+                <small class="form-text text-muted">Password must be at least 8 characters long.</small>
+            </div>
+            
+            <div class="form-group mb-4">
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
+                <div class="invalid-feedback"></div>
+            </div>
+            
+            <button type="submit" class="btn btn-register btn-lg w-100">Complete Registration</button>
+        </form>
+        
+        {% else %}
+        <!-- Step 1: Registration number validation -->
+        <form method="post" id="registration-form" class="registration-form">
+            {% csrf_token %}
+            
+            <div class="form-group mb-4">
+                <label for="registration_number">Registration Number</label>
+                <input type="text" class="form-control" id="registration_number" name="registration_number" placeholder="Enter your registration number" required>
+                <div class="invalid-feedback"></div>
+                <small class="form-text text-muted">Enter your university registration number to verify your identity.</small>
+            </div>
+            
+            <button type="submit" class="btn btn-register btn-lg w-100">Verify & Continue</button>
+        </form>
+        {% endif %}
+        
+        <div class="login-link mt-3">
+            Already registered? <a href="{% url 'login' %}">Login here</a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="/static/js/registration.js"></script>
+{% endblock %}
