@@ -1,6 +1,10 @@
+.env.development
+.env.example
+.vscode
 .env
-/venv
-__pycache__
-db.sqlite3
-docs/
-media
+venv
+media/
+static
+staticfiles
+media/*
+__pycache__/

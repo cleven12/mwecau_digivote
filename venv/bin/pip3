@@ -1,8 +1,7 @@
-#!/home/cleven/Public/mwecau_ict_pr/mwecau_election_platform/src/backend/venv/bin/python
-# -*- coding: utf-8 -*-
-import re
+#!/home/cgm/Public/projects/university_elec_api/venv/bin/python
 import sys
 from pip._internal.cli.main import main
 if __name__ == '__main__':
-    sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
+    if sys.argv[0].endswith('.exe'):
+        sys.argv[0] = sys.argv[0][:-4]
     sys.exit(main())
