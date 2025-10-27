@@ -1,4 +1,5 @@
 # core/views.py
+from datetime import timezone
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -54,7 +55,7 @@ class APIHealthCheckView(APIView):
         health_data["endpoints"]["auth_login"] = check_endpoint(
             method="POST",
             url=reverse("core:api_login"),
-            payload={"registration_number": "TEST-001", "password": "test"},
+            payload={"registration_number": "TEST/001", "password": "test"},
             expected_status=status.HTTP_401_UNAUTHORIZED  # Expect failure without valid credentials
         )
         health_data["endpoints"]["auth_logout"] = check_endpoint(

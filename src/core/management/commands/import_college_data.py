@@ -9,106 +9,106 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         # Add the CSV data directly
         csv_data = """registration_number, full_name, course_code, course_name
-REG-001, Paul Mbise, BsChem, Bachelor of Science in Chemistry
-REG-002, Neema Mwijage, BsCS, Bachelor of Science in Computer Science
-REG-003, George Mkenda, BsMathStat, Bachelor of Science in Mathematics and Statistics
-REG-004, Victor Ndege, BsEd, Bachelor Science with Education
-REG-005, Francis Mtitu, BsBio, Bachelor of Science in Applied Biology
-REG-006, Anyes Mushi, BAccFin, Bachelor of Accounting and Finance
-REG-007, Laureen Sanga, BProcSCM, Bachelor of Procurement and Supply Chain Management
-REG-008, Jesca Nyanda, BAProjMgmt, Bachelor of Arts in Project Planning and Management
-REG-009, Faustine Mwita, BABusAdmin, Bachelor of Arts in Business Administration Management
-REG-010, Cleven Komba, BASW-HR, Bachelor of Arts in Social Work and Human Rights
-REG-011, Anna Mwaya, LLB, Bachelor of Laws
-REG-012, Evenlight Kabwe, BASocSW, Bachelor of Arts in Sociology and Social Work
-REG-013, Glory Nguma, BAGeoEnv, Bachelor of Arts in Geography and Environmental Studies
-REG-014, Nehemia Bakari, BAEd, Bachelor of Arts with Education
-REG-015, Nyanda Nkwabi, BsChem, Bachelor of Science in Chemistry
-REG-016, Massawe Mwandu, BsCS, Bachelor of Science in Computer Science
-REG-017, Debora Mbezi, BsMathStat, Bachelor of Science in Mathematics and Statistics
-REG-018, Obeni Chitende, BsEd, Bachelor Science with Education
-REG-019, Jackson Nguvumali, BsBio, Bachelor of Science in Applied Biology
-REG-020, Levina Mwingira, BAccFin, Bachelor of Accounting and Finance
-REG-021, Loveness Mdoe, BProcSCM, Bachelor of Procurement and Supply Chain Management
-REG-022, Benson Samia, BAProjMgmt, Bachelor of Arts in Project Planning and Management
-REG-023, Samia Othman, BABusAdmin, Bachelor of Arts in Business Administration Management
-REG-024, Cleophas Mrema, BASW-HR, Bachelor of Arts in Social Work and Human Rights
-REG-025, Esther Mwakatobe, LLB, Bachelor of Laws
-REG-026, Gloria Mwinuka, BASocSW, Bachelor of Arts in Sociology and Social Work
-REG-027, Nyota Mwita, BAGeoEnv, Bachelor of Arts in Geography and Environmental Studies
-REG-028, Neema Abas, BAEd, Bachelor of Arts with Education
-REG-029, Victor Ndago, BsChem, Bachelor of Science in Chemistry
-REG-030, George Mwinyi, BsCS, Bachelor of Science in Computer Science
-REG-031, Francesca Kisasi, BsMathStat, Bachelor of Science in Mathematics and Statistics
-REG-032, Faustine Kahangwa, BsEd, Bachelor Science with Education
-REG-033, Cleophas Kitundu, BsBio, Bachelor of Science in Applied Biology
-REG-034, Laureen Mtibwa, BAccFin, Bachelor of Accounting and Finance
-REG-035, Anyes Rija, BProcSCM, Bachelor of Procurement and Supply Chain Management
-REG-036, Jackson Maduhu, BAProjMgmt, Bachelor of Arts in Project Planning and Management
-REG-037, Deborah Majaliwa, BABusAdmin, Bachelor of Arts in Business Administration Management
-REG-038, Nyanda Seba, BASW-HR, Bachelor of Arts in Social Work and Human Rights
-REG-039, Benson Kamugisha, LLB, Bachelor of Laws
-REG-040, Faustin Kipande, BASocSW, Bachelor of Arts in Sociology and Social Work
-REG-041, Gloria Nyara, BAGeoEnv, Bachelor of Arts in Geography and Environmental Studies
-REG-042, Nehemia Kipanya, BAEd, Bachelor of Arts with Education
-REG-043, Deborah Lubuva, BsChem, Bachelor of Science in Chemistry
-REG-044, Evenlight Temba, BsCS, Bachelor of Science in Computer Science
-REG-045, Nyanda Matata, BsMathStat, Bachelor of Science in Mathematics and Statistics
-REG-046, Obeni Ndumbalo, BsEd, Bachelor Science with Education
-REG-047, Anna Lihamba, BsBio, Bachelor of Science in Applied Biology
-REG-048, Cleven Mutaka, BAccFin, Bachelor of Accounting and Finance
-REG-049, Loveness Mandefu, BProcSCM, Bachelor of Procurement and Supply Chain Management
-REG-050, George Kiponda, BAProjMgmt, Bachelor of Arts in Project Planning and Management
-REG-051, Lucia Mbwana, BABusAdmin, Bachelor of Arts in Business Administration Management
-REG-052, Benson Ndori, BASW-HR, Bachelor of Arts in Social Work and Human Rights
-REG-053, Neema Kongoro, LLB, Bachelor of Laws
-REG-054, Victor Mnyasa, BASocSW, Bachelor of Arts in Sociology and Social Work
-REG-055, Laureen Mwinuka, BAGeoEnv, Bachelor of Arts in Geography and Environmental Studies
-REG-056, Nyota Mishi, BAEd, Bachelor of Arts with Education
-REG-057, George Musoke, BsChem, Bachelor of Science in Chemistry
-REG-058, Faustine Mahiri, BsCS, Bachelor of Science in Computer Science
-REG-059, Debora Ndela, BsMathStat, Bachelor of Science in Mathematics and Statistics
-REG-060, Loveness Msuya, BsEd, Bachelor Science with Education
-REG-061, Victor Mponda, BsBio, Bachelor of Science in Applied Biology
-REG-062, Jackson Mchoro, BAccFin, Bachelor of Accounting and Finance
-REG-063, Benson Ramadhani, BProcSCM, Bachelor of Procurement and Supply Chain Management
-REG-064, Cleven Munuo, BAProjMgmt, Bachelor of Arts in Project Planning and Management
-REG-065, Evenlight Samweli, BABusAdmin, Bachelor of Arts in Business Administration Management
-REG-066, Nyanda Kashindi, BASW-HR, Bachelor of Arts in Social Work and Human Rights
-REG-067, Nehemia Ndunguru, LLB, Bachelor of Laws
-REG-068, Faustine Kubwa, BASocSW, Bachelor of Arts in Sociology and Social Work
-REG-069, George Mwanjisi, BAGeoEnv, Bachelor of Arts in Geography and Environmental Studies
-REG-070, Anna Kitima, BAEd, Bachelor of Arts with Education
-REG-071, Cleven Kihangwa, BsChem, Bachelor of Science in Chemistry
-REG-072, Laureen Kaligula, BsCS, Bachelor of Science in Computer Science
-REG-073, Victor Kayombo, BsMathStat, Bachelor of Science in Mathematics and Statistics
-REG-074, Anyes Kipuka, BsEd, Bachelor Science with Education
-REG-075, Jackson Nguvumali, BsBio, Bachelor of Science in Applied Biology
-REG-076, Gloria Luhanga, BAccFin, Bachelor of Accounting and Finance
-REG-077, Levina Chabuga, BProcSCM, Bachelor of Procurement and Supply Chain Management
-REG-078, Neema Liundi, BAProjMgmt, Bachelor of Arts in Project Planning and Management
-REG-079, Nyota Khamisi, BABusAdmin, Bachelor of Arts in Business Administration Management
-REG-080, Francis Tuma, BASW-HR, Bachelor of Arts in Social Work and Human Rights
-REG-081, Anyes Kalembwa, LLB, Bachelor of Laws
-REG-082, Cleven Mwakalindile, BASocSW, Bachelor of Arts in Sociology and Social Work
-REG-083, Laureen Kipunde, BAGeoEnv, Bachelor of Arts in Geography and Environmental Studies
-REG-084, Nyanda Mkandawile, BAEd, Bachelor of Arts with Education
-REG-085, Faustine Kachoka, BsChem, Bachelor of Science in Chemistry
-REG-086, Benson Ngamba, BsCS, Bachelor of Science in Computer Science
-REG-087, Gloria Muhumbo, BsMathStat, Bachelor of Science in Mathematics and Statistics
-REG-088, Debora Chirwa, BsEd, Bachelor Science with Education
-REG-089, Anna Lutabingwa, BsBio, Bachelor of Science in Applied Biology
-REG-090, Cleven Malemba, BAccFin, Bachelor of Accounting and Finance
-REG-091, Neema Pembe, BProcSCM, Bachelor of Procurement and Supply Chain Management
-REG-092, Faustine Kabambi, BAProjMgmt, Bachelor of Arts in Project Planning and Management
-REG-093, Anyes Mwaka, BABusAdmin, Bachelor of Arts in Business Administration Management
-REG-094, Jackson Kibona, BASW-HR, Bachelor of Arts in Social Work and Human Rights
-REG-095, Victor Juma, LLB, Bachelor of Laws
-REG-096, Loveness Kijazi, BASocSW, Bachelor of Arts in Sociology and Social Work
-REG-097, Benson Kiponda, BAGeoEnv, Bachelor of Arts in Geography and Environmental Studies
-REG-098, Anna Kimweri, BAEd, Bachelor of Arts with Education
-REG-099, Cleven Makoti, BsChem, Bachelor of Science in Chemistry
-REG-100, Laureen Lyimo, BsCS, Bachelor of Science in Computer Science"""
+T/DEG/2020/0001, Paul Mbise, BsChem, Bachelor of Science in Chemistry
+T/DEG/2020/0002, Neema Mwijage, BsCS, Bachelor of Science in Computer Science
+T/DEG/2020/0003, George Mkenda, BsMathStat, Bachelor of Science in Mathematics and Statistics
+T/DEG/2020/0004, Victor Ndege, BsEd, Bachelor Science with Education
+T/DEG/2020/0005, Francis Mtitu, BsBio, Bachelor of Science in Applied Biology
+T/DEG/2020/0006, Anyes Mushi, BAccFin, Bachelor of Accounting and Finance
+T/DEG/2020/0007, Laureen Sanga, BProcSCM, Bachelor of Procurement and Supply Chain Management
+T/DEG/2020/0008, Jesca Nyanda, BAProjMgmt, Bachelor of Arts in Project Planning and Management
+T/DEG/2020/0009, Faustine Mwita, BABusAdmin, Bachelor of Arts in Business Administration Management
+T/DEG/2020/0010, Cleven Komba, BASW-HR, Bachelor of Arts in Social Work and Human Rights
+T/DEG/2020/0011, Anna Mwaya, LLB, Bachelor of Laws
+T/DEG/2020/0012, Evenlight Kabwe, BASocSW, Bachelor of Arts in Sociology and Social Work
+T/DEG/2020/0013, Glory Nguma, BAGeoEnv, Bachelor of Arts in Geography and Environmental Studies
+T/DEG/2020/0014, Nehemia Bakari, BAEd, Bachelor of Arts with Education
+T/DEG/2020/0015, Nyanda Nkwabi, BsChem, Bachelor of Science in Chemistry
+T/DEG/2020/0016, Massawe Mwandu, BsCS, Bachelor of Science in Computer Science
+T/DEG/2020/0017, Debora Mbezi, BsMathStat, Bachelor of Science in Mathematics and Statistics
+T/DEG/2020/0018, Obeni Chitende, BsEd, Bachelor Science with Education
+T/DEG/2020/0019, Jackson Nguvumali, BsBio, Bachelor of Science in Applied Biology
+T/DEG/2020/0020, Levina Mwingira, BAccFin, Bachelor of Accounting and Finance
+T/DEG/2020/0021, Loveness Mdoe, BProcSCM, Bachelor of Procurement and Supply Chain Management
+T/DEG/2020/0022, Benson Samia, BAProjMgmt, Bachelor of Arts in Project Planning and Management
+T/DEG/2020/0023, Samia Othman, BABusAdmin, Bachelor of Arts in Business Administration Management
+T/DEG/2020/0024, Cleophas Mrema, BASW-HR, Bachelor of Arts in Social Work and Human Rights
+T/DEG/2020/0025, Esther Mwakatobe, LLB, Bachelor of Laws
+T/DEG/2020/0026, Gloria Mwinuka, BASocSW, Bachelor of Arts in Sociology and Social Work
+T/DEG/2020/0027, Nyota Mwita, BAGeoEnv, Bachelor of Arts in Geography and Environmental Studies
+T/DEG/2020/0028, Neema Abas, BAEd, Bachelor of Arts with Education
+T/DEG/2020/0029, Victor Ndago, BsChem, Bachelor of Science in Chemistry
+T/DEG/2020/0030, George Mwinyi, BsCS, Bachelor of Science in Computer Science
+T/DEG/2020/0031, Francesca Kisasi, BsMathStat, Bachelor of Science in Mathematics and Statistics
+T/DEG/2020/0032, Faustine Kahangwa, BsEd, Bachelor Science with Education
+T/DEG/2020/0033, Cleophas Kitundu, BsBio, Bachelor of Science in Applied Biology
+T/DEG/2020/0034, Laureen Mtibwa, BAccFin, Bachelor of Accounting and Finance
+T/DEG/2020/0035, Anyes Rija, BProcSCM, Bachelor of Procurement and Supply Chain Management
+T/DEG/2020/0036, Jackson Maduhu, BAProjMgmt, Bachelor of Arts in Project Planning and Management
+T/DEG/2020/0037, Deborah Majaliwa, BABusAdmin, Bachelor of Arts in Business Administration Management
+T/DEG/2020/0038, Nyanda Seba, BASW-HR, Bachelor of Arts in Social Work and Human Rights
+T/DEG/2020/0039, Benson Kamugisha, LLB, Bachelor of Laws
+T/DEG/2020/0040, Faustin Kipande, BASocSW, Bachelor of Arts in Sociology and Social Work
+T/DEG/2020/0041, Gloria Nyara, BAGeoEnv, Bachelor of Arts in Geography and Environmental Studies
+T/DEG/2020/0042, Nehemia Kipanya, BAEd, Bachelor of Arts with Education
+T/DEG/2020/0043, Deborah Lubuva, BsChem, Bachelor of Science in Chemistry
+T/DEG/2020/0044, Evenlight Temba, BsCS, Bachelor of Science in Computer Science
+T/DEG/2020/0045, Nyanda Matata, BsMathStat, Bachelor of Science in Mathematics and Statistics
+T/DEG/2020/0046, Obeni Ndumbalo, BsEd, Bachelor Science with Education
+T/DEG/2020/0047, Anna Lihamba, BsBio, Bachelor of Science in Applied Biology
+T/DEG/2020/0048, Cleven Mutaka, BAccFin, Bachelor of Accounting and Finance
+T/DEG/2020/0049, Loveness Mandefu, BProcSCM, Bachelor of Procurement and Supply Chain Management
+T/DEG/2020/0050, George Kiponda, BAProjMgmt, Bachelor of Arts in Project Planning and Management
+T/DEG/2020/0051, Lucia Mbwana, BABusAdmin, Bachelor of Arts in Business Administration Management
+T/DEG/2020/0052, Benson Ndori, BASW-HR, Bachelor of Arts in Social Work and Human Rights
+T/DEG/2020/0053, Neema Kongoro, LLB, Bachelor of Laws
+T/DEG/2020/0054, Victor Mnyasa, BASocSW, Bachelor of Arts in Sociology and Social Work
+T/DEG/2020/0055, Laureen Mwinuka, BAGeoEnv, Bachelor of Arts in Geography and Environmental Studies
+T/DEG/2020/0056, Nyota Mishi, BAEd, Bachelor of Arts with Education
+T/DEG/2020/0057, George Musoke, BsChem, Bachelor of Science in Chemistry
+T/DEG/2020/0058, Faustine Mahiri, BsCS, Bachelor of Science in Computer Science
+T/DEG/2020/0059, Debora Ndela, BsMathStat, Bachelor of Science in Mathematics and Statistics
+T/DEG/2020/0060, Loveness Msuya, BsEd, Bachelor Science with Education
+T/DEG/2020/0061, Victor Mponda, BsBio, Bachelor of Science in Applied Biology
+T/DEG/2020/0062, Jackson Mchoro, BAccFin, Bachelor of Accounting and Finance
+T/DEG/2020/0063, Benson Ramadhani, BProcSCM, Bachelor of Procurement and Supply Chain Management
+T/DEG/2020/0064, Cleven Munuo, BAProjMgmt, Bachelor of Arts in Project Planning and Management
+T/DEG/2020/0065, Evenlight Samweli, BABusAdmin, Bachelor of Arts in Business Administration Management
+T/DEG/2020/0066, Nyanda Kashindi, BASW-HR, Bachelor of Arts in Social Work and Human Rights
+T/DEG/2020/0067, Nehemia Ndunguru, LLB, Bachelor of Laws
+T/DEG/2020/0068, Faustine Kubwa, BASocSW, Bachelor of Arts in Sociology and Social Work
+T/DEG/2020/0069, George Mwanjisi, BAGeoEnv, Bachelor of Arts in Geography and Environmental Studies
+T/DEG/2020/0070, Anna Kitima, BAEd, Bachelor of Arts with Education
+T/DEG/2020/0071, Cleven Kihangwa, BsChem, Bachelor of Science in Chemistry
+T/DEG/2020/0072, Laureen Kaligula, BsCS, Bachelor of Science in Computer Science
+T/DEG/2020/0073, Victor Kayombo, BsMathStat, Bachelor of Science in Mathematics and Statistics
+T/DEG/2020/0074, Anyes Kipuka, BsEd, Bachelor Science with Education
+T/DEG/2020/0075, Jackson Nguvumali, BsBio, Bachelor of Science in Applied Biology
+T/DEG/2020/0076, Gloria Luhanga, BAccFin, Bachelor of Accounting and Finance
+T/DEG/2020/0077, Levina Chabuga, BProcSCM, Bachelor of Procurement and Supply Chain Management
+T/DEG/2020/0078, Neema Liundi, BAProjMgmt, Bachelor of Arts in Project Planning and Management
+T/DEG/2020/0079, Nyota Khamisi, BABusAdmin, Bachelor of Arts in Business Administration Management
+T/DEG/2020/0080, Francis Tuma, BASW-HR, Bachelor of Arts in Social Work and Human Rights
+T/DEG/2020/0081, Anyes Kalembwa, LLB, Bachelor of Laws
+T/DEG/2020/0082, Cleven Mwakalindile, BASocSW, Bachelor of Arts in Sociology and Social Work
+T/DEG/2020/0083, Laureen Kipunde, BAGeoEnv, Bachelor of Arts in Geography and Environmental Studies
+T/DEG/2020/0084, Nyanda Mkandawile, BAEd, Bachelor of Arts with Education
+T/DEG/2020/0085, Faustine Kachoka, BsChem, Bachelor of Science in Chemistry
+T/DEG/2020/0086, Benson Ngamba, BsCS, Bachelor of Science in Computer Science
+T/DEG/2020/0087, Gloria Muhumbo, BsMathStat, Bachelor of Science in Mathematics and Statistics
+T/DEG/2020/0088, Debora Chirwa, BsEd, Bachelor Science with Education
+T/DEG/2020/0089, Anna Lutabingwa, BsBio, Bachelor of Science in Applied Biology
+T/DEG/2020/0090, Cleven Malemba, BAccFin, Bachelor of Accounting and Finance
+T/DEG/2020/0091, Neema Pembe, BProcSCM, Bachelor of Procurement and Supply Chain Management
+T/DEG/2020/0092, Faustine Kabambi, BAProjMgmt, Bachelor of Arts in Project Planning and Management
+T/DEG/2020/0093, Anyes Mwaka, BABusAdmin, Bachelor of Arts in Business Administration Management
+T/DEG/2020/0094, Jackson Kibona, BASW-HR, Bachelor of Arts in Social Work and Human Rights
+T/DEG/2020/0095, Victor Juma, LLB, Bachelor of Laws
+T/DEG/2020/0096, Loveness Kijazi, BASocSW, Bachelor of Arts in Sociology and Social Work
+T/DEG/2020/0097, Benson Kiponda, BAGeoEnv, Bachelor of Arts in Geography and Environmental Studies
+T/DEG/2020/0098, Anna Kimweri, BAEd, Bachelor of Arts with Education
+T/DEG/2020/0099, Cleven Makoti, BsChem, Bachelor of Science in Chemistry
+T/DEG/2020/0100, Laureen Lyimo, BsCS, Bachelor of Science in Computer Science"""
 
         csv_file = io.StringIO(csv_data)
         reader = csv.reader(csv_file, delimiter=',')

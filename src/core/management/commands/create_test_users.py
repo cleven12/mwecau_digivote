@@ -11,7 +11,7 @@ class Command(BaseCommand):
         self.stdout.write('Creating test users and college data...')
         
         # Add admin and commissioner users
-        admin_email = 'admin@university.edu'
+        admin_email = 'admin@mail.com'
         admin_password = '@12345678'
         
         try:
@@ -27,12 +27,12 @@ class Command(BaseCommand):
                 password=admin_password,
                 first_name='Admin',
                 last_name='User',
-                registration_number='ADMIN-001',
+                registration_number='T/ADM/2020/001',
             )
             self.stdout.write(f'Created admin user: {admin_email}')
             
         # Create commissioner
-        commissioner_email = 'commissioner@university.edu'
+        commissioner_email = 'commissioner@mail.com'
         commissioner_password = '@2025'
         
         try:
@@ -48,7 +48,7 @@ class Command(BaseCommand):
                 password=commissioner_password,
                 first_name='Election',
                 last_name='Commissioner',
-                registration_number='COMM-001',
+                registration_number='T/COMM/2020/001',
                 role=User.ROLE_COMMISSIONER,
                 is_staff=True,
                 is_verified=True
@@ -56,7 +56,7 @@ class Command(BaseCommand):
             self.stdout.write(f'Created commissioner user: {commissioner_email}')
         
         # Create class leader
-        class_leader_email = 'classleader@university.edu'
+        class_leader_email = 'classleader@mail.com'
         class_leader_password = '@2025'
         
         try:
@@ -71,7 +71,7 @@ class Command(BaseCommand):
                 password=class_leader_password,
                 first_name='Class',
                 last_name='Leader',
-                registration_number='CL-001',
+                registration_number='T/CL/2020/0001',
                 role=User.ROLE_CLASS_LEADER,
                 is_verified=True
             )
@@ -79,36 +79,36 @@ class Command(BaseCommand):
         
         # Add the CSV data for college data
         csv_data = """registration_number, full_name, course_code, course_name
-REG-001, Paul Mbise, BsChem, Bachelor of Science in Chemistry
-REG-002, Neema Mwijage, BsCS, Bachelor of Science in Computer Science
-REG-003, George Mkenda, BsMathStat, Bachelor of Science in Mathematics and Statistics
-REG-004, Victor Ndege, BsEd, Bachelor Science with Education
-REG-005, Francis Mtitu, BsBio, Bachelor of Science in Applied Biology
-REG-006, Anyes Mushi, BAccFin, Bachelor of Accounting and Finance
-REG-007, Laureen Sanga, BProcSCM, Bachelor of Procurement and Supply Chain Management
-REG-008, Jesca Nyanda, BAProjMgmt, Bachelor of Arts in Project Planning and Management
-REG-009, Faustine Mwita, BABusAdmin, Bachelor of Arts in Business Administration Management
-REG-010, Cleven Komba, BASW-HR, Bachelor of Arts in Social Work and Human Rights
-REG-011, Anna Mwaya, LLB, Bachelor of Laws
-REG-012, Evenlight Kabwe, BASocSW, Bachelor of Arts in Sociology and Social Work
-REG-013, Glory Nguma, BAGeoEnv, Bachelor of Arts in Geography and Environmental Studies
-REG-014, Nehemia Bakari, BAEd, Bachelor of Arts with Education
-REG-015, Nyanda Nkwabi, BsChem, Bachelor of Science in Chemistry
-REG-016, Massawe Mwandu, BsCS, Bachelor of Science in Computer Science
-REG-017, Debora Mbezi, BsMathStat, Bachelor of Science in Mathematics and Statistics
-REG-018, Obeni Chitende, BsEd, Bachelor Science with Education
-REG-019, Jackson Nguvumali, BsBio, Bachelor of Science in Applied Biology
-REG-020, Levina Mwingira, BAccFin, Bachelor of Accounting and Finance
-REG-021, Loveness Mdoe, BProcSCM, Bachelor of Procurement and Supply Chain Management
-REG-022, Benson Samia, BAProjMgmt, Bachelor of Arts in Project Planning and Management
-REG-023, Samia Othman, BABusAdmin, Bachelor of Arts in Business Administration Management
-REG-024, Cleophas Mrema, BASW-HR, Bachelor of Arts in Social Work and Human Rights
-REG-025, Esther Mwakatobe, LLB, Bachelor of Laws
-REG-026, Gloria Mwinuka, BASocSW, Bachelor of Arts in Sociology and Social Work
-REG-027, Nyota Mwita, BAGeoEnv, Bachelor of Arts in Geography and Environmental Studies
-REG-028, Neema Abas, BAEd, Bachelor of Arts with Education
-REG-029, Victor Ndago, BsChem, Bachelor of Science in Chemistry
-REG-030, George Mwinyi, BsCS, Bachelor of Science in Computer Science"""
+T/DEG/2020/0001, Paul Mbise, BsChem, Bachelor of Science in Chemistry
+T/DEG/2020/0002, Neema Mwijage, BsCS, Bachelor of Science in Computer Science
+T/DEG/2020/0003, George Mkenda, BsMathStat, Bachelor of Science in Mathematics and Statistics
+T/DEG/2020/0004, Victor Ndege, BsEd, Bachelor Science with Education
+T/DEG/2020/0005, Francis Mtitu, BsBio, Bachelor of Science in Applied Biology
+T/DEG/2020/0006, Anyes Mushi, BAccFin, Bachelor of Accounting and Finance
+T/DEG/2020/0007, Laureen Sanga, BProcSCM, Bachelor of Procurement and Supply Chain Management
+T/DEG/2020/0008, Jesca Nyanda, BAProjMgmt, Bachelor of Arts in Project Planning and Management
+T/DEG/2020/0009, Faustine Mwita, BABusAdmin, Bachelor of Arts in Business Administration Management
+T/DEG/2020/0010, Cleven Komba, BASW-HR, Bachelor of Arts in Social Work and Human Rights
+T/DEG/2020/0011, Anna Mwaya, LLB, Bachelor of Laws
+T/DEG/2020/0012, Evenlight Kabwe, BASocSW, Bachelor of Arts in Sociology and Social Work
+T/DEG/2020/0013, Glory Nguma, BAGeoEnv, Bachelor of Arts in Geography and Environmental Studies
+T/DEG/2020/0014, Nehemia Bakari, BAEd, Bachelor of Arts with Education
+T/DEG/2020/0015, Nyanda Nkwabi, BsChem, Bachelor of Science in Chemistry
+T/DEG/2020/0016, Massawe Mwandu, BsCS, Bachelor of Science in Computer Science
+T/DEG/2020/0017, Debora Mbezi, BsMathStat, Bachelor of Science in Mathematics and Statistics
+T/DEG/2020/0018, Obeni Chitende, BsEd, Bachelor Science with Education
+T/DEG/2020/0019, Jackson Nguvumali, BsBio, Bachelor of Science in Applied Biology
+T/DEG/2020/0020, Levina Mwingira, BAccFin, Bachelor of Accounting and Finance
+T/DEG/2020/0021, Loveness Mdoe, BProcSCM, Bachelor of Procurement and Supply Chain Management
+T/DEG/2020/0022, Benson Samia, BAProjMgmt, Bachelor of Arts in Project Planning and Management
+T/DEG/2020/0023, Samia Othman, BABusAdmin, Bachelor of Arts in Business Administration Management
+T/DEG/2020/0024, Cleophas Mrema, BASW-HR, Bachelor of Arts in Social Work and Human Rights
+T/DEG/2020/0025, Esther Mwakatobe, LLB, Bachelor of Laws
+T/DEG/2020/0026, Gloria Mwinuka, BASocSW, Bachelor of Arts in Sociology and Social Work
+T/DEG/2020/0027, Nyota Mwita, BAGeoEnv, Bachelor of Arts in Geography and Environmental Studies
+T/DEG/2020/0028, Neema Abas, BAEd, Bachelor of Arts with Education
+T/DEG/2020/0029, Victor Ndago, BsChem, Bachelor of Science in Chemistry
+T/DEG/2020/0030, George Mwinyi, BsCS, Bachelor of Science in Computer Science"""
 
         # Clear existing college data
         CollegeData.objects.all().delete()
@@ -153,7 +153,7 @@ REG-030, George Mwinyi, BsCS, Bachelor of Science in Computer Science"""
             first_name = name_parts[0]
             last_name = ' '.join(name_parts[1:]) if len(name_parts) > 1 else ''
             
-            email = f"{first_name.lower()}.{last_name.lower()}@university.edu".replace(' ', '')
+            email = f"{first_name.lower()}.{last_name.lower()}@mail.com".replace(' ', '')
             
             # Randomly assign a state
             state = random.choice(states)

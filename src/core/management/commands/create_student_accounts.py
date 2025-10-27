@@ -25,7 +25,7 @@ class Command(BaseCommand):
             last_name = entry.last_name
             
             # Generate unique email using registration number
-            email = f"{entry.registration_number.lower()}@university.edu".replace(' ', '')
+            email = f"{entry.registration_number.lower()}@mail.com".replace(' ', '')
             
             # Randomly assign a state
             state = random.choice(states)

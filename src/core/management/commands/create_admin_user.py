@@ -6,7 +6,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         # Create admin superuser
-        admin_email = 'admin@university.edu'
+        admin_email = 'admin@mail.com'
         admin_password = '@12345678'
         
         try:
@@ -27,7 +27,7 @@ class Command(BaseCommand):
             self.stdout.write(self.style.SUCCESS(f'Created admin user: {admin_email}'))
             
         # Update commissioner password
-        commissioner_email = 'commissioner@university.edu'
+        commissioner_email = 'commissioner@mail.com'
         commissioner_password = '@2025'
         
         try:
