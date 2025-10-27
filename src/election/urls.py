@@ -6,8 +6,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     # API Endpoints
     path('list/', ElectionListView.as_view(), name='election_list'),
-    path('api/vote/', VoteView.as_view(), name='api_vote'),
-    path('api/results/<int:election_id>/', ResultsView.as_view(), name='api_results'),
+    path('vote/', VoteView.as_view(), name='api_vote'),
+    path('results/<int:election_id>/', ResultsView.as_view(), name='api_results'),
 ]
 
 if settings.DEBUG:
