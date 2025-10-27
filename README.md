@@ -76,6 +76,7 @@ This project is proprietary - see [LICENCE](LICENCE) for details.
 ## Authors
 
 - [**Cleven Godson**](https://github.com/cleven12) – *PR Manager*
+- - [**Faustine Emmanuel**](https://github.com/FaustineEmmanuel) – *Developer*
 - **laureen kidunda** – *PR Manager & Developer* [Lajokjohn](https://github.com/Lajokjohn)
 
 <!-- - **Contributor 2** – *Position/Developer* – [contributorusername](https://github.com/contributorusername)
