@@ -15,7 +15,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-# CSRF settings for Replit
+# CSRF settings
 CSRF_TRUSTED_ORIGINS = [
     'https://*.com',
 ]

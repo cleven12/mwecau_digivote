@@ -54,7 +54,7 @@ def send_verification_email(user_id):
         send_mail(
             subject=subject,
             message=message,
-            from_email=settings.DEFAULT_FROM_EMAIL if hasattr(settings, 'DEFAULT_FROM_EMAIL') else 'noreply@mwecau.ac.tz',
+            from_email=settings.DEFAULT_FROM_EMAIL if hasattr(settings, 'DEFAULT_FROM_EMAIL') else 'xyztempo12345@tutamail.com',
             recipient_list=[user.email],
             fail_silently=True,
         )
@@ -82,7 +82,7 @@ def send_password_reset_email(user_id, new_password):
     send_mail(
         subject=subject,
         message=message,
-        from_email=settings.DEFAULT_FROM_EMAIL if hasattr(settings, 'DEFAULT_FROM_EMAIL') else 'noreply@mwecau.ac.tz',
+        from_email=settings.DEFAULT_FROM_EMAIL if hasattr(settings, 'DEFAULT_FROM_EMAIL') else 'xyztempo12345@tutamail.com',
         recipient_list=[user.email],
         fail_silently=True,
     )
@@ -113,7 +113,7 @@ def send_commissioner_contact_email(user_id, message_content):
         send_mail(
             subject=subject,
             message=message,
-            from_email=settings.DEFAULT_FROM_EMAIL if hasattr(settings, 'DEFAULT_FROM_EMAIL') else 'noreply@mwecau.ac.tz',
+            from_email=settings.DEFAULT_FROM_EMAIL if hasattr(settings, 'DEFAULT_FROM_EMAIL') else 'xyztempo12345@tutamail.com',
             recipient_list=recipient_list,
             fail_silently=True,
         )

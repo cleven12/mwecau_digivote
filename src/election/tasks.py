@@ -48,7 +48,7 @@ def notify_voters_of_active_election(election_id):
             send_mail(
                 subject=subject,
                 message=message,
-                from_email=settings.DEFAULT_FROM_EMAIL if hasattr(settings, 'DEFAULT_FROM_EMAIL') else 'noreply@mwecau.ac.tz',
+                from_email=settings.DEFAULT_FROM_EMAIL if hasattr(settings, 'DEFAULT_FROM_EMAIL') else 'xyztempo12345@tutamail.com',
                 recipient_list=[user.email],
                 fail_silently=True
             )
@@ -74,7 +74,7 @@ def send_vote_confirmation_email(user_id, election_id, level_id):
         send_mail(
             subject=subject,
             message=message,
-            from_email=settings.DEFAULT_FROM_EMAIL if hasattr(settings, 'DEFAULT_FROM_EMAIL') else 'noreply@mwecau.ac.tz',
+            from_email=settings.DEFAULT_FROM_EMAIL if hasattr(settings, 'DEFAULT_FROM_EMAIL') else 'xyztempo12345@tutamail.com',
             recipient_list=[user.email],
             fail_silently=True
         )
