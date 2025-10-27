@@ -327,17 +327,15 @@ class UserDashboardView(APIView):
                 'is_verified': request.user.is_verified,
                 'is_commissioner': request.user.role == 'commissioner',
                 'voter_id': request.user.voter_id,
-                'course': {
-                    'id': request.user.course.id,
-                    'code': request.user.course.code,
-                    'name': request.user.course.name
+                "course": {
+                    "id": request.user.course.id,
+                    "code": request.user.course.code,
+                    "name": request.user.course.name,
                 } if request.user.course else None,
-                'state': {
-                    'id': request.user.state.id,
-                    'name': request.user.state.name
+                "state": {
+                    "id": request.user.state.id,
+                    "name": request.user.state.name,
                 } if request.user.state else None,
-                'state_name': request.user.state.name if request.user.state else None,
-                'course_name': request.user.course.name if request.user.course else None,
             },
             'voting_tokens': tokens_data
         }, status=status.HTTP_200_OK)
