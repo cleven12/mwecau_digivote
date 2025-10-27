@@ -1,5 +1,4 @@
 .env.development
-.env.example
 .vscode
 .env
 venv
