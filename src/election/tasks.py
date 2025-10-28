@@ -13,25 +13,64 @@ def notify_voters_of_active_election(election_id):
         return
 
     voters = User.objects.filter(is_verified=True, voter_id__isnull=False)
-    
+
+    # Debug/logging: record counts
+    print(f"notify_voters_of_active_election: election={election.id} voters_count={voters.count()}")
+
     for user in voters:
         tokens = []
-        for level in election.levels.all():
-            if (level.type == ElectionLevel.TYPE_PRESIDENT or
-                (level.type == ElectionLevel.TYPE_COURSE and user.course and level.course == user.course) or
-                (level.type == ElectionLevel.TYPE_STATE and user.state and level.state == user.state)):
-                token, _ = VoterToken.objects.get_or_create(
+        # For debugging: collect reasons for inclusion/exclusion per level
+        debug_reasons = []
+        for level in election.levels.select_related('course', 'state').all():
+            eligible = False
+            reason = None
+
+            if level.type == ElectionLevel.TYPE_PRESIDENT:
+                eligible = True
+                reason = 'president-level'
+
+            elif level.type == ElectionLevel.TYPE_COURSE:
+                if user.course is None:
+                    eligible = False
+                    reason = 'user-no-course'
+                elif level.course_id == user.course_id:
+                    eligible = True
+                    reason = f'course-match ({user.course_id})'
+                else:
+                    eligible = False
+                    reason = f'course-mismatch (level={level.course_id} user={user.course_id})'
+
+            elif level.type == ElectionLevel.TYPE_STATE:
+                if user.state is None:
+                    eligible = False
+                    reason = 'user-no-state'
+                elif level.state_id == user.state_id:
+                    eligible = True
+                    reason = f'state-match ({user.state_id})'
+                else:
+                    eligible = False
+                    reason = f'state-mismatch (level={level.state_id} user={user.state_id})'
+
+            debug_reasons.append((level.id, level.type, eligible, reason))
+
+            if eligible:
+                # ensure expiry_date is timezone-aware and copied from election
+                expiry = election.end_date
+                token, created = VoterToken.objects.get_or_create(
                     user=user,
                     election=election,
                     election_level=level,
                     defaults={
                         'token': uuid.uuid4(),
-                        'expiry_date': election.end_date
+                        'expiry_date': expiry
                     }
                 )
                 if not token.is_used:
                     tokens.append((level.name, str(token.token)))
-        
+
+        # Print debugging information for this user - helpful to trace misassigned emails
+        print(f"notify: user={user.id} email={user.email} tokens_count={len(tokens)} reasons={debug_reasons}")
+
         if tokens and user.email:
             subject = f"MWECAU Election Platform - New Election: {election.title}"
             message = (
@@ -45,13 +84,16 @@ def notify_voters_of_active_election(election_id):
                 f"\n\nVote at the election platform.\n"
                 f"Note: Keep your voter tokens secure and do not share them."
             )
-            send_mail(
-                subject=subject,
-                message=message,
-                from_email=settings.DEFAULT_FROM_EMAIL if hasattr(settings, 'DEFAULT_FROM_EMAIL') else 'xyztempo12345@tutamail.com',
-                recipient_list=[user.email],
-                fail_silently=True
-            )
+            try:
+                send_mail(
+                    subject=subject,
+                    message=message,
+                    from_email=getattr(settings, 'DEFAULT_FROM_EMAIL', None) or 'no-reply@example.com',
+                    recipient_list=[user.email],
+                    fail_silently=False
+                )
+            except Exception as e:
+                print(f"Failed to send election notification to {user.email}: {str(e)}")
 
 
 def send_vote_confirmation_email(user_id, election_id, level_id):

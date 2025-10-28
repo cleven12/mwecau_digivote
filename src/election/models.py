@@ -98,6 +98,57 @@ class Election(models.Model):
         now = timezone.now()
         return self.is_active and self.start_date <= now < self.end_date
 
+    def activate(self, notify_voters=True):
+        """
+        Activate the election and optionally notify voters.
+        Returns True if activation was successful, False if already active.
+        """
+        if self.has_ended:
+            raise ValidationError("Cannot activate an election that has ended")
+        
+        if self.is_active:
+            return False
+            
+        # Validate election has required data
+        if not self.start_date or not self.end_date:
+            raise ValidationError("Election must have start and end dates")
+            
+        if not self.levels.exists():
+            raise ValidationError("Election must have at least one level")
+            
+        now = timezone.now()
+        if self.end_date <= now:
+            raise ValidationError("Cannot activate an election that has already ended")
+            
+        self.is_active = True
+        self.save(update_fields=['is_active'])
+        
+        if notify_voters:
+            from .tasks import notify_voters_of_active_election
+            notify_voters_of_active_election(self.id)
+            
+        return True
+        
+    def deactivate(self):
+        """
+        Deactivate the election.
+        Returns True if deactivation was successful, False if already inactive.
+        """
+        if not self.is_active:
+            return False
+            
+        self.is_active = False
+        self.save(update_fields=['is_active'])
+        return True
+    def activate(self):
+        """Activate the election and generate voter tokens."""
+        from .tasks import notify_voters_of_active_election
+        if not self.is_active:
+            self.is_active = True
+            self.save()
+            # Generate tokens and send notifications
+            notify_voters_of_active_election(self.id)
+
     def save(self, *args, **kwargs):
         """Override save, potentially to trigger notifications."""
         super().save(*args, **kwargs)

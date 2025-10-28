@@ -178,7 +178,7 @@ class CompleteRegistrationView(APIView):
             logger.debug("User details updated and saved")
 
             # 5. Send welcome email 
-            # send_verification_email(user.id) 
+            send_verification_email(user.id) 
             # logger.debug("Verification email task queued")
 
             return Response({

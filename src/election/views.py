@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from django.utils import timezone
 from django.db.models import Count, Sum
 from django.views.generic import TemplateView
+from django.core.exceptions import ValidationError
 from .models import Election, ElectionLevel, Position, Candidate, VoterToken, Vote
 from core.models import User
 from .tasks import send_vote_confirmation_email
@@ -28,11 +29,71 @@ class ElectionListView(APIView):
         serializer = ElectionListSerializer(elections, many=True, context={'request': request})
         return Response(serializer.data)
 
-class ElectionDetailView():
-    pass
+class ElectionDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def get(self, request, pk):
+        try:
+            election = Election.objects.get(pk=pk)
+            serializer = ElectionListSerializer(election, context={'request': request})
+            return Response(serializer.data)
+        except Election.DoesNotExist:
+            return Response({'error': 'Election not found.'}, status=status.HTTP_404_NOT_FOUND)
+            
+    def patch(self, request, pk):
+        """Update election status (activate/deactivate)."""
+        if not request.user.can_manage_elections():
+            return Response({'error': 'Permission denied.'}, status=status.HTTP_403_FORBIDDEN)
+            
+        try:
+            election = Election.objects.get(pk=pk)
+            action = request.data.get('action')
+            
+            if action == 'activate':
+                try:
+                    success = election.activate()
+                    if success:
+                        return Response({'message': 'Election activated and notifications sent.'})
+                    return Response({'message': 'Election was already active.'})
+                except ValidationError as e:
+                    return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+                    
+            elif action == 'deactivate':
+                success = election.deactivate()
+                if success:
+                    return Response({'message': 'Election deactivated.'})
+                return Response({'message': 'Election was already inactive.'})
+                
+            return Response({'error': 'Invalid action.'}, status=status.HTTP_400_BAD_REQUEST)
+            
+        except Election.DoesNotExist:
+            return Response({'error': 'Election not found.'}, status=status.HTTP_404_NOT_FOUND)
 
-class ElectionCreateView():
-    pass
+
+class ElectionCreateView(APIView):
+    permission_classes = [IsAuthenticated]
+    
+    def post(self, request):
+        if not request.user.can_manage_elections():
+            return Response({'error': 'Permission denied.'}, status=status.HTTP_403_FORBIDDEN)
+            
+        serializer = ElectionListSerializer(data=request.data)
+        if serializer.is_valid():
+            # Save with is_active=False initially
+            election = serializer.save(is_active=False)
+            
+            # If auto_activate is requested and start date is now/past
+            if request.data.get('auto_activate'):
+                try:
+                    if timezone.now() >= election.start_date:
+                        election.activate()
+                except ValidationError as e:
+                    return Response({
+                        'warning': f'Election created but activation failed: {str(e)}'
+                    }, status=status.HTTP_201_CREATED)
+                    
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 # --- Voting Views ---
