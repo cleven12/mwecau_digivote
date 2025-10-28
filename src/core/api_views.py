@@ -74,15 +74,54 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
     
     @action(detail=False, methods=['put', 'patch'])
     def update_profile(self, request):
-        """Update current user profile."""
-        serializer = UserSerializer(
-            request.user,
-            data=request.data,
-            partial=True
-        )
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(serializer.data)
+        """Update current user profile.
+
+        Only allow users to update their email and password through this endpoint.
+        Other fields (name, course, state, gender, registration_number, etc.) are
+        immutable and come from `CollegeData` for integrity.
+        """
+        allowed = {'email', 'password'}
+        incoming = set(request.data.keys())
+
+        # Reject attempts to modify protected fields explicitly
+        forbidden = incoming - allowed
+        if forbidden:
+            return Response({
+                'status': 'error',
+                'message': 'Attempt to modify protected fields.',
+                'forbidden_fields': list(forbidden)
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        user = request.user
+        changed = False
+
+        # Handle email update
+        if 'email' in request.data:
+            new_email = request.data.get('email')
+            # Basic validation: let serializer handle uniqueness/format
+            serializer = UserSerializer(user, data={'email': new_email}, partial=True, context={'request': request})
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            changed = True
+
+        # Handle password update
+        if 'password' in request.data:
+            new_password = request.data.get('password')
+            user.set_password(new_password)
+            user.save(update_fields=['password'])
+            changed = True
+
+        if not changed:
+            return Response({
+                'status': 'error',
+                'message': 'No updatable fields provided.'
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({
+            'status': 'success',
+            'message': 'Profile updated.',
+            'user': UserSerializer(user, context={'request': request}).data
+        })
 
 
 @api_view(['POST'])
