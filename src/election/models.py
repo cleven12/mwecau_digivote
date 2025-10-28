@@ -198,6 +198,74 @@ class Candidate(models.Model):
     platform = models.TextField(blank=True, help_text="Campaign platform or key points")
     image = models.ImageField(upload_to='candidate_images/', null=True, blank=True, help_text="Profile image of the candidate")
     vote_count = models.PositiveIntegerField(default=0, help_text="Cached count of votes received")
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'candidates'
+        verbose_name = 'Candidate'
+        verbose_name_plural = 'Candidates'
+        unique_together = ['user', 'election']  # One candidacy per election
+        indexes = [
+            models.Index(fields=['election', 'position']),
+            models.Index(fields=['user']),
+            models.Index(fields=['vote_count']),  # For sorting by votes
+        ]
+        
+    def __str__(self):
+        return f"{self.user.get_full_name()} - {self.position.title} ({self.election.title})"
+        
+    def update_vote_count(self):
+        """Update the cached vote count."""
+        self.vote_count = self.votes.count()
+        self.save(update_fields=['vote_count', 'updated_at'])
+        
+    def can_edit(self, user):
+        """Check if given user can edit this candidate profile."""
+        return (
+            user.is_staff or
+            user.is_commissioner() or
+            self.user == user
+        )
+        
+    def is_eligible(self):
+        """
+        Check if the candidate meets all eligibility requirements.
+        Called during clean() to validate before saving.
+        """
+        if not self.user or not self.position:
+            return False
+            
+        # Gender restriction check
+        if (self.position.gender_restriction != Position.GENDER_ANY and
+            self.user.gender != self.position.gender_restriction):
+            return False
+            
+        # Level-specific checks
+        level = self.position.election_level
+        if level.type == level.TYPE_COURSE:
+            if not self.user.course or self.user.course != level.course:
+                return False
+        elif level.type == level.TYPE_STATE:
+            if not self.user.state or self.user.state != level.state:
+                return False
+            
+        return True
+        
+    def clean(self):
+        """Validate the candidate meets all requirements."""
+        super().clean()
+        
+        if not self.is_eligible():
+            raise ValidationError({
+                'user': 'User does not meet the eligibility requirements for this position.'
+            })
+            
+        # Ensure election matches position's election level
+        if self.position and self.election:
+            if self.position.election_level not in self.election.levels.all():
+                raise ValidationError({
+                    'position': 'Position must belong to an election level in this election.'
+                })
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
