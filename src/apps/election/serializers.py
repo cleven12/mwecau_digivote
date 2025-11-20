@@ -1,7 +1,7 @@
 # election/serializers.py
 from rest_framework import serializers
 from .models import Election, ElectionLevel, Position, Candidate, VoterToken, Vote
-from core.models import User, Course, State # Import related models for nested serialization if needed
+from apps.core .models import User, Course, State # Import related models for nested serialization if needed
 from django.urls import reverse
 from django.utils import timezone
 
