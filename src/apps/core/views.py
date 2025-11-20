@@ -17,7 +17,7 @@ from .tasks import send_verification_email, send_password_reset_email, send_comm
 
 logger = logging.getLogger(__name__)
 
-# --- API Views ---
+
 class UserLoginView(APIView):
     """API endpoint for user login with registration_number and password."""
     permission_classes = [AllowAny]
@@ -43,8 +43,10 @@ class UserLogoutView(APIView):
             token = RefreshToken(refresh_token)
             token.blacklist()
             return Response({'message': 'Successfully logged out'}, status=status.HTTP_205_RESET_CONTENT)
+        
         except TokenError:
             return Response({'error': 'Invalid or expired refresh token'}, status=status.HTTP_400_BAD_REQUEST)
+        
         except Exception as e:
             logger.error(f"Logout error: {str(e)}")
             return Response({'error': 'Logout failed'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
@@ -303,7 +305,6 @@ class UserDashboardView(APIView):
             }
         }, status=status.HTTP_200_OK)
 
-# --- Contact Form ---
 class ContactCommissionerView(APIView):
     """API endpoint to contact commissioners."""
     permission_classes = [IsAuthenticated]

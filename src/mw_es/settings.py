@@ -26,7 +26,9 @@ CUSTOM_APPS = [
     'apps.core',
     'apps.election',
 ]
+
 THIRD_PARTY_APPS = [
+    'celery',
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',

@@ -43,8 +43,6 @@ class UserManager(BaseUserManager):
 
         return self._create_user(registration_number, password, **extra_fields)
 
-
-# Modified Ver
     def create_from_college_data(self, college_data_id):
         """Create a User from CollegeData, generating a secure voter_id and password.
         Uses email and gender from CollegeData if available and valid, otherwise defers setting.
@@ -57,9 +55,8 @@ class UserManager(BaseUserManager):
 
         # Generate random password and voter_id
         default_password = secrets.token_hex(8)
-        voter_id = str(uuid.uuid4())  # Use UUID for secure, unique voter_id
+        voter_id = str(uuid.uuid4())
 
-        # Prepare user creation arguments
         user_creation_kwargs = {
             'registration_number': college_data.registration_number,
             'password': default_password,
@@ -70,64 +67,20 @@ class UserManager(BaseUserManager):
             'is_verified': False
         }
 
-        # Only pass email if it's present and not just whitespace in CollegeData
         college_data_email = getattr(college_data, 'email', None)
         if college_data_email and college_data_email.strip():
             user_creation_kwargs['email'] = college_data_email.strip()
 
-        # --- Only pass gender if it's present and valid in CollegeData ---
-        # Re-use the GENDER_CHOICES from User model to validate
         college_data_gender = getattr(college_data, 'gender', None)
+
         if college_data_gender and college_data_gender in dict(User.GENDER_CHOICES):
             user_creation_kwargs['gender'] = college_data_gender
-        # --- End gender handling ---
 
-        # Create user with prepared arguments
         user = self.create_user(**user_creation_kwargs)
 
         college_data.mark_as_used()
         return user, default_password
 
-# V[2]
-    # ---- CORRECTION: Ensure this method starts at the same indentation level as other methods ----
-    # def create_from_college_data(self, college_data_id):
-        """Create a User from CollegeData, generating a secure voter_id and password.
-        Uses email from CollegeData if available and valid, otherwise defers email setting.
-        Modified to use UUID for voter_id.
-        """
-        from .models import CollegeData
-        college_data = CollegeData.objects.get(id=college_data_id)
-        if college_data.is_used:
-            raise ValueError('College data already used')
-
-        # Generate random password and voter_id
-        default_password = secrets.token_hex(8)
-        voter_id = str(uuid.uuid4())  # Use UUID for secure, unique voter_id
-
-        # Prepare user creation arguments
-        user_creation_kwargs = {
-            'registration_number': college_data.registration_number,
-            'password': default_password,
-            'first_name': college_data.first_name,
-            'last_name': college_data.last_name,
-            'course': college_data.course,
-            'voter_id': voter_id,
-            'is_verified': False
-        }
-
-        # Only pass email if it's present and not just whitespace in CollegeData
-        # This prevents passing '' which causes the unique constraint error
-        # Check if college_data.email exists and is not just whitespace
-        college_data_email = getattr(college_data, 'email', None) # Safer way to get attribute
-        if college_data_email and college_data_email.strip():
-            user_creation_kwargs['email'] = college_data_email.strip() # Use stripped email
-
-        # Create user with prepared arguments
-        user = self.create_user(**user_creation_kwargs)
-
-        college_data.mark_as_used()
-        return user, default_password
-    # ---- END CORRECTION ----
 
     def generate_voter_token(self, user_id, election_id):
         """Generate a VoterToken for a user and election."""
@@ -210,7 +163,7 @@ class User(AbstractUser):
     
     username = None
     
-    # Fields
+
     registration_number = models.CharField(
         max_length=20,
         unique=True,
@@ -228,7 +181,7 @@ class User(AbstractUser):
         help_text="Required email for notifications and password resets",
     )
     voter_id = models.CharField(
-        max_length=36,  # Increased to fit UUID format
+        max_length=36,
         unique=True,
         null=True,
         blank=True,
@@ -266,11 +219,9 @@ class User(AbstractUser):
         help_text="Whether the user account is verified"
     )
     
-    # Timestamps
     date_verified = models.DateTimeField(null=True, blank=True)
     last_login_ip = models.GenericIPAddressField(null=True, blank=True)
     
-    # Authentication settings
     USERNAME_FIELD = 'registration_number'
     REQUIRED_FIELDS = ['email']
     
@@ -348,19 +299,19 @@ class CollegeData(models.Model):
     last_name = models.CharField(max_length=50)
     email = models.EmailField(
         help_text="Required email for user account creation",
-        blank=True # Consider if blank=False is better if email is truly required by admins
+        blank=True
     )
-    # --- Add gender field to CollegeData ---
+
     gender = models.CharField(
         max_length=10,
-        choices=User.GENDER_CHOICES, # Re-use choices from User model for consistency
-        null=True, # Allow NULL in DB if not provided by admin
-        blank=True, # Allow blank in forms/admin
+        choices=User.GENDER_CHOICES,
+        null=True,
+        blank=True,
         help_text="Gender of the student"
     )
-    # --- End gender field ---
+
     voter_id = models.CharField(
-        max_length=36,  # Increased to fit UUID format
+        max_length=36,
         unique=True,
         null=True,
         blank=True,
@@ -394,77 +345,6 @@ class CollegeData(models.Model):
     
     def mark_as_used(self):
         """Mark this college data as used for user creation."""
-        if not self.voter_id:
-            self.voter_id = str(uuid.uuid4())
-        self.is_used = True
-        self.status = 'processed'
-        self.save(update_fields=['is_used', 'status', 'voter_id'])
-    
-    class Meta:
-        db_table = 'college_data'
-        verbose_name = 'College Data'
-        verbose_name_plural = 'College Data'
-        indexes = [
-            models.Index(fields=['registration_number']),
-            models.Index(fields=['course', 'is_used']),
-            models.Index(fields=['status']),
-            models.Index(fields=['voter_id']),
-        ]
-
-# V[01]
-# class CollegeData(models.Model):
-    """Model for storing pre-uploaded college data by Class Leaders."""
-    registration_number = models.CharField(
-        max_length=20,
-        unique=True,
-        validators=[RegexValidator(
-            regex=r'^[A-Z0-9/]+$',
-            message='Registration number must contain only uppercase letters, numbers, or slashes.'
-        )]
-    )
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    email = models.EmailField(
-        help_text="Required email for user account creation",
-        blank=True
-    )
-    voter_id = models.CharField(
-        max_length=36,  # Increased to fit UUID format
-        unique=True,
-        null=True,
-        blank=True,
-        help_text="Unique voter ID for anonymous voting, auto-generated UUID"
-    )
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    uploaded_by = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        limit_choices_to={'role__in': [User.ROLE_CLASS_LEADER, User.ROLE_COMMISSIONER]},
-        help_text="Class leader or commissioner who uploaded this data"
-    )
-    is_used = models.BooleanField(
-        default=False,
-        help_text="Whether this data has been used to create a user account"
-    )
-    created_at = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(
-        max_length=20,
-        choices=[
-            ('pending', 'Pending'),
-            ('processed', 'Processed'),
-            ('failed', 'Failed'),
-        ],
-        default='pending',
-        help_text="Processing status for async tasks"
-    )
-    
-    def __str__(self):
-        return f"{self.first_name} {self.last_name} ({self.registration_number})"
-    
-    def mark_as_used(self):
-        """Mark this college data as used for user creation.
-        # Modified to set voter_id if not provided.
-        """
         if not self.voter_id:
             self.voter_id = str(uuid.uuid4())
         self.is_used = True
