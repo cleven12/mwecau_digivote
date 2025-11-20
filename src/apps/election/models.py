@@ -3,7 +3,7 @@ from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 # Import models from the 'core' app
-from core.models import User, State, Course
+from apps.core.models import User, State, Course
 import uuid
 
 
