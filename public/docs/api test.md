@@ -103,7 +103,7 @@
 - **Verification**:
   - Check Celery logs for `send_verification_email` task.
   - Verify email sent to `neema.john@example.com` with voter token.
-  - Check `User` created in MySQL (`SELECT * FROM core_user WHERE registration_number='T/DEG/2020/0003';`).
+  - Check `User` created in MySQL (`SELECT * from apps.core _user WHERE registration_number='T/DEG/2020/0003';`).
 
 ### 3. Login (`POST /api/auth/login/`)
 - **Description**: Authenticates user and returns JWT tokens.
