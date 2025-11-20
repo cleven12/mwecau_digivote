@@ -1,16 +1,20 @@
 
-
+---
 
 ## License
 
-This project is licensed under a **Proprietary License**. All rights to the software and associated documentation files (the "Software") are owned by the **MWECAU ICT Club**. Unauthorized use, copying, modification, merging, publishing, distribution, sublicensing, or selling of the Software is strictly prohibited.
+The source code in this repository is licensed under the **MIT License**.
 
-### Terms of Use:
+### MIT License
 
-* You may only use the Software as explicitly granted by the **MWECAU ICT Club** under a separate commercial agreement or license.
-* Redistribution, reverse engineering, and sublicensing of the Software is prohibited.
-* The Software is provided "as-is," and **MWECAU ICT Club** does not offer any warranties, express or implied. In no event shall the authors or copyright holders be held liable for any damages arising from the use of the Software.
+Copyright (c) 2025 **MWECAU ICT Club**
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is provided to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 For licensing inquiries, commercial usage, or other permissions, please contact **MWECAU ICT Club** at [mwecauictclub@gmail.com](mailto:mwecauictclub@gmail.com).
 
-
+---
