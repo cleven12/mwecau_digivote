@@ -2,25 +2,29 @@
 from celery import shared_task
 from django.core.mail import send_mail
 from django.conf import settings
+
+from mw_es.settings import SITE_URL
 from .models import User
-# Import election models here as they are needed for token generation
-from election.models import Election, VoterToken 
+from apps.election.models import Election, VoterToken 
 import uuid
 
-# Celery tasks for email notifications
+
+SITE_URL = settings.SITE_URL
+# Email notifications
 @shared_task(queue='email_queue')
 def send_verification_email(user_id):
     """Send verification/welcome email. 
        Includes VoterTokens only if active elections exist.
     """
+
     try:
         user = User.objects.get(id=user_id)
+
     except User.DoesNotExist:
-        # Log error or handle appropriately
         print(f"User with ID {user_id} not found for email.")
         return
 
-    # Check for active elections
+    # Active elections
     active_elections = Election.objects.filter(is_active=True, has_ended=False)
     has_active_elections = active_elections.exists()
 
@@ -39,7 +43,6 @@ def send_verification_email(user_id):
         message += "\nYou are eligible to vote in the following active elections:\n"
         voter_tokens = []
         for election in active_elections:
-            # Get or create the token for this user-election pair
             token_obj, created = VoterToken.objects.get_or_create(
                 user=user,
                 election=election,
@@ -50,14 +53,14 @@ def send_verification_email(user_id):
         message += "\n".join(voter_tokens)
         message += "\n\nUse these tokens to cast your votes."
 
-    message += "\n\nLog in at http://localhost:8000/api/auth/login/ to participate."
+    message += f"\n\nLog in at {SITE_URL}/api/auth/login/ to participate."
 
     send_mail(
         subject=subject,
         message=message,
         from_email=settings.EMAIL_HOST_USER,
         recipient_list=[user.email],
-        fail_silently=False, # Better for debugging, consider True in production
+        fail_silently=False,
     )
 
 @shared_task(queue='email_queue')
@@ -75,7 +78,7 @@ def send_password_reset_email(user_id, new_password):
         f"Your password has been reset:\n"
         f"- Registration Number: {user.registration_number}\n"
         f"- New Password: {new_password}\n"
-        f"Log in at http://localhost:8000/api/auth/login/ with your new password."
+        f"Log in at {SITE_URL}/api/auth/login/ with your new password."
     )
     send_mail(
         subject=subject,
@@ -97,7 +100,7 @@ def send_commissioner_contact_email(user_id, message_content):
     commissioners = User.objects.filter(role=User.ROLE_COMMISSIONER, is_verified=True)
     if not commissioners.exists():
         print("No verified commissioners found to send contact message.")
-        return # Or handle differently
+        return
 
     subject = "MWECAU Election Platform - User Contact Request"
     message = (
