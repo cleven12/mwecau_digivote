@@ -131,7 +131,7 @@ class UserManager(BaseUserManager):
 
     def generate_voter_token(self, user_id, election_id):
         """Generate a VoterToken for a user and election."""
-        from election.models import VoterToken, Election
+        from apps.election.models import VoterToken, Election
         user = self.get(id=user_id)
         if not user.can_vote():
             raise ValueError('User is not eligible to vote')
@@ -316,7 +316,7 @@ class User(AbstractUser):
         """Check if user has voted in a specific election.
         # Added to support vote validation in Celery tasks.
         """
-        from election.models import VoterToken
+        from apps.election.models import VoterToken
         return VoterToken.objects.filter(
             user=self,
             election_id=election_id,
