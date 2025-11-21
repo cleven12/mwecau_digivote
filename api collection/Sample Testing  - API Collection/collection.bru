@@ -1,0 +1,11 @@
+headers {
+  Content-Type: application/json
+}
+
+vars:pre-request {
+  registration_number: T/DEG/2020/0003
+}
+
+script:pre-request {
+  http://0.0.0.0:8000/api/auth/login/
+}
