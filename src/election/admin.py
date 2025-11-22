@@ -41,7 +41,7 @@ class ElectionAdmin(admin.ModelAdmin):
     readonly_fields = ('created_at', 'updated_at')
     ordering = ('-start_date',)
     date_hierarchy = None  # 🔹 Disabled to avoid timezone DB errors
-    actions = ['activate_and_notify']
+    actions = ['activate_and_notify', 'send_custom_notification', 'schedule_reminders']
 
     def start_date_local(self, obj):
         return timezone.localtime(obj.start_date).strftime("%Y-%m-%d %H:%M")
@@ -66,18 +66,92 @@ class ElectionAdmin(admin.ModelAdmin):
 
     def activate_and_notify(self, request, queryset):
         """Admin action to activate selected elections and generate/send voter tokens."""
+        from .tasks import notify_voters_of_active_election
         updated = 0
         for obj in queryset:
             try:
-                # Use model method which also triggers notify_voters_of_active_election
-                obj.activate()
-                updated += 1
+                if not obj.is_active:
+                    obj.is_active = True
+                    obj.save()
+                    # Queue notification task
+                    notify_voters_of_active_election.delay(obj.id)
+                    updated += 1
             except Exception as e:
                 self.message_user(request, f"Failed to activate election {obj.id}: {e}", level=messages.ERROR)
 
         if updated:
             self.message_user(request, f"Activated and notified {updated} election(s).", level=messages.SUCCESS)
     activate_and_notify.short_description = "Activate selected elections and notify voters"
+
+    def send_custom_notification(self, request, queryset):
+        """Send custom notification to all voters in selected elections."""
+        from .tasks import send_custom_election_notification
+        from django import forms
+        from django.shortcuts import render
+        
+        class NotificationForm(forms.Form):
+            message = forms.CharField(
+                widget=forms.Textarea(attrs={'rows': 5, 'cols': 80}),
+                help_text="Enter your custom message to send to all eligible voters"
+            )
+        
+        if 'apply' in request.POST:
+            form = NotificationForm(request.POST)
+            if form.is_valid():
+                custom_message = form.cleaned_data['message']
+                count = 0
+                for election in queryset:
+                    try:
+                        send_custom_election_notification.delay(election.id, custom_message)
+                        count += 1
+                    except Exception as e:
+                        self.message_user(request, f"Failed to send notification for {election.title}: {e}", level=messages.ERROR)
+                
+                self.message_user(request, f"Queued custom notifications for {count} election(s).", level=messages.SUCCESS)
+                return
+        else:
+            form = NotificationForm()
+        
+        context = {
+            'title': 'Send Custom Notification',
+            'form': form,
+            'elections': queryset,
+            'opts': self.model._meta,
+        }
+        return render(request, 'admin/election/send_notification.html', context)
+    
+    send_custom_notification.short_description = "Send custom notification to voters"
+    
+    def schedule_reminders(self, request, queryset):
+        """Schedule reminder emails for selected elections."""
+        from .tasks import send_election_starting_reminder, send_non_voters_reminder
+        from datetime import timedelta
+        
+        scheduled = 0
+        for election in queryset:
+            try:
+                # Schedule 5-minute pre-start reminder
+                start_reminder_time = election.start_date - timedelta(minutes=5)
+                if start_reminder_time > timezone.now():
+                    send_election_starting_reminder.apply_async((election.id,), eta=start_reminder_time)
+                    scheduled += 1
+                
+                # Schedule 30-minute pre-end reminder for non-voters
+                end_reminder_time = election.end_date - timedelta(minutes=30)
+                if end_reminder_time > timezone.now():
+                    send_non_voters_reminder.apply_async((election.id,), eta=end_reminder_time)
+                    scheduled += 1
+                    
+            except Exception as e:
+                self.message_user(request, f"Failed to schedule reminders for {election.title}: {e}", level=messages.ERROR)
+        
+        if scheduled:
+            self.message_user(
+                request, 
+                f"Scheduled {scheduled} reminder tasks (start and end reminders).", 
+                level=messages.SUCCESS
+            )
+    schedule_reminders.short_description = "Schedule automated reminder emails"
 
 
 @admin.register(Position)
