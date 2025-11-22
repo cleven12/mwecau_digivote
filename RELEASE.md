@@ -60,12 +60,12 @@ The MWECAU Digital Voting System is a comprehensive online platform for managing
 - Register page: New user registration with college data validation
 - Dashboard: User info, voting tokens, active elections, API endpoint documentation
 
-**November 14, 2025 - Replit Environment Setup**
+**November 14, 2025 - Cloud Environment Setup**
 - Imported project from GitHub
 - Installed Python 3.12 and all dependencies via packager tool
 - Configured Django to run on port 5000 with host 0.0.0.0
 - Set up SQLite database for development (db.sqlite3)
-- Configured ALLOWED_HOSTS=['*'] and CSRF_TRUSTED_ORIGINS for Replit domains
+- Configured ALLOWED_HOSTS=['*'] and CSRF_TRUSTED_ORIGINS for Cloud domains
 - Ran database migrations successfully
 - Created static/css/style.css with clean, minimal CSS styling
 - Collected static files to staticfiles/
@@ -185,7 +185,7 @@ The MWECAU Digital Voting System is a comprehensive online platform for managing
 - No JavaScript libraries required
 - Server-rendered only with beautiful gradient design
 
-## Replit Environment
+## Cloud Environment
 
 ### Access Points
 - Main Application: Webview (port 5000)
@@ -197,17 +197,17 @@ The MWECAU Digital Voting System is a comprehensive online platform for managing
 - API: /api/election/{id}/submit/ and /api/election/{id}/results/
 
 ### Environment Variables (.env)
-Located in `src/.env` with Replit-compatible configuration:
+Located in `src/.env` with Cloud-compatible configuration:
 - DEBUG=True
-- ALLOWED_HOSTS includes .replit.dev and .repl.co
-- CSRF_TRUSTED_ORIGINS configured for Replit domains
+- ALLOWED_HOSTS includes *.dev and *.co
+- CSRF_TRUSTED_ORIGINS configured for Cloud domains
 - SQLite database configured
 - Email console backend for development
 
 ### Workflow
-- **Django Server**: `cd src && python manage.py runserver 0.0.0.0:5000`
-- Auto-starts on Replit
-- Bound to 0.0.0.0:5000 for webview access
+- **Django Server**: `cd src && python manage.py runserver 0.0.0.0:8000`
+- Auto-starts on Cloud
+- Bound to 0.0.0.0:8000 for webview access
 
 ### Deployment Configuration
 - **Target**: VM (always-on server for stateful election system)
@@ -217,11 +217,3 @@ Located in `src/.env` with Replit-compatible configuration:
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
-
-## Next Steps
-
-1. Test voter token flow with API endpoints
-2. Add more UI pages as needed (election list, voting interface, results display)
-3. Consider PostgreSQL migration for production
-4. Add email configuration for production notifications
-5. Create admin user for testing

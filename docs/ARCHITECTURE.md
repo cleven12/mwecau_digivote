@@ -83,7 +83,7 @@ The MWECAU Digital Voting System is a **lean, server-rendered Django application
 - **No JavaScript frameworks**: Progressive enhancement only
 
 ### Infrastructure
-- **Replit**: Development and hosting platform
+- **Cloud**: Development and hosting platform
 - **VM Deployment**: Always-on server for elections
 - **Static Files**: Collected and served via Django
 
@@ -328,10 +328,10 @@ All forms include Django's CSRF token:
 </form>
 ```
 
-Configured trusted origins for Replit:
+Configured trusted origins for Cloud:
 ```python
 CSRF_TRUSTED_ORIGINS = [
-    'https://*.replit.dev',
+    'https://*.Cloud.dev',
     'https://*.repl.co',
 ]
 ```
@@ -417,7 +417,7 @@ CSRF_TRUSTED_ORIGINS = [
 
 ### Development Environment
 
-**Replit Configuration**:
+**Cloud Configuration**:
 - Python 3.12 environment
 - Auto-restart on file changes
 - Port 5000 webview

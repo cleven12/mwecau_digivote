@@ -145,3 +145,272 @@ INFO 2025-11-22 01:15:19,931 basehttp "GET /login/ HTTP/1.1" 200 2826
 INFO 2025-11-22 01:15:19,993 basehttp "GET /static/css/style.css HTTP/1.1" 304 0
 INFO 2025-11-22 01:15:24,241 basehttp "POST /login/ HTTP/1.1" 200 3062
 INFO 2025-11-22 01:15:27,002 basehttp "GET /register/ HTTP/1.1" 200 2896
+INFO 2025-11-22 07:03:33,119 autoreload Watching for file changes with StatReloader
+INFO 2025-11-22 07:03:37,367 basehttp "GET / HTTP/1.1" 200 14794
+INFO 2025-11-22 07:03:37,473 basehttp "GET /admin/ HTTP/1.1" 302 0
+INFO 2025-11-22 07:03:37,507 basehttp "GET /static/css/style.css HTTP/1.1" 200 3729
+INFO 2025-11-22 07:03:38,231 basehttp "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4187
+WARNING 2025-11-22 07:04:03,641 log Not Found: /favicon.ico
+WARNING 2025-11-22 07:04:03,642 basehttp "GET /favicon.ico HTTP/1.1" 404 5735
+INFO 2025-11-22 07:04:05,193 basehttp "GET /login/ HTTP/1.1" 200 2826
+INFO 2025-11-22 07:04:59,922 basehttp "POST /login/ HTTP/1.1" 302 0
+INFO 2025-11-22 07:05:00,006 basehttp "GET /dashboard/ HTTP/1.1" 200 5571
+INFO 2025-11-22 07:05:17,034 basehttp "GET /profile/edit/ HTTP/1.1" 200 9341
+INFO 2025-11-22 07:05:55,377 basehttp "GET /elections/ HTTP/1.1" 200 3122
+ERROR 2025-11-22 07:05:57,432 log Internal Server Error: /elections/1/results/
+Traceback (most recent call last):
+  File "/home/nevelc/Private/repo/university_elec_api/venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/nevelc/Private/repo/university_elec_api/venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/nevelc/Private/repo/university_elec_api/venv/lib/python3.13/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/nevelc/Private/repo/university_elec_api/src/election/views_ui.py", line 74, in election_results
+    candidates = Candidate.objects.filter(position=position).annotate(
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        votes=Count('vote')
+        ^^^^^^^^^^^^^^^^^^^
+    ).order_by('-votes')
+    ^
+  File "/home/nevelc/Private/repo/university_elec_api/venv/lib/python3.13/site-packages/django/db/models/query.py", line 1654, in annotate
+    return self._annotate(args, kwargs, select=True)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nevelc/Private/repo/university_elec_api/venv/lib/python3.13/site-packages/django/db/models/query.py", line 1699, in _annotate
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: The annotation 'votes' conflicts with a field on the model.
+ERROR 2025-11-22 07:05:57,436 basehttp "GET /elections/1/results/ HTTP/1.1" 500 91109
+INFO 2025-11-22 07:06:16,524 basehttp "GET /elections/ HTTP/1.1" 302 0
+INFO 2025-11-22 07:06:16,538 basehttp "GET /login/?next=/elections/ HTTP/1.1" 200 2826
+INFO 2025-11-22 07:06:16,611 basehttp "GET /static/css/style.css HTTP/1.1" 200 3729
+INFO 2025-11-22 07:06:20,887 basehttp "GET /register/ HTTP/1.1" 200 2896
+WARNING 2025-11-22 07:06:27,526 log Not Found: /adm
+WARNING 2025-11-22 07:06:27,527 basehttp "GET /adm HTTP/1.1" 404 5711
+INFO 2025-11-22 07:06:30,677 basehttp "GET /admin HTTP/1.1" 301 0
+INFO 2025-11-22 07:06:30,684 basehttp "GET /admin/ HTTP/1.1" 302 0
+INFO 2025-11-22 07:06:30,694 basehttp "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4187
+INFO 2025-11-22 07:06:30,782 basehttp "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2810
+INFO 2025-11-22 07:06:30,784 basehttp "GET /static/admin/css/login.css HTTP/1.1" 200 951
+INFO 2025-11-22 07:06:30,785 basehttp "GET /static/admin/css/responsive.css HTTP/1.1" 200 16565
+INFO 2025-11-22 07:06:30,785 basehttp "GET /static/admin/css/base.css HTTP/1.1" 200 22120
+INFO 2025-11-22 07:06:30,785 basehttp "GET /static/admin/js/theme.js HTTP/1.1" 200 1653
+INFO 2025-11-22 07:06:30,803 basehttp "GET /static/admin/css/dark_mode.css HTTP/1.1" 200 2808
+INFO 2025-11-22 07:06:30,808 basehttp "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+INFO 2025-11-22 07:09:20,103 autoreload Watching for file changes with StatReloader
+INFO 2025-11-22 07:09:24,411 basehttp "POST /admin/login/?next=/admin/ HTTP/1.1" 200 4370
+INFO 2025-11-22 07:09:34,888 basehttp "POST /admin/login/?next=/admin/ HTTP/1.1" 302 0
+INFO 2025-11-22 07:09:34,959 basehttp "GET /admin/ HTTP/1.1" 200 20379
+INFO 2025-11-22 07:09:35,040 basehttp "GET /static/admin/css/dashboard.css HTTP/1.1" 200 441
+INFO 2025-11-22 07:09:35,090 basehttp "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 200 331
+INFO 2025-11-22 07:09:35,090 basehttp "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 200 380
+INFO 2025-11-22 07:09:43,396 basehttp "GET /admin/token_blacklist/outstandingtoken/ HTTP/1.1" 200 18443
+INFO 2025-11-22 07:09:43,444 basehttp "GET /static/admin/css/changelists.css HTTP/1.1" 200 6878
+INFO 2025-11-22 07:09:43,475 basehttp "GET /static/admin/js/jquery.init.js HTTP/1.1" 200 347
+INFO 2025-11-22 07:09:43,475 basehttp "GET /static/admin/js/admin/RelatedObjectLookups.js HTTP/1.1" 200 9777
+INFO 2025-11-22 07:09:43,521 basehttp "GET /static/admin/js/actions.js HTTP/1.1" 200 8076
+INFO 2025-11-22 07:09:43,521 basehttp "GET /static/admin/js/prepopulate.js HTTP/1.1" 200 1531
+INFO 2025-11-22 07:09:43,522 basehttp "GET /static/admin/js/urlify.js HTTP/1.1" 200 7887
+INFO 2025-11-22 07:09:43,524 basehttp "GET /static/admin/js/vendor/xregexp/xregexp.js HTTP/1.1" 200 325171
+INFO 2025-11-22 07:09:43,534 basehttp "GET /static/admin/js/vendor/jquery/jquery.js HTTP/1.1" 200 285314
+INFO 2025-11-22 07:09:43,535 basehttp "GET /static/admin/js/core.js HTTP/1.1" 200 6208
+INFO 2025-11-22 07:09:43,553 basehttp "GET /static/admin/img/search.svg HTTP/1.1" 200 458
+INFO 2025-11-22 07:09:43,575 basehttp "GET /static/admin/js/filters.js HTTP/1.1" 200 978
+INFO 2025-11-22 07:09:47,081 basehttp "GET /admin/token_blacklist/blacklistedtoken/ HTTP/1.1" 200 18625
+INFO 2025-11-22 07:09:47,146 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-22 07:09:47,221 basehttp "GET /static/admin/img/tooltag-add.svg HTTP/1.1" 200 331
+INFO 2025-11-22 07:09:51,230 basehttp "GET /admin/django_celery_beat/clockedschedule/ HTTP/1.1" 200 18254
+INFO 2025-11-22 07:09:51,274 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-22 07:09:54,317 basehttp "GET /admin/django_celery_beat/clockedschedule/add/ HTTP/1.1" 200 22113
+INFO 2025-11-22 07:09:54,364 basehttp "GET /static/admin/css/forms.css HTTP/1.1" 200 8525
+INFO 2025-11-22 07:09:54,367 basehttp "GET /static/admin/js/prepopulate_init.js HTTP/1.1" 200 586
+INFO 2025-11-22 07:09:54,367 basehttp "GET /static/admin/js/inlines.js HTTP/1.1" 200 15628
+INFO 2025-11-22 07:09:54,367 basehttp "GET /static/admin/js/calendar.js HTTP/1.1" 200 9141
+INFO 2025-11-22 07:09:54,369 basehttp "GET /static/admin/js/admin/DateTimeShortcuts.js HTTP/1.1" 200 19319
+INFO 2025-11-22 07:09:54,371 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-22 07:09:54,421 basehttp "GET /static/admin/img/icon-unknown.svg HTTP/1.1" 200 655
+INFO 2025-11-22 07:09:54,442 basehttp "GET /static/admin/css/widgets.css HTTP/1.1" 200 11973
+INFO 2025-11-22 07:09:54,446 basehttp "GET /static/admin/js/change_form.js HTTP/1.1" 200 606
+INFO 2025-11-22 07:09:54,521 basehttp "GET /static/admin/img/icon-clock.svg HTTP/1.1" 200 677
+INFO 2025-11-22 07:09:54,543 basehttp "GET /static/admin/img/icon-calendar.svg HTTP/1.1" 200 1086
+INFO 2025-11-22 07:10:02,296 basehttp "GET /admin/django_celery_beat/crontabschedule/ HTTP/1.1" 200 18256
+INFO 2025-11-22 07:10:02,331 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-22 07:10:04,364 basehttp "GET /admin/django_celery_beat/crontabschedule/add/ HTTP/1.1" 200 62227
+INFO 2025-11-22 07:10:04,405 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-22 07:10:19,231 basehttp "GET /admin/django_celery_beat/intervalschedule/ HTTP/1.1" 200 18263
+INFO 2025-11-22 07:10:19,264 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-22 07:10:22,309 basehttp "GET /admin/django_celery_beat/intervalschedule/add/ HTTP/1.1" 200 23055
+INFO 2025-11-22 07:10:22,352 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-22 07:10:36,687 basehttp "GET /admin/django_celery_beat/periodictask/ HTTP/1.1" 200 21659
+INFO 2025-11-22 07:10:36,740 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-22 07:10:36,780 basehttp "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 200 581
+INFO 2025-11-22 07:10:38,999 basehttp "GET /admin/django_celery_beat/periodictask/add/ HTTP/1.1" 200 43956
+INFO 2025-11-22 07:10:39,036 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-22 07:11:19,498 basehttp "GET /admin/django_celery_beat/solarschedule/ HTTP/1.1" 200 18272
+INFO 2025-11-22 07:11:19,534 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-22 07:11:21,788 basehttp "GET /admin/django_celery_beat/solarschedule/add/ HTTP/1.1" 200 24169
+INFO 2025-11-22 07:11:21,821 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-22 07:11:34,527 basehttp "GET /admin/django_celery_results/groupresult/ HTTP/1.1" 200 19823
+INFO 2025-11-22 07:11:34,570 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-22 07:11:36,866 basehttp "GET /admin/django_celery_results/groupresult/add/ HTTP/1.1" 200 23381
+INFO 2025-11-22 07:11:36,907 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-22 07:11:41,250 basehttp "GET /admin/django_celery_results/taskresult/ HTTP/1.1" 200 20538
+INFO 2025-11-22 07:11:41,290 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-22 07:11:43,287 basehttp "GET /admin/django_celery_results/taskresult/add/ HTTP/1.1" 200 29818
+INFO 2025-11-22 07:11:43,324 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-22 07:11:50,145 basehttp "GET /admin/election/vote/ HTTP/1.1" 200 23656
+INFO 2025-11-22 07:11:50,185 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-22 07:12:01,208 basehttp "GET /admin/election/votertoken/ HTTP/1.1" 200 34269
+INFO 2025-11-22 07:12:01,249 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-22 07:12:01,264 basehttp "GET /static/admin/img/icon-no.svg HTTP/1.1" 200 560
+INFO 2025-11-22 07:12:01,270 basehttp "GET /static/admin/img/icon-yes.svg HTTP/1.1" 200 436
+INFO 2025-11-22 07:12:14,052 basehttp "GET /admin/election/position/ HTTP/1.1" 200 30089
+INFO 2025-11-22 07:12:14,086 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-22 07:12:14,165 basehttp "GET /static/admin/img/sorting-icons.svg HTTP/1.1" 200 1097
+INFO 2025-11-22 07:12:24,858 basehttp "GET /admin/election/election/ HTTP/1.1" 200 24098
+INFO 2025-11-22 07:12:24,893 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-22 07:12:28,107 basehttp "GET /admin/election/election/2/change/ HTTP/1.1" 200 27458
+INFO 2025-11-22 07:12:28,141 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-22 07:12:28,156 basehttp "GET /static/admin/js/SelectFilter2.js HTTP/1.1" 200 15845
+INFO 2025-11-22 07:12:28,178 basehttp "GET /static/admin/js/SelectBox.js HTTP/1.1" 200 4530
+INFO 2025-11-22 07:12:28,244 basehttp "GET /static/admin/img/selector-icons.svg HTTP/1.1" 200 3291
+INFO 2025-11-22 07:13:02,469 basehttp "POST /admin/election/election/2/change/ HTTP/1.1" 302 0
+INFO 2025-11-22 07:13:02,519 basehttp "GET /admin/election/election/2/change/ HTTP/1.1" 200 27715
+INFO 2025-11-22 07:13:02,597 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-22 07:13:07,602 basehttp "GET /elections/ HTTP/1.1" 200 3122
+INFO 2025-11-22 07:13:09,434 basehttp "GET /elections/ HTTP/1.1" 200 3122
+INFO 2025-11-22 07:13:10,883 basehttp "GET /elections/ HTTP/1.1" 200 3122
+INFO 2025-11-22 07:13:14,562 basehttp "GET /dashboard/ HTTP/1.1" 200 5353
+INFO 2025-11-22 07:13:18,912 basehttp "GET /elections/ HTTP/1.1" 200 3122
+INFO 2025-11-22 07:13:43,412 basehttp "GET /dashboard/ HTTP/1.1" 200 5353
+INFO 2025-11-22 07:14:06,123 basehttp "POST /admin/election/election/2/change/ HTTP/1.1" 200 27637
+INFO 2025-11-22 07:14:06,184 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-22 07:14:19,962 basehttp "POST /admin/election/election/2/change/ HTTP/1.1" 302 0
+INFO 2025-11-22 07:14:20,009 basehttp "GET /admin/election/election/2/change/ HTTP/1.1" 200 27697
+INFO 2025-11-22 07:14:20,090 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-22 07:14:25,145 basehttp "GET /dashboard/ HTTP/1.1" 200 5353
+INFO 2025-11-22 07:14:34,160 basehttp "GET /admin/core/user/ HTTP/1.1" 200 81900
+INFO 2025-11-22 07:14:34,220 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-22 07:15:00,025 basehttp "GET /admin/core/user/105/change/ HTTP/1.1" 200 46986
+INFO 2025-11-22 07:15:00,070 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-22 07:15:00,089 basehttp "GET /static/admin/img/icon-deletelink.svg HTTP/1.1" 200 392
+INFO 2025-11-22 07:15:13,780 basehttp "POST /admin/core/user/105/change/ HTTP/1.1" 302 0
+INFO 2025-11-22 07:15:13,863 basehttp "GET /admin/core/user/105/change/ HTTP/1.1" 200 47234
+INFO 2025-11-22 07:15:13,948 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-22 07:15:17,740 basehttp "GET /dashboard/ HTTP/1.1" 200 5347
+INFO 2025-11-22 07:15:37,721 basehttp "GET /admin/election/election/ HTTP/1.1" 200 24098
+INFO 2025-11-22 07:15:37,780 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-22 07:15:41,979 basehttp "GET /admin/election/election/2/change/ HTTP/1.1" 200 27439
+INFO 2025-11-22 07:15:42,028 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-22 07:15:47,447 basehttp "POST /admin/election/election/2/change/ HTTP/1.1" 302 0
+INFO 2025-11-22 07:15:47,511 basehttp "GET /admin/election/election/2/change/ HTTP/1.1" 200 27705
+INFO 2025-11-22 07:15:47,596 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-22 07:15:51,937 basehttp "GET /dashboard/ HTTP/1.1" 200 5988
+INFO 2025-11-22 07:15:55,368 basehttp "GET /elections/ HTTP/1.1" 200 3624
+INFO 2025-11-22 07:15:58,695 basehttp "GET /elections/2/vote/ HTTP/1.1" 200 24436
+INFO 2025-11-22 07:16:38,088 basehttp "POST /elections/2/vote/submit/ HTTP/1.1" 302 0
+INFO 2025-11-22 07:16:38,120 basehttp "GET /elections/2/vote/ HTTP/1.1" 200 19859
+INFO 2025-11-22 07:16:51,378 basehttp "GET /elections/2/vote/ HTTP/1.1" 200 19606
+INFO 2025-11-22 07:17:05,824 basehttp "POST /elections/2/vote/submit/ HTTP/1.1" 302 0
+INFO 2025-11-22 07:17:05,852 basehttp "GET /elections/2/vote/ HTTP/1.1" 200 19890
+INFO 2025-11-22 07:17:17,279 basehttp "POST /elections/2/vote/submit/ HTTP/1.1" 302 0
+INFO 2025-11-22 07:17:17,310 basehttp "GET /elections/2/vote/ HTTP/1.1" 200 19890
+INFO 2025-11-22 07:17:23,756 basehttp "POST /elections/2/vote/submit/ HTTP/1.1" 302 0
+INFO 2025-11-22 07:17:23,787 basehttp "GET /elections/2/vote/ HTTP/1.1" 200 19890
+INFO 2025-11-22 07:17:31,203 basehttp "POST /elections/2/vote/submit/ HTTP/1.1" 302 0
+INFO 2025-11-22 07:17:31,235 basehttp "GET /elections/2/vote/ HTTP/1.1" 200 17496
+INFO 2025-11-22 07:17:53,594 basehttp "GET /profile/edit/ HTTP/1.1" 200 9461
+INFO 2025-11-22 07:18:23,227 basehttp "GET /dashboard/ HTTP/1.1" 200 5984
+INFO 2025-11-22 07:18:39,409 basehttp "GET /elections/2/results/ HTTP/1.1" 302 0
+INFO 2025-11-22 07:18:39,431 basehttp "GET /elections/ HTTP/1.1" 200 3850
+INFO 2025-11-22 07:18:42,629 basehttp "GET /elections/2/vote/ HTTP/1.1" 200 17235
+INFO 2025-11-22 07:18:46,524 basehttp "POST /elections/2/vote/submit/ HTTP/1.1" 302 0
+INFO 2025-11-22 07:18:46,556 basehttp "GET /elections/2/vote/ HTTP/1.1" 200 17519
+INFO 2025-11-22 07:18:59,356 basehttp "POST /admin/election/election/2/change/ HTTP/1.1" 302 0
+INFO 2025-11-22 07:18:59,412 basehttp "GET /admin/election/election/2/change/ HTTP/1.1" 200 27713
+INFO 2025-11-22 07:18:59,509 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-22 07:19:03,037 basehttp "GET /elections/2/vote/ HTTP/1.1" 200 17235
+INFO 2025-11-22 07:19:14,359 basehttp "GET /dashboard/ HTTP/1.1" 200 5984
+ERROR 2025-11-22 07:19:18,676 log Internal Server Error: /elections/2/results/
+Traceback (most recent call last):
+  File "/home/nevelc/Private/repo/university_elec_api/venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/nevelc/Private/repo/university_elec_api/venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/nevelc/Private/repo/university_elec_api/venv/lib/python3.13/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/nevelc/Private/repo/university_elec_api/src/election/views_ui.py", line 74, in election_results
+    candidates = Candidate.objects.filter(position=position).annotate(
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        votes=Count('vote')
+        ^^^^^^^^^^^^^^^^^^^
+    ).order_by('-votes')
+    ^
+  File "/home/nevelc/Private/repo/university_elec_api/venv/lib/python3.13/site-packages/django/db/models/query.py", line 1654, in annotate
+    return self._annotate(args, kwargs, select=True)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nevelc/Private/repo/university_elec_api/venv/lib/python3.13/site-packages/django/db/models/query.py", line 1699, in _annotate
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: The annotation 'votes' conflicts with a field on the model.
+ERROR 2025-11-22 07:19:18,679 basehttp "GET /elections/2/results/ HTTP/1.1" 500 90769
+ERROR 2025-11-22 07:19:23,298 log Internal Server Error: /elections/2/results/
+Traceback (most recent call last):
+  File "/home/nevelc/Private/repo/university_elec_api/venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/nevelc/Private/repo/university_elec_api/venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/nevelc/Private/repo/university_elec_api/venv/lib/python3.13/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/nevelc/Private/repo/university_elec_api/src/election/views_ui.py", line 74, in election_results
+    candidates = Candidate.objects.filter(position=position).annotate(
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        votes=Count('vote')
+        ^^^^^^^^^^^^^^^^^^^
+    ).order_by('-votes')
+    ^
+  File "/home/nevelc/Private/repo/university_elec_api/venv/lib/python3.13/site-packages/django/db/models/query.py", line 1654, in annotate
+    return self._annotate(args, kwargs, select=True)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nevelc/Private/repo/university_elec_api/venv/lib/python3.13/site-packages/django/db/models/query.py", line 1699, in _annotate
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: The annotation 'votes' conflicts with a field on the model.
+ERROR 2025-11-22 07:19:23,301 basehttp "GET /elections/2/results/ HTTP/1.1" 500 90769
+INFO 2025-11-22 07:19:27,688 basehttp "GET /elections/2/vote/ HTTP/1.1" 200 17235
+INFO 2025-11-22 07:19:31,636 basehttp "POST /elections/2/vote/submit/ HTTP/1.1" 302 0
+INFO 2025-11-22 07:19:31,663 basehttp "GET /elections/2/vote/ HTTP/1.1" 200 17519
+INFO 2025-11-22 07:19:39,692 basehttp "GET /elections/2/vote/ HTTP/1.1" 200 17235
+INFO 2025-11-22 07:19:52,421 basehttp "POST /admin/election/election/2/change/ HTTP/1.1" 302 0
+INFO 2025-11-22 07:19:52,472 basehttp "GET /admin/election/election/2/change/ HTTP/1.1" 200 27713
+INFO 2025-11-22 07:19:52,557 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2025-11-22 07:19:56,843 basehttp "GET /elections/2/vote/ HTTP/1.1" 302 0
+INFO 2025-11-22 07:19:56,868 basehttp "GET /elections/ HTTP/1.1" 200 3868
+ERROR 2025-11-22 07:20:03,654 log Internal Server Error: /elections/2/results/
+Traceback (most recent call last):
+  File "/home/nevelc/Private/repo/university_elec_api/venv/lib/python3.13/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+  File "/home/nevelc/Private/repo/university_elec_api/venv/lib/python3.13/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/home/nevelc/Private/repo/university_elec_api/venv/lib/python3.13/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+  File "/home/nevelc/Private/repo/university_elec_api/src/election/views_ui.py", line 74, in election_results
+    candidates = Candidate.objects.filter(position=position).annotate(
+                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        votes=Count('vote')
+        ^^^^^^^^^^^^^^^^^^^
+    ).order_by('-votes')
+    ^
+  File "/home/nevelc/Private/repo/university_elec_api/venv/lib/python3.13/site-packages/django/db/models/query.py", line 1654, in annotate
+    return self._annotate(args, kwargs, select=True)
+           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/nevelc/Private/repo/university_elec_api/venv/lib/python3.13/site-packages/django/db/models/query.py", line 1699, in _annotate
+    raise ValueError(
+    ...<2 lines>...
+    )
+ValueError: The annotation 'votes' conflicts with a field on the model.
+ERROR 2025-11-22 07:20:03,657 basehttp "GET /elections/2/results/ HTTP/1.1" 500 90769
+INFO 2025-11-22 07:21:27,292 autoreload /home/nevelc/Private/repo/university_elec_api/src/mw_es/settings.py changed, reloading.
+INFO 2025-11-22 07:21:28,222 autoreload Watching for file changes with StatReloader
