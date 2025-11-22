@@ -1,0 +1,63 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block content %}
+<div class="content">
+    <h1>{{ title }}</h1>
+    
+    <p>You are about to send a custom notification to all eligible voters in the following election(s):</p>
+    
+    <ul>
+        {% for election in elections %}
+        <li><strong>{{ election.title }}</strong> ({{ election.start_date }} - {{ election.end_date }})</li>
+        {% endfor %}
+    </ul>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label for="{{ form.message.id_for_label }}">Custom Message:</label>
+            {{ form.message }}
+            {% if form.message.help_text %}
+                <p class="help">{{ form.message.help_text }}</p>
+            {% endif %}
+            {% if form.message.errors %}
+                <p class="errornote">{{ form.message.errors }}</p>
+            {% endif %}
+        </div>
+        
+        <div class="submit-row">
+            <input type="submit" value="Send Notification" class="default" name="apply">
+            <a href="{% url 'admin:election_election_changelist' %}" class="button cancel-link">Cancel</a>
+        </div>
+    </form>
+</div>
+
+<style>
+    .form-group {
+        margin: 20px 0;
+    }
+    .form-group label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    .form-group textarea {
+        width: 100%;
+        max-width: 800px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    .help {
+        color: #666;
+        font-size: 0.9em;
+        margin-top: 5px;
+    }
+    .errornote {
+        color: #ba2121;
+        font-weight: bold;
+    }
+</style>
+{% endblock %}
