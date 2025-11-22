@@ -1,0 +1,147 @@
+INFO 2025-11-21 21:06:46,351 autoreload Watching for file changes with StatReloader
+INFO 2025-11-21 21:06:46,686 autoreload Watching for file changes with StatReloader
+INFO 2025-11-21 21:06:52,302 basehttp "GET / HTTP/1.1" 200 1164
+INFO 2025-11-21 21:06:53,515 basehttp "GET /static/css/style.css HTTP/1.1" 200 3729
+INFO 2025-11-21 21:06:58,835 autoreload Watching for file changes with StatReloader
+INFO 2025-11-21 21:07:00,866 basehttp "GET / HTTP/1.1" 200 1164
+INFO 2025-11-21 21:07:07,403 basehttp "GET / HTTP/1.1" 200 1164
+INFO 2025-11-21 21:07:07,462 basehttp "GET /static/css/style.css HTTP/1.1" 200 3729
+WARNING 2025-11-21 21:07:07,645 log Not Found: /favicon.ico
+WARNING 2025-11-21 21:07:07,646 basehttp "GET /favicon.ico HTTP/1.1" 404 3973
+INFO 2025-11-21 21:08:32,578 autoreload /home/runner/workspace/src/election/tasks.py changed, reloading.
+INFO 2025-11-21 21:08:33,472 autoreload Watching for file changes with StatReloader
+INFO 2025-11-21 21:08:39,050 basehttp "GET / HTTP/1.1" 200 1164
+INFO 2025-11-21 21:08:39,788 basehttp "GET /static/css/style.css HTTP/1.1" 304 0
+INFO 2025-11-21 21:08:41,201 autoreload /home/runner/workspace/src/core/signals.py changed, reloading.
+INFO 2025-11-21 21:08:42,043 autoreload Watching for file changes with StatReloader
+INFO 2025-11-21 21:08:43,795 basehttp "GET / HTTP/1.1" 200 1164
+INFO 2025-11-21 21:08:50,693 autoreload /home/runner/workspace/src/core/signals.py changed, reloading.
+INFO 2025-11-21 21:08:51,816 autoreload Watching for file changes with StatReloader
+INFO 2025-11-21 21:08:55,329 basehttp "GET / HTTP/1.1" 200 1164
+INFO 2025-11-21 21:09:05,682 autoreload /home/runner/workspace/src/election/signals.py changed, reloading.
+INFO 2025-11-21 21:09:06,392 autoreload Watching for file changes with StatReloader
+INFO 2025-11-21 21:09:08,710 basehttp "GET / HTTP/1.1" 200 1164
+INFO 2025-11-21 21:11:18,753 autoreload /home/runner/workspace/src/election/tasks.py changed, reloading.
+INFO 2025-11-21 21:11:19,906 autoreload Watching for file changes with StatReloader
+INFO 2025-11-21 21:11:25,037 basehttp "GET / HTTP/1.1" 200 1164
+INFO 2025-11-21 21:11:26,276 basehttp "GET /static/css/style.css HTTP/1.1" 304 0
+INFO 2025-11-21 21:11:26,502 autoreload /home/runner/workspace/src/election/admin.py changed, reloading.
+INFO 2025-11-21 21:11:27,311 autoreload Watching for file changes with StatReloader
+INFO 2025-11-21 21:11:28,889 basehttp "GET / HTTP/1.1" 200 1164
+INFO 2025-11-21 21:11:41,071 autoreload /home/runner/workspace/src/election/admin.py changed, reloading.
+INFO 2025-11-21 21:11:42,210 autoreload Watching for file changes with StatReloader
+INFO 2025-11-21 21:11:46,900 basehttp "GET / HTTP/1.1" 200 1164
+INFO 2025-11-21 21:11:59,086 autoreload /home/runner/workspace/src/core/urls.py changed, reloading.
+INFO 2025-11-21 21:11:59,944 autoreload Watching for file changes with StatReloader
+INFO 2025-11-21 21:12:02,178 basehttp "GET / HTTP/1.1" 200 1164
+INFO 2025-11-21 21:14:13,082 basehttp "GET /register/ HTTP/1.1" 200 1318
+INFO 2025-11-21 21:14:15,275 basehttp "GET /static/css/style.css HTTP/1.1" 304 0
+INFO 2025-11-21 21:14:16,013 basehttp "GET / HTTP/1.1" 200 1164
+INFO 2025-11-21 21:14:17,184 basehttp "GET /static/css/style.css HTTP/1.1" 200 3729
+INFO 2025-11-21 21:15:17,253 basehttp "GET / HTTP/1.1" 200 1164
+INFO 2025-11-21 21:16:08,151 autoreload /home/runner/workspace/src/core/views_ui.py changed, reloading.
+INFO 2025-11-21 21:16:09,096 autoreload Watching for file changes with StatReloader
+INFO 2025-11-21 21:16:12,571 autoreload /home/runner/workspace/src/core/urls.py changed, reloading.
+INFO 2025-11-21 21:16:13,238 autoreload Watching for file changes with StatReloader
+INFO 2025-11-21 21:16:15,088 basehttp "GET / HTTP/1.1" 200 1164
+INFO 2025-11-21 21:21:32,605 autoreload /home/runner/workspace/src/mw_es/settings.py changed, reloading.
+INFO 2025-11-21 21:21:33,494 autoreload Watching for file changes with StatReloader
+INFO 2025-11-21 21:21:38,662 basehttp "GET / HTTP/1.1" 200 1164
+INFO 2025-11-21 21:21:39,591 basehttp "GET /static/css/style.css HTTP/1.1" 304 0
+INFO 2025-11-21 21:23:26,827 basehttp "GET /register/ HTTP/1.1" 200 1318
+INFO 2025-11-21 21:23:32,725 basehttp "POST /register/ HTTP/1.1" 200 1491
+INFO 2025-11-21 21:23:41,250 basehttp "GET /login/ HTTP/1.1" 200 1248
+INFO 2025-11-21 21:23:57,991 basehttp "POST /login/ HTTP/1.1" 302 0
+INFO 2025-11-21 21:23:58,656 basehttp "GET /dashboard/ HTTP/1.1" 200 3716
+INFO 2025-11-21 21:24:10,292 basehttp "GET /elections/2/vote/ HTTP/1.1" 302 0
+INFO 2025-11-21 21:24:10,677 basehttp "GET /elections/ HTTP/1.1" 200 1528
+ERROR 2025-11-21 21:24:15,942 log Internal Server Error: /elections/1/results/
+Traceback (most recent call last):
+  File "/home/runner/workspace/.pythonlibs/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.12/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/src/election/views_ui.py", line 74, in election_results
+    candidates = Candidate.objects.filter(position=position).annotate(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.12/site-packages/django/db/models/query.py", line 1654, in annotate
+    return self._annotate(args, kwargs, select=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.12/site-packages/django/db/models/query.py", line 1699, in _annotate
+    raise ValueError(
+ValueError: The annotation 'votes' conflicts with a field on the model.
+ERROR 2025-11-21 21:24:15,945 basehttp "GET /elections/1/results/ HTTP/1.1" 500 122698
+INFO 2025-11-21 21:24:42,863 basehttp "GET /elections/ HTTP/1.1" 200 1363
+INFO 2025-11-21 21:24:43,297 basehttp "GET /static/css/style.css HTTP/1.1" 304 0
+INFO 2025-11-21 21:24:53,408 basehttp "GET /elections/ HTTP/1.1" 200 1363
+INFO 2025-11-21 21:24:57,895 basehttp "GET /dashboard/ HTTP/1.1" 200 3567
+INFO 2025-11-21 21:25:14,806 basehttp "GET /elections/1/vote/ HTTP/1.1" 302 0
+INFO 2025-11-21 21:25:15,192 basehttp "GET /elections/ HTTP/1.1" 200 1528
+INFO 2025-11-21 21:25:19,629 basehttp "GET /dashboard/ HTTP/1.1" 200 3567
+INFO 2025-11-21 21:25:26,263 basehttp "GET /elections/2/vote/ HTTP/1.1" 302 0
+INFO 2025-11-21 21:25:26,675 basehttp "GET /elections/ HTTP/1.1" 200 1528
+INFO 2025-11-21 21:25:33,195 basehttp "GET /dashboard/ HTTP/1.1" 200 3567
+INFO 2025-11-21 21:25:45,816 basehttp "GET /elections/ HTTP/1.1" 200 1363
+INFO 2025-11-21 21:26:07,337 basehttp "GET /dashboard/ HTTP/1.1" 200 3567
+INFO 2025-11-21 21:26:08,593 basehttp "GET /logout/ HTTP/1.1" 302 0
+INFO 2025-11-21 21:26:09,468 basehttp "GET /login/ HTTP/1.1" 200 1415
+INFO 2025-11-21 21:26:34,245 basehttp "POST /login/ HTTP/1.1" 302 0
+INFO 2025-11-21 21:26:34,631 basehttp "GET /dashboard/ HTTP/1.1" 200 2343
+INFO 2025-11-21 21:26:49,619 basehttp "GET /elections/ HTTP/1.1" 200 1369
+ERROR 2025-11-21 21:26:53,655 log Internal Server Error: /elections/1/results/
+Traceback (most recent call last):
+  File "/home/runner/workspace/.pythonlibs/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.12/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/src/election/views_ui.py", line 74, in election_results
+    candidates = Candidate.objects.filter(position=position).annotate(
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.12/site-packages/django/db/models/query.py", line 1654, in annotate
+    return self._annotate(args, kwargs, select=True)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/runner/workspace/.pythonlibs/lib/python3.12/site-packages/django/db/models/query.py", line 1699, in _annotate
+    raise ValueError(
+ValueError: The annotation 'votes' conflicts with a field on the model.
+ERROR 2025-11-21 21:26:53,657 basehttp "GET /elections/1/results/ HTTP/1.1" 500 122704
+INFO 2025-11-21 21:27:54,628 basehttp "GET /elections/ HTTP/1.1" 200 1369
+INFO 2025-11-21 21:27:55,352 basehttp "GET /dashboard/ HTTP/1.1" 200 2194
+INFO 2025-11-21 21:38:07,256 autoreload /home/runner/workspace/src/core/views_ui.py changed, reloading.
+INFO 2025-11-21 21:38:08,501 autoreload Watching for file changes with StatReloader
+INFO 2025-11-21 21:38:12,978 autoreload Watching for file changes with StatReloader
+INFO 2025-11-21 21:38:15,694 basehttp "GET / HTTP/1.1" 200 14941
+INFO 2025-11-21 21:38:16,833 basehttp "GET /static/css/style.css HTTP/1.1" 304 0
+INFO 2025-11-21 21:38:16,860 basehttp "GET /admin/ HTTP/1.1" 200 20379
+INFO 2025-11-21 21:38:17,821 basehttp "GET /static/admin/css/base.css HTTP/1.1" 200 22120
+INFO 2025-11-21 21:38:18,612 basehttp "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2810
+INFO 2025-11-21 21:38:18,613 basehttp "GET /static/admin/css/dark_mode.css HTTP/1.1" 200 2808
+INFO 2025-11-21 21:38:18,739 basehttp "GET /static/admin/css/dashboard.css HTTP/1.1" 200 441
+INFO 2025-11-21 21:38:18,982 basehttp "GET /static/admin/css/responsive.css HTTP/1.1" 200 16565
+INFO 2025-11-21 21:38:18,997 basehttp "GET /static/admin/js/theme.js HTTP/1.1" 200 1653
+INFO 2025-11-21 21:38:20,952 basehttp "GET / HTTP/1.1" 200 14794
+INFO 2025-11-21 21:38:21,026 basehttp "GET /static/css/style.css HTTP/1.1" 200 3729
+INFO 2025-11-21 21:38:21,071 basehttp "GET /admin/ HTTP/1.1" 302 0
+INFO 2025-11-21 21:38:21,243 basehttp "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4187
+INFO 2025-11-21 21:38:21,541 basehttp "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+WARNING 2025-11-21 21:38:21,754 log Not Found: /favicon.ico
+WARNING 2025-11-21 21:38:21,754 basehttp "GET /favicon.ico HTTP/1.1" 404 5740
+INFO 2025-11-22 01:12:36,226 autoreload Watching for file changes with StatReloader
+INFO 2025-11-22 01:13:40,467 autoreload Watching for file changes with StatReloader
+INFO 2025-11-22 01:14:11,698 basehttp "GET / HTTP/1.1" 200 14794
+INFO 2025-11-22 01:14:11,770 basehttp "GET /admin/ HTTP/1.1" 302 0
+INFO 2025-11-22 01:14:11,783 basehttp "GET /static/css/style.css HTTP/1.1" 200 3729
+INFO 2025-11-22 01:14:12,176 basehttp "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4187
+INFO 2025-11-22 01:15:19,931 basehttp "GET /login/ HTTP/1.1" 200 2826
+INFO 2025-11-22 01:15:19,993 basehttp "GET /static/css/style.css HTTP/1.1" 304 0
+INFO 2025-11-22 01:15:24,241 basehttp "POST /login/ HTTP/1.1" 200 3062
+INFO 2025-11-22 01:15:27,002 basehttp "GET /register/ HTTP/1.1" 200 2896
