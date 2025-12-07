@@ -7,30 +7,6 @@ from .tasks import send_verification_email
 import uuid
 
 
-
-@receiver(post_save, sender=User)
-def generate_voter_id_and_tokens(sender, instance, created, **kwargs):
-    """
-    Generate voter ID and voting tokens automatically when a user is created or verified.
-    """
-    # Generate voter_id if not present
-    if not instance.voter_id:
-        instance.voter_id = str(uuid.uuid4())
-        instance.save(update_fields=['voter_id'])
-    
-    # If user just got verified, send verification email with tokens
-    if not created and instance.is_verified:
-        old_verified = getattr(instance, '_old_verified', None)
-        if old_verified is False and instance.is_verified is True:
-            # User just got verified - send email with tokens
-            try:
-                send_verification_email.delay(instance.id)
-            except Exception as e:
-                print(f"Failed to queue verification email: {e}")
-                # Fallback to synchronous call
-                send_verification_email(instance.id)
-
-
 @receiver(pre_save, sender=User)
 def capture_old_verification_state(sender, instance, **kwargs):
     """Capture the old verification status before saving."""
@@ -46,12 +22,47 @@ def capture_old_verification_state(sender, instance, **kwargs):
 
 
 @receiver(post_save, sender=User)
-def notify_on_state_change(sender, instance, created, **kwargs):
-    """Notify user by email when their `state` field has changed.
+def generate_voter_id_on_create(sender, instance, created, **kwargs):
+    """
+    Generate voter ID automatically when a user is created.
+    This applies to both self-registered and admin-created users.
+    """
+    if created and not instance.voter_id:
+        instance.voter_id = str(uuid.uuid4())
+        instance.save(update_fields=['voter_id'])
 
-    This will run for any save that changes the `state` FK, including admin
-    updates or bulk imports. It will not notify on creation or when state is
-    unchanged.
+
+@receiver(post_save, sender=User)
+def generate_tokens_on_verification(sender, instance, created, **kwargs):
+    """
+    Generate voting tokens and send verification email when a user is verified.
+    Triggers both for self-registered users and admin-verified users.
+    """
+    if created:
+        return  # Don't send email on initial creation
+    
+    old_verified = getattr(instance, '_old_verified', None)
+    
+    # If user just got verified (transitioned from unverified to verified)
+    if not old_verified and instance.is_verified:
+        try:
+            # Send verification email with tokens for active elections
+            send_verification_email.delay(instance.id)
+        except Exception as e:
+            print(f"Failed to queue verification email for user {instance.id}: {e}")
+            # Fallback to synchronous call
+            try:
+                send_verification_email(instance.id)
+            except Exception as fallback_error:
+                print(f"Failed to send verification email synchronously: {fallback_error}")
+
+
+@receiver(post_save, sender=User)
+def notify_on_state_change(sender, instance, created, **kwargs):
+    """
+    Notify user by email when their `state` field has changed.
+    This runs for any save that changes the `state` FK, including admin updates or bulk imports.
+    It will not notify on creation or when state is unchanged.
     """
     if created:
         return
@@ -89,3 +100,4 @@ def notify_on_state_change(sender, instance, created, **kwargs):
     except Exception as e:
         # Avoid raising in signal; just log to stdout for now
         print(f"Failed to send state-change email to {instance.email}: {e}")
+
