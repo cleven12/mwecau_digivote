@@ -7,6 +7,59 @@ Formatting: This project follows a simplified Keep a Changelog style.
 Unreleased
 ---------
 
+### Comprehensive Email Notification & Token Management System (2025-12-07)
+
+**Email Notifications:**
+- User verification email sent when user is verified (self-registered or admin-approved)
+- Verification email includes voting tokens for all active elections user is eligible for
+- Election activation emails sent to all eligible voters with their per-level tokens
+- 5-minute pre-election start reminder emails to all voters with active tokens
+- 30-minute pre-election end reminder emails ONLY to non-voters, showing which levels they haven't voted in
+- Post-vote confirmation congratulation emails thanking voter for participation
+- Custom notification emails from admin panel to election voters
+
+**Token Management:**
+- Voter ID automatically generated when user is created (applies to both self-registered and admin-created users)
+- Voting tokens automatically generated when user is verified (via Django signal)
+- Tokens created for all eligible election levels based on user's state/course assignment
+- Tokens generated when election is activated for all verified eligible voters
+- Token eligibility determined by:
+  - President level: All verified voters eligible
+  - Course level: Only voters assigned to that course
+  - State level: Only voters assigned to that state
+
+**Signal Improvements:**
+- Refactored `src/core/signals.py`:
+  - `capture_old_verification_state` - Tracks old verification status
+  - `generate_voter_id_on_create` - Auto-generates voter ID for new users
+  - `generate_tokens_on_verification` - Triggers token generation and email when user is verified
+  - `notify_on_state_change` - Notifies users of state changes
+- Refactored `src/election/signals.py`:
+  - `capture_old_election_state` - Tracks old election state
+  - `handle_election_activation` - Triggers voter notifications AND scheduled reminders when election is activated
+
+**Task Improvements (src/core/tasks.py):**
+- `send_verification_email()` - Enhanced to generate tokens for active elections
+- `send_password_reset_email()` - Unchanged
+- `send_commissioner_contact_email()` - Unchanged
+- Helper `_check_eligibility()` - Determines token eligibility for users
+
+**Task Improvements (src/election/tasks.py):**
+- `send_verification_email()` - Redundant (kept in core/tasks.py as primary)
+- `notify_voters_of_active_election()` - Generates and sends tokens to all eligible voters
+- `schedule_election_reminders()` - NEW: Schedules 5-min and 30-min reminder tasks using Celery ETA
+- `send_election_starting_reminder()` - 5-minute pre-start notification
+- `send_vote_confirmation_email()` - Congratulation email after successful vote
+- `send_non_voters_reminder()` - 30-minute pre-end reminder ONLY for non-voters, grouped by level
+- `send_custom_election_notification()` - Custom admin notifications
+- Helper `_check_eligibility()` - Consistent eligibility logic
+
+**Error Handling:**
+- All Celery tasks have try/except blocks with meaningful logging
+- Fallback to synchronous execution if async queueing fails
+- Missing emails handled gracefully (user.email checks)
+- Non-existent objects handled properly (User, Election, ElectionLevel)
+
 ### Code Cleanup & Consolidation (2025-12-07)
 
 **Removed Unused Files:**
