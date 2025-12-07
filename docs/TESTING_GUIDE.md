@@ -1,84 +1,90 @@
-# MWECAU Digital Voting System - Testing Guide
+# MWECAU Digital Voting System - Testing Guide (code-verified)
 
-## System Setup Complete
+This guide shows how to test the system against the code in this repository. It focuses on practical steps and correct endpoint paths.
 
-Your MWECAU Digital Voting System is now fully configured and ready for testing!
-
-## Database Summary
-
+Local dev notes
+- Run from repo root:
+```bash
+cd src
+python manage.py runserver
 ```
- Core Data:
-   • 6 States (KWACHANGE, KIFUMBU, ON-CAMPUS, MAWELA, WHITE HOUSE, MOSHI MJINI)
-   • 14 Courses (BsChem, BsCS, BsMathStat, BsEd, BsBio, etc.)
-   • 100 College Data Entries
+- By default Django runs on port `8000`. The settings `SITE_URL` defaults to `http://localhost:5000`; examples below use `http://localhost:8000` unless you override the port.
 
- Users:
-   • 77 Total Users
-   • 76 Verified Voters (all assigned to random states and courses)
-   • 1 Admin User
+Admin and sample accounts
+- Admin account (if created by management commands or fixtures): `admin@mail.com` / `@12345678` (verify in `src/management/commands` or DB).
 
- Elections:
-   • 1 Active Election (University Elections 2025)
-   • 21 Election Levels:
-      - 1 President Level (university-wide)
-      - 6 State Levels (one per state)
-      - 14 Course Levels (one per course)
-   • 41 Positions (1 president + 2 per state + 2 per course)
-```
+Primary test flows
+1) Registration & Login (API helpers exist in `src/core/api_views.py` but are not always wired into URL patterns; UI registration/login are available under `/register/` and `/login/`).
+2) Election listing (UI): `GET /elections/`
+3) Vote (UI): `POST /elections/<election_id>/vote/submit/` (form)
+4) Vote (API): `POST /elections/api/<election_id>/submit/` (JSON)
+5) Results (API): `GET /elections/api/<election_id>/results/`
 
-##  Login Credentials
-
-### Admin Account
-```
-Email: admin@mail.com
-Password: @12345678
-Role: Admin/Superuser
-Access: Django Admin Panel + Full API Access
-```
-
-### Student Accounts
-```
-Email Pattern: <registration-number>@mail.com
-Password: @2025 (all students)
-
-Examples:
-- reg-001@mail.com / @2025
-- reg-002@mail.com / @2025
-- reg-050@mail.com / @2025
-```
-
-## 🚀 API Endpoints
-
-### Base URL
-```
-http://localhost:5000
-```
-
-### Authentication Endpoints
-
-#### 1. Login
+API quick examples (use correct paths)
+- Get elections (UI page): `GET /elections/`
+- Cast a vote (API):
 ```http
-POST /api/auth/login/
+POST http://localhost:8000/elections/api/1/submit/
+Authorization: Bearer <ACCESS_TOKEN>  # or use session cookie from login
 Content-Type: application/json
 
 {
-  "registration_number": "T/ADM/2020/0001",
-  "password": "@2025"
-}
-
-Response:
-{
-  "status": "success",
-  "message": "Login successful",
-  "data": {
-    "user": {...},
-    "tokens": {
-      "refresh": "...",
-      "access": "..."
-    }
-  }
+  "token": "550e8400-e29b-41d4-a716-446655440000",
+  "candidate_id": 5
 }
 ```
+- View results (API):
+```http
+GET http://localhost:8000/elections/api/1/results/
+Authorization: Bearer <ACCESS_TOKEN>
+```
+
+Where to find tokens for testing
+- In production tokens are emailed when an election is activated. In development you can:
+  - Query the `voter_tokens` table directly (SQLite/DB) for `token` values.
+  - Run `notify_voters_of_active_election` task manually (it is a Celery task but can be invoked directly for testing) or start Celery workers and let it run asynchronously.
+
+Enabling Celery (optional but recommended for asynchronous emails)
+```bash
+cd src
+# start worker
+celery -A mw_es worker -Q email_queue --loglevel=info
+# start beat (scheduler)
+celery -A mw_es beat --loglevel=info
+```
+If not running workers, functions implemented as tasks may execute synchronously when called directly.
+
+Management commands (setup)
+- Common commands to prepare a dev environment (run from `src/`):
+```bash
+python manage.py update_states
+python manage.py import_college_data
+python manage.py create_admin_user
+python manage.py create_student_accounts
+python manage.py create_elections
+python manage.py create_sample_election
+```
+
+Smoke tests
+- Cast a vote with a valid token and confirm:
+  - `VoterToken.is_used` is True after voting.
+  - A `Vote` record exists and has `election` and `election_level` populated.
+- Attempt to vote twice with the same token — second attempt should fail with validation error.
+
+DB quick checks (SQLite)
+- List tokens for a user and an election:
+```sql
+SELECT id, token, is_used, expiry_date FROM voter_tokens WHERE user_id = <id> AND election_id = <id>;
+```
+- Verify vote recorded:
+```sql
+SELECT * FROM votes WHERE token_id = <token_id>;
+```
+
+Notes & known limitations
+- Celery is configured in settings to use the Django DB broker; however some code paths call task functions synchronously. Start Celery workers to enable asynchronous background processing.
+- Some API helper endpoints implemented in `src/core/api_views.py` may not be registered under global URL confs; verify `src/mw_es/urls.py` and `src/core/urls.py` if you expect additional API routes.
+
 
 #### 2. Register New Account
 ```http

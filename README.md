@@ -1,167 +1,44 @@
 # MWECAU Digital Voting System
 
-## Overview
+This repository implements a student election platform built with Django and Django REST Framework.
 
-The MWECAU Digital Voting System is a comprehensive online platform for managing student elections at Mwenge Catholic University. The system replaces traditional paper-based voting with a secure, accessible digital solution that enables students to vote from anywhere during election periods.
+Quick facts (code-verified)
+- Backend: Django (custom `User` model in `core`)
+- API: Django REST Framework with JWT (`djangorestframework-simplejwt`) and Session authentication enabled
+- Tasks: Celery tasks are defined (`django-celery-beat`, `django-celery-results`) and the default broker in settings is the Django DB broker (`django://`).
+- DB (dev): SQLite (`db.sqlite3`). Production: use PostgreSQL and a proper Celery broker (Redis/RabbitMQ).
 
-**Core Purpose:** Enable transparent, secure, and accessible student elections across all MWECAU campuses with instant results and complete audit trails.
+Running locally
+```bash
+cd src
+python manage.py migrate
+python manage.py runserver
+```
 
-**Key Capabilities:**
-- Multi-level election management (President, State Leaders, Course Leaders)
-- Secure token-based voting system
-- Real-time results and statistics
-- Role-based access control (Voters, Candidates, Class Leaders, Commissioners)
-- Student registration workflow with verification
-- Email notifications for elections and verification
+Start Celery (optional, for async email/notifications):
+```bash
+cd src
+celery -A mw_es worker -Q email_queue --loglevel=info
+celery -A mw_es beat --loglevel=info
+```
 
-## Recent Changes
+Key URLs (code-verified)
+- UI: `/`, `/login/`, `/register/`, `/dashboard/`, `/commissioner/`
+- Election UI: `/elections/`, `/elections/<id>/vote/`, `/elections/<id>/results/`
+- Election API: `POST /elections/api/<id>/submit/` and `GET /elections/api/<id>/results/`
+- Commissioner APIs: `/api/commissioner/stats/`, `/api/commissioner/election/<id>/analytics/`, `/api/commissioner/verify-user/<id>/`
 
-**November 21, 2025 - Backend Improvements with Celery & Email Notifications**
+Docs
+- `docs/ARCHITECTURE.md` — architecture notes (code-verified)
+- `docs/API_DOCUMENTATION.md` — concise API reference (updated)
+- `docs/ELECTION_BUSINESS_LOGIC.md` — business rules and token lifecycle (updated)
+- `docs/TESTING_GUIDE.md` — testing steps (updated)
+- `CHANGELOG.md`, `CONTRIBUTING.md` — contributor guidance
 
-**Asynchronous Task Processing:**
-- Integrated Celery for background task processing using Django database as broker
-- Configured `django-celery-beat` for scheduled task management  
-- Configured `django-celery-results` for task result tracking
-- All email notifications now run asynchronously to improve performance
+Contributing
+- See `CONTRIBUTING.md` for guidelines and how to run the project locally.
 
-**Automatic Token Generation:**
-- Tokens automatically generated when users are verified (via signals)
-- Tokens automatically generated when elections are activated
-- Automatic voter_id generation for all new users
-- Email notifications sent with tokens upon verification
-
-**Email Notification System:**
-- Verification emails with voting tokens for active elections
-- Password reset emails
-- Commissioner contact emails
-- Election activation notifications with level-specific tokens
-- Vote confirmation emails
-- 5-minute pre-start election reminders
-- 30-minute pre-end reminders for non-voters
-- Custom admin notifications from admin panel
-
-**Commissioner Dashboard:**
-- Comprehensive analytics dashboard at `/commissioner/`
-- Real-time statistics for users, elections, votes
-- State and course participation tracking
-- Pending user verification management
-- Election analytics API endpoints
-- Quick access to all administrative functions
-
-**Admin Panel Enhancements:**
-- "Activate and Notify" action to activate elections and send notifications
-- "Send Custom Notification" action for admin-initiated voter communications
-- "Schedule Reminders" action for automated reminder emails
-- Custom notification form for personalized messages to voters
-
-**JWT Authentication:**
-- Integrated `djangorestframework-simplejwt` for secure API access
-- Token refresh and blacklist support
-- 60-minute access tokens, 1-day refresh tokens
-
-**October 23, 2025 - Environment Setup Completed**
-
-**Cloud Configuration:**
-- Installed all Python dependencies via uv/pyproject.toml
-- Configured Django development server on port 5000 with host 0.0.0.0
-- Set up workflow for automatic server startup
-- Configured deployment settings for VM deployment
-- Updated .gitignore with comprehensive Python patterns
-- All static files collected successfully
-- Database migrations applied successfully
-- Swagger API documentation available at /swagger/
-
-**System Access:**
-- Main API: http://localhost:5000/
-- Swagger Docs: http://localhost:5000/swagger/
-- Admin Panel: http://localhost:5000/admin/
-- Django Admin credentials documented in TESTING_GUIDE.md
-
-**Documentation Added:**
-- `API_DOCUMENTATION.md` - Complete API reference with examples for all endpoints
-- `SECURITY_AND_LICENSING_GUIDE.md` - Comprehensive guide for source code protection, licensing, and monetization strategies
-
-**October 23, 2025 - Complete System Setup & Testing**
-
- **Database Setup Completed:**
-- 6 States, 14 Courses, 100 College Data Entries
-- 77 Users (76 verified voters + 1 admin)
-- 1 Active Election with 21 Levels (1 President + 6 State + 14 Course)
-- 41 Positions ready for candidates
-
- **Fixed Management Commands:**
-1. **create_elections.py**: Fixed to properly create ElectionLevel instances with state/course assignments (Position doesn't have these fields)
-2. **create_student_accounts.py**: Updated to use first_name/last_name fields instead of old full_name field
-3. **create_sample_election.py**: Enhanced to link all election levels to elections automatically
-
- **Election System Business Logic Verified:**
-1. **Vote Model Auto-Population**: Fixed `Vote.save()` to auto-populate `election`, `election_level`, and `voter` fields from token BEFORE validation
-2. **Email Confirmation**: Removed invalid `.delay()` calls to `send_vote_confirmation_email` (Celery not configured)
-3. **Three-Level Verification**: Architect confirmed President/Course/State levels work correctly with proper eligibility filtering
-
-**Documentation Created:**
-- `ELECTION_BUSINESS_LOGIC.md` - Comprehensive technical documentation of the partial blockchain token system
-- `TESTING_GUIDE.md` - Complete testing guide with login credentials, API endpoints, and test scenarios
-
-## User Preferences
-
-Preferred communication style: Simple, everyday language.
-
-## System Architecture
-
-### Backend Framework
-**Django 5.2.7** - Python web framework providing the core application structure
-
-**Rationale:** Django's batteries-included approach provides built-in admin interface, ORM, authentication, and security features essential for an election system. The framework's mature ecosystem and security track record make it ideal for handling sensitive voting data.
-
-### Authentication & Authorization
-**Custom User Model with Registration Number Authentication**
-- Uses registration numbers instead of usernames for student identification
-- Custom `UserManager` and `RegistrationNumberBackend` for authentication
-- JWT tokens via `djangorestframework-simplejwt` for API authentication
-- Token blacklisting support for secure logout
-
-**Role-Based Access Control:**
-- Voter: Standard students who can vote
-- Candidate: Students running for positions
-- Class Leader: Can upload student data
-- Commissioner: Full administrative access
-
-**Rationale:** Registration numbers are the natural identifier for university students. JWT tokens provide stateless authentication suitable for both web and potential mobile clients.
-
-### Database Design
-**SQLite** (Development) - File-based relational database
-
-**Core Data Models:**
-
-1. **User Management:**
-   - `User`: Central authentication with voter IDs, registration numbers, roles
-   - `CollegeData`: Pre-registration student data for validation
-   - `State`: Geographic/administrative divisions
-   - `Course`: Academic programs
-
-2. **Election System:**
-   - `Election`: Election events with date ranges and active status
-   - `ElectionLevel`: Multi-level election hierarchy (President, State, Course)
-   - `Position`: Specific roles within elections (with gender restrictions)
-   - `Candidate`: User candidacies for positions
-   - `VoterToken`: Unique per-user, per-election, per-level voting tokens
-   - `Vote`: Anonymized voting records
-
-**Design Pattern:** The system uses a hierarchical election model where elections contain multiple levels (President, State, Course), each level has positions, and positions have candidates. This allows for complex multi-level elections in a single event.
-
-**Rationale:** The voter token system ensures one-vote-per-position while maintaining vote anonymity. Tokens are generated per election level, allowing users to vote in all levels they're eligible for.
-
-### API Architecture
-**Django REST Framework** - RESTful API layer
-
-**API Endpoints Structure:**
-- `/api/auth/*` - Authentication (login, logout, register, verification, password reset)
-- `/api/election/*` - Election operations (list, vote, results)
-- Reference data endpoints for states and courses
-
-**Serialization Strategy:**
-- Separate serializers for list and detail views
+If you want me to also tidy remaining docs, archive older drafts, or run the test suite, tell me which you'd like next.
 - Nested serialization for related objects (courses, states, election levels)
 - Context-aware serialization for user-specific data
 

@@ -1,13 +1,8 @@
 django>=5.2.1
 djangorestframework>=3.16.1
 pillow>=12.0.0
-psycopg2-binary>=2.9.10
-python-decouple
 python-dotenv
-requests
-gunicorn
 celery
 django-celery-beat
 django-celery-results
 djangorestframework-simplejwt
-redis

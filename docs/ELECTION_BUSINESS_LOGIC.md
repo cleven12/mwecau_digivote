@@ -1,3 +1,60 @@
+# MWECAU Digital Voting System - Business Logic (code-verified)
+
+This document summarizes the implemented election business logic. It is derived from the code in `src/election/` and related modules.
+
+VoterToken (summary)
+- The system issues a per-user, per-election, per-election-level token implemented in the `VoterToken` model.
+- Tokens are UUID4 values and have `is_used` and `expiry_date` fields. Typical lifecycle:
+  1. Token created when an election is activated for eligible users.
+ 2. Token may be emailed to users (via Celery task) or inspected in the DB for testing.
+ 3. Token used once when a vote is cast; it is then marked used and cannot be reused.
+
+Token generation
+- Implemented by the `notify_voters_of_active_election` Celery task (`src/election/tasks.py`).
+- Eligibility rules (from code):
+  - President level: all verified users with a `voter_id` are eligible.
+  - Course level: users whose `user.course_id` matches the level's `course_id`.
+  - State level: users whose `user.state_id` matches the level's `state_id`.
+- The task creates tokens with `expiry_date` set to the election `end_date` and avoids creating duplicates (`get_or_create`).
+
+Vote casting (API)
+- Endpoint (code): `POST /elections/api/<election_id>/submit/` (`VoteView` in `src/election/views.py`).
+- Authentication: requires an authenticated user (JWT or session per `REST_FRAMEWORK` settings).
+- Payload (JSON):
+  - `token` (UUID string) — the voter token
+  - `candidate_id` (integer) — the candidate to vote for
+- Validation (implemented in `VoteCreateSerializer`, `src/election/serializers.py`):
+  1. The token UUID maps to a `VoterToken` record.
+  2. The token is valid (not used and not expired).
+  3. The token's election is currently ongoing (`Election.is_ongoing()`).
+  4. The candidate exists and belongs to the same election and election level as the token.
+- On success: a `Vote` record is created, the token is marked used, and the code calls the vote confirmation helper. The helper is defined as a Celery task but may be invoked synchronously if no worker is running.
+
+Vote model behavior
+- When a `Vote` is saved the model auto-populates `election`, `election_level`, and `voter` from the token (see `Vote.save()` logic). Validation ensures that the vote's election and level match the token and candidate.
+
+Results aggregation (API)
+- Endpoint (code): `GET /elections/api/<election_id>/results/` (`ResultsView`).
+- Access control: commissioners and staff can view results anytime; regular users can view results only after the election has ended (`election.has_ended`).
+- Aggregation logic: for each level and each position in the level the view aggregates votes per candidate and computes percentages. The view returns a list of positions with candidate counts and percentages.
+
+Concurrency & integrity
+- Token single-use is enforced by `is_used` and by validation in serializers and model save logic.
+- Vote creation and token marking are performed in the view; consider wrapping both in an atomic transaction if you harden against race conditions further.
+
+Emailing and Celery notes
+- Celery tasks for notifications and confirmations are declared in `src/election/tasks.py` and the project settings include `django-celery-beat` and `django-celery-results` with a DB broker by default.
+- Many task helpers (e.g., `send_vote_confirmation_email`) are invoked as functions in the code; to execute them asynchronously run a Celery worker and `celery beat`.
+
+Testing tips
+- To get tokens for testing query the `voter_tokens` table or use the `notify_voters_of_active_election` task in local dev (or invoke the task function directly).
+- For manual tests: cast a vote with the `token` and `candidate_id` payload at `POST /elections/api/<id>/submit/`, then confirm `VoterToken.is_used` and check `Vote` entries.
+
+Where to read the code
+- Token generation and notifications: `src/election/tasks.py`
+- Vote endpoint and results endpoint: `src/election/views.py`
+- Serializers and validation: `src/election/serializers.py`
+- Models: `src/election/models.py`
 # MWECAU Digital Voting System - Business Logic Documentation
 
 ## Overview
