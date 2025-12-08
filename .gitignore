@@ -1,7 +1,88 @@
-.env.development
-.vscode
+# Environment Variables - Never commit actual secrets!
 .env
-venv
-media/
-media/*
+.env.development
+.env.production
+.env.local
+.env.*.local
+
+# IDE & Editor
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Virtual Environments
+venv/
+env/
+ENV/
+.venv
+
+# Python
 __pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Django
+*.sqlite3
+*.sqlite
+db.sqlite3
+/media/
+/media/*
+/staticfiles/
+/staticfiles/*
+
+# Logs
+logs/
+*.log
+src/logs/
+src/logs/*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+
+# Node (if frontend is included)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Environment specific
+.env.*.backup
+.env.*.old
