@@ -848,3 +848,4 @@ INFO 2025-12-08 05:38:31,316 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
 INFO 2025-12-08 05:38:31,344 basehttp "GET /static/admin/img/icon-yes.svg HTTP/1.1" 200 436
 INFO 2025-12-08 05:38:31,366 basehttp "GET /static/admin/img/icon-no.svg HTTP/1.1" 200 560
 INFO 2025-12-08 05:38:31,479 basehttp "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 200 581
+INFO 2025-12-08 05:40:29,259 basehttp "GET / HTTP/1.1" 200 14794
