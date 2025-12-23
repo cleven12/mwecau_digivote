@@ -36,6 +36,7 @@ python manage.py runserver
 ## Contributing
 - Plain HTML/CSS, no Bootstrap. Feel free to style with your own CSS.
 - See [`CONTRIBUTING.md`](CONTRIBUTING.md) for guidelines.
+- Main repository: [mwecauictclub/mwecau_election_platform](https://github.com/mwecauictclub/mwecau_election_platform)
 
 ## Acknowledgments
 - [@cleven12](https://github.com/cleven12) (Cleven)

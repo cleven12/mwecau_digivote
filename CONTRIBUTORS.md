@@ -251,7 +251,8 @@ New contributors making their first contributions
 
 ## Questions About Contributing?
 
-- **GitHub Issues:** [Create an issue](https://github.com/cleven12/university_elec_api/issues)
+- **GitHub Issues:** [Create an issue](https://github.com/mwecauictclub/mwecau_election_platform/issues)
+- **Original Repository:** [cleven12/university_elec_api](https://github.com/cleven12/university_elec_api) (development history)
 - **Email:** Contact through GitHub
 - **Documentation:** Check `/docs` folder for technical details
 

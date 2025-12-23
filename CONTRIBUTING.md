@@ -11,8 +11,8 @@ Thank you for contributing to this club project! This is a lightweight Django vo
 
 **Setup:**
 ```bash
-git clone https://github.com/cleven12/university_elec_api.git
-cd university_elec_api
+git clone https://github.com/mwecauictclub/mwecau_election_platform.git
+cd mwecau_election_platform
 cp .env.example .env  # Edit with your settings
 cd src
 python -m venv venv
@@ -181,9 +181,10 @@ When you contribute, add your GitHub username to the list above in your PR!
 
 ## Getting Help
 
-- **Issues:** Open a GitHub issue for bugs or feature requests
+- **Issues:** [Open a GitHub issue](https://github.com/mwecauictclub/mwecau_election_platform/issues) for bugs or feature requests
 - **Questions:** Comment on existing issues or open a discussion
 - **Chat:** Contact @mwecauictclub for club-related questions
+- **Original Development:** [cleven12/university_elec_api](https://github.com/cleven12/university_elec_api) for development history
 
 ## Club Development Philosophy
 
