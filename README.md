@@ -27,15 +27,21 @@ python manage.py runserver
 - Elections: `/elections/`, `/elections/<id>/vote/`, `/elections/<id>/results/`
 - Commissioner APIs: `/api/commissioner/stats/`, `/api/commissioner/election/<id>/analytics/`
 
+## Documentation
+- [`docs/`](docs/) - Technical documentation
+- [`CONTRIBUTING.md`](CONTRIBUTING.md) - How to contribute
+- [`CONTRIBUTORS.md`](CONTRIBUTORS.md) - Project contributors
+- [`LICENSE`](LICENSE) - MIT License
+
 ## Contributing
 - Plain HTML/CSS, no Bootstrap. Feel free to style with your own CSS.
-- See `CONTRIBUTING.md` for guidelines.
+- See [`CONTRIBUTING.md`](CONTRIBUTING.md) for guidelines.
 
 ## Acknowledgments
-- @cleven12 (Cleven)
-- @Lajokjohn (Lajokjohn)
-- @FaustineEmmanuel (Faustine)
-- @mwecauictclub (Mwecau_ict_club, club account)
+- [@cleven12](https://github.com/cleven12) (Cleven)
+- [@Lajokjohn](https://github.com/Lajokjohn) (Lajokjohn)
+- [@FaustineEmmanuel](https://github.com/FaustineEmmanuel) (Faustine)
+- [@mwecauictclub](https://github.com/mwecauictclub) (Mwecau_ict_club, club account)
 
 ## Notes
 - Celery integrations remain optional; configure a real broker if needed.
