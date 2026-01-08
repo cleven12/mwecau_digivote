@@ -63,7 +63,7 @@ The MWECAU Digital Voting Platform revolutionizes student elections by enabling 
 - Vote anonymity through token separation
 - Complete audit trails
 - Double-voting prevention
-- Password hashing with Django's built-in validators
+- Password hashing using Django built-in validators
 
 ## Architecture
 
