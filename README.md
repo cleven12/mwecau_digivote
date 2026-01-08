@@ -57,13 +57,19 @@ The MWECAU Digital Voting Platform revolutionizes student elections by enabling 
 - **Automated Notifications** - Email updates via Celery task queue
 - **Role-Based Access** - Granular permission system
 
-### Security Features
-- JWT-based authentication with refresh tokens
-- Unique voting tokens per election
-- Vote anonymity through token separation
-- Complete audit trails
-- Double-voting prevention
-- Password hashing using Django built-in validators
+## Security Features
+
+- **JWT-based authentication with refresh tokens to ensure secure and scalable user authentication while minimizing session hijacking risks.
+
+- **Unique voting tokens per election to guarantee that each voter can participate only in the specific election for which they are authorized.
+
+- **Vote anonymity through token separation, ensuring that voter identities are never linked to their submitted votes.
+
+- **Comprehensive audit trails to record all critical system activities for transparency, accountability, and post-election verification.
+
+- **Double-voting prevention mechanisms that enforce a single vote per voter per election.
+
+- **Secure password hashing using Django’s built-in validators, protecting user credentials through strong, industry-standard encryption algorithms.
 
 ## Architecture
 
