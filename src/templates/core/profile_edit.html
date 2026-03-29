@@ -1,172 +1,174 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
-{% block title %}Edit Profile - MWECAU Voting{% endblock %}
+{% block title %}Edit Profile — MWECAUSO DigiVote{% endblock %}
 
 {% block content %}
-<div >
-    <div >
-        <div >
-            <div >
-                <div >
-                    <h3><i class="fas fa-user-edit"></i> Edit Your Profile</h3>
-                </div>
-                <div >
-                    
-                    {% if not can_edit_email_gender %}
-                    <div  role="alert">
-                        <i class="fas fa-exclamation-circle"></i>
-                        <strong>Note:</strong> Email and gender cannot be edited while an election is active. There are currently active elections:
-                        <ul class="mt-2 mb-0">
-                            {% for election in active_elections %}
-                            <li><strong>{{ election.title }}</strong> - Active until {{ election.end_date|date:"M d, Y H:i" }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    {% elif edit_reason == "pre_election" %}
-                    <div  role="alert">
-                        <i class="fas fa-info-circle"></i>
-                        <strong>Pre-Election Window:</strong> You can edit your email and gender right now because an election is starting within the next 24 hours.
-                        <ul class="mt-2 mb-0">
-                            {% for election in upcoming_elections %}
-                            <li><strong>{{ election.title }}</strong> - Starting {{ election.start_date|date:"M d, Y H:i" }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    {% else %}
-                    <div  role="alert">
-                        <i class="fas fa-check-circle"></i>
-                        <strong>Profile Editing Available:</strong> You can edit your email and gender. There are no active elections at this time.
-                    </div>
-                    {% endif %}
-                    
-                    <h5 class="mt-4">Account Information</h5>
-                    <form method="post">
-                        {% csrf_token %}
-                        
-                        <!-- Read-only fields -->
-                        <div >
-                            <div >
-                                <div class="mb-3">
-                                    <label for="registration_number" >Registration Number</label>
-                                    <input type="text"  id="registration_number" value="{{ user.registration_number }}" disabled>
-                                </div>
-                            </div>
-                            <div >
-                                <div class="mb-3">
-                                    <label for="voter_id" >Voter ID</label>
-                                    <input type="text"  id="voter_id" value="{{ user.voter_id|default:'N/A' }}" disabled>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div >
-                            <div >
-                                <div class="mb-3">
-                                    <label for="first_name" >First Name</label>
-                                    <input type="text"  id="first_name" value="{{ user.first_name }}" disabled>
-                                </div>
-                            </div>
-                            <div >
-                                <div class="mb-3">
-                                    <label for="last_name" >Last Name</label>
-                                    <input type="text"  id="last_name" value="{{ user.last_name }}" disabled>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div >
-                            <div >
-                                <div class="mb-3">
-                                    <label for="course" >Course</label>
-                                    <input type="text"  id="course" value="{{ user.course|default:'Not assigned' }}" disabled>
-                                </div>
-                            </div>
-                            <div >
-                                <div class="mb-3">
-                                    <label for="state" >State</label>
-                                    <input type="text"  id="state" value="{{ user.state|default:'Not assigned' }}" disabled>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <hr>
-                        
-                        <h5>Editable Information</h5>
-                        
-                        <!-- Email (editable during elections) -->
-                        <div class="mb-3">
-                            <label for="email" >
-                                Email Address
-                                {% if can_edit_email_gender %}
-                                <span >Editable</span>
-                                {% else %}
-                                <span >Not editable now</span>
-                                {% endif %}
-                            </label>
-                            <input 
-                                type="email" 
-                                 
-                                id="email" 
-                                name="email" 
-                                value="{{ user.email }}"
-                                {% if not can_edit_email_gender %}disabled{% endif %}
-                            >
-                            <small >Your contact email for election notifications</small>
-                        </div>
-                        
-                        <!-- Gender (editable during elections) -->
-                        <div class="mb-3">
-                            <label for="gender" >
-                                Gender
-                                {% if can_edit_email_gender %}
-                                <span >Editable</span>
-                                {% else %}
-                                <span >Not editable now</span>
-                                {% endif %}
-                            </label>
-                            <select  id="gender" name="gender" {% if not can_edit_email_gender %}disabled{% endif %}>
-                                <option value="">Select Gender</option>
-                                {% for value, label in gender_choices %}
-                                <option value="{{ value }}" {% if user.gender == value %}selected{% endif %}>{{ label }}</option>
-                                {% endfor %}
-                            </select>
-                            <small >Some positions may have gender restrictions</small>
-                        </div>
-                        
-                        <div >
-                            {% if can_edit_email_gender %}
-                            <button type="submit" >
-                                <i class="fas fa-save"></i> Save Changes
-                            </button>
-                            {% else %}
-                            <button type="button"  disabled>
-                                <i class="fas fa-save"></i> Save Changes (Not available)
-                            </button>
-                            {% endif %}
-                            <a href="{% url 'core:dashboard' %}" >
-                                <i class="fas fa-arrow-left"></i> Back to Dashboard
-                            </a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+
+<div style="margin-bottom:1.5rem;">
+  <a href="{% url 'core:dashboard' %}" style="font-size:.875rem; color:var(--text-muted); text-decoration:none;">
+    <i class="fas fa-arrow-left"></i> Back to Dashboard
+  </a>
+  <h2 style="margin-top:.5rem; margin-bottom:.25rem;"><i class="fas fa-user-edit text-blue"></i> Edit Profile</h2>
+  <p style="margin:0; color:var(--text-muted);">Manage your account information</p>
 </div>
 
-<style>
-    .card {
-        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-    }
-    .card-header {
-        background-color: #f8f9fa;
-        border-bottom: 1px solid #dee2e6;
-    }
-    .d-flex {
-        display: flex;
-    }
-    .gap-2 {
-        gap: 0.5rem;
-    }
-</style>
+<!-- Edit status banner -->
+{% if not can_edit_email_gender %}
+<div class="alert alert-warning" style="margin-bottom:1.5rem;">
+  <i class="fas fa-lock"></i>
+  <div>
+    <strong>Profile locked during active election.</strong>
+    Email and gender cannot be changed while voting is in progress.
+    {% for election in active_elections %}
+    <div style="margin-top:.4rem; font-size:.85rem;">
+      <i class="fas fa-poll" style="color:var(--warning)"></i>
+      {{ election.title }} — active until {{ election.end_date|date:"d M Y, H:i" }}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% elif edit_reason == "pre_election" %}
+<div class="alert alert-info" style="margin-bottom:1.5rem;">
+  <i class="fas fa-clock"></i>
+  <div>
+    <strong>Pre-election window.</strong>
+    You can still edit your profile — an election starts soon. Make sure your details are correct before voting opens.
+    {% for election in upcoming_elections %}
+    <div style="margin-top:.4rem; font-size:.85rem;">
+      <i class="fas fa-calendar-check"></i>
+      {{ election.title }} — starts {{ election.start_date|date:"d M Y, H:i" }}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% else %}
+<div class="alert alert-success" style="margin-bottom:1.5rem;">
+  <i class="fas fa-check-circle"></i>
+  <strong>Profile editing is open.</strong> No active elections — update your details freely.
+</div>
+{% endif %}
+
+<div class="profile-grid">
+
+  <!-- Sidebar: fixed info -->
+  <div class="profile-sidebar">
+    <div class="profile-avatar">
+      {{ user.first_name|first }}{{ user.last_name|first }}
+    </div>
+    <div style="font-weight:700; font-size:1.05rem; color:var(--text-primary);">{{ user.first_name }} {{ user.last_name }}</div>
+    <div style="font-size:.8rem; font-family:monospace; color:var(--text-muted); margin:.25rem 0 .75rem;">{{ user.registration_number }}</div>
+    <span class="badge {% if user.is_verified %}badge-success{% else %}badge-warning{% endif %}" style="margin-bottom:1rem;">
+      <i class="fas {% if user.is_verified %}fa-check-circle{% else %}fa-clock{% endif %}"></i>
+      {% if user.is_verified %}Verified{% else %}Pending{% endif %}
+    </span>
+    <div class="divider"></div>
+    <div class="info-row">
+      <span class="info-label">Role</span>
+      <span class="info-value">{{ user.get_role_display }}</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Course</span>
+      <span class="info-value">{{ user.course.code|default:"—" }}</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">State</span>
+      <span class="info-value">{{ user.state.name|default:"—" }}</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Voter ID</span>
+      <span class="info-value" style="font-family:monospace; font-size:.72rem; word-break:break-all;">{{ user.voter_id|default:"Not issued" }}</span>
+    </div>
+  </div>
+
+  <!-- Main form -->
+  <div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><i class="fas fa-lock"></i> Read-only Information</div>
+        <span class="badge badge-warning"><i class="fas fa-lock"></i> Cannot be changed</span>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+        <div class="form-group" style="margin:0;">
+          <label>First Name</label>
+          <input type="text" value="{{ user.first_name }}" readonly>
+        </div>
+        <div class="form-group" style="margin:0;">
+          <label>Last Name</label>
+          <input type="text" value="{{ user.last_name }}" readonly>
+        </div>
+        <div class="form-group" style="margin:0;">
+          <label>Registration Number</label>
+          <input type="text" value="{{ user.registration_number }}" readonly style="font-family:monospace;">
+        </div>
+        <div class="form-group" style="margin:0;">
+          <label>Course</label>
+          <input type="text" value="{{ user.course|default:'Not assigned' }}" readonly>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><i class="fas fa-edit"></i> Editable Information</div>
+        {% if can_edit_email_gender %}
+        <span class="badge badge-success"><i class="fas fa-unlock"></i> Editable now</span>
+        {% else %}
+        <span class="badge badge-error"><i class="fas fa-lock"></i> Locked</span>
+        {% endif %}
+      </div>
+
+      <form method="post" novalidate>
+        {% csrf_token %}
+
+        <div class="form-group">
+          <label for="email">
+            <i class="fas fa-envelope" style="color:var(--blue); margin-right:.35rem"></i>
+            Email Address
+          </label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value="{{ user.email|default:'' }}"
+            placeholder="your.email@example.com"
+            {% if not can_edit_email_gender %}readonly{% endif %}
+          >
+          <div class="form-hint">Used for election notifications and account recovery</div>
+        </div>
+
+        <div class="form-group">
+          <label for="gender">
+            <i class="fas fa-venus-mars" style="color:var(--blue); margin-right:.35rem"></i>
+            Gender
+          </label>
+          <select id="gender" name="gender" {% if not can_edit_email_gender %}disabled{% endif %}>
+            <option value="">— Select gender —</option>
+            {% for value, label in gender_choices %}
+            <option value="{{ value }}" {% if user.gender == value %}selected{% endif %}>{{ label }}</option>
+            {% endfor %}
+          </select>
+          <div class="form-hint">Required for gender-restricted election positions</div>
+        </div>
+
+        <div style="display:flex; gap:.75rem; flex-wrap:wrap; margin-top:1.5rem;">
+          {% if can_edit_email_gender %}
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i> Save Changes
+          </button>
+          {% else %}
+          <button type="button" class="btn btn-primary" disabled>
+            <i class="fas fa-lock"></i> Locked During Election
+          </button>
+          {% endif %}
+          <a href="{% url 'core:dashboard' %}" class="btn btn-outline">
+            <i class="fas fa-times"></i> Cancel
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>
 {% endblock %}
