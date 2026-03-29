@@ -1,56 +1,133 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
-{% block title %}Results - {{ election.title }}{% endblock %}
+{% block title %}Results — {{ election.title }}{% endblock %}
 
 {% block content %}
-<h2>{{ election.title }} - Results</h2>
+
+<div style="margin-bottom:1.75rem;">
+  <a href="{% url 'election:elections_list' %}" style="font-size:.875rem; color:var(--text-muted); text-decoration:none;">
+    <i class="fas fa-arrow-left"></i> Back to Elections
+  </a>
+  <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap; margin-top:.5rem;">
+    <h2 style="margin-bottom:.25rem;">{{ election.title }} — Results</h2>
+    {% if election.has_ended %}
+    <span class="badge badge-error"><i class="fas fa-flag-checkered"></i> Election Ended</span>
+    {% else %}
+    <span class="badge badge-success"><i class="fas fa-circle" style="font-size:.5rem"></i> Live Results</span>
+    {% endif %}
+  </div>
+  <p style="margin:0; color:var(--text-muted); font-size:.875rem;">
+    <i class="fas fa-calendar-check" style="color:var(--blue)"></i>
+    {{ election.start_date|date:"d M Y, H:i" }}
+    &nbsp;→&nbsp;
+    <i class="fas fa-calendar-times"></i>
+    {{ election.end_date|date:"d M Y, H:i" }}
+  </p>
+</div>
 
 {% if results %}
-    {% for level_data in results %}
-    <div >
-        <h3>{{ level_data.level.name }}</h3>
-        
-        {% for position_data in level_data.positions %}
-        <div style="margin-top: 2rem;">
-            <h4>{{ position_data.position.title }}</h4>
-            <p><strong>Total Votes:</strong> {{ position_data.total_votes }}</p>
-            
-            {% if position_data.candidates %}
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Rank</th>
-                            <th>Candidate</th>
-                            <th>Votes</th>
-                            <th>Percentage</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for candidate_result in position_data.candidates %}
-                        <tr>
-                            <td>{{ forloop.counter }}</td>
-                            <td>
-                                {{ candidate_result.candidate.user.get_full_name }}<br>
-                                <small>{{ candidate_result.candidate.user.registration_number }}</small>
-                            </td>
-                            <td>{{ candidate_result.vote_count }}</td>
-                            <td>{{ candidate_result.percentage }}%</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+
+  {% for level_data in results %}
+  <div class="card" style="margin-bottom:1.75rem;">
+    <div class="card-header">
+      <div class="card-title">
+        <i class="fas fa-layer-group"></i> {{ level_data.level.name }}
+      </div>
+    </div>
+
+    {% for position_data in level_data.positions %}
+    <div style="margin-bottom:2rem;">
+      <div class="section-heading">
+        <i class="fas fa-user-tie"></i> {{ position_data.position.title }}
+        <span style="margin-left:auto; font-size:.8rem; font-weight:500; color:var(--text-muted); text-transform:none; letter-spacing:0;">
+          {{ position_data.total_votes }} vote{{ position_data.total_votes|pluralize }} total
+        </span>
+      </div>
+
+      {% if position_data.candidates %}
+        {% for candidate_result in position_data.candidates %}
+        <div style="display:flex; align-items:center; gap:1rem; padding:.85rem 0; border-bottom:1px solid var(--border);">
+
+          <!-- Rank -->
+          <div style="width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:.85rem; flex-shrink:0;
+            {% if forloop.counter == 1 %}background:var(--gold-dim); color:#7a5e0a;{% else %}background:var(--off-white); color:var(--text-muted);{% endif %}">
+            {% if forloop.counter == 1 %}
+              <i class="fas fa-crown"></i>
             {% else %}
-                <p>No votes cast for this position.</p>
+              {{ forloop.counter }}
             {% endif %}
+          </div>
+
+          <!-- Avatar -->
+          {% if candidate_result.candidate.image %}
+            <img src="{{ candidate_result.candidate.image.url }}"
+                 style="width:44px; height:44px; border-radius:50%; object-fit:cover; border:2px solid var(--border); flex-shrink:0;">
+          {% else %}
+            <div style="width:44px; height:44px; border-radius:50%; background:{% if forloop.counter == 1 %}linear-gradient(135deg,var(--gold),#e8c040){% else %}linear-gradient(135deg,var(--blue),var(--blue-mid)){% endif %}; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:.95rem; color:{% if forloop.counter == 1 %}var(--blue-dark){% else %}white{% endif %}; flex-shrink:0;">
+              {{ candidate_result.candidate.user.first_name|first }}{{ candidate_result.candidate.user.last_name|first }}
+            </div>
+          {% endif %}
+
+          <!-- Info + bar -->
+          <div style="flex:1; min-width:0;">
+            <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:.35rem; flex-wrap:wrap; gap:.25rem;">
+              <div>
+                <strong style="font-size:.95rem;">{{ candidate_result.candidate.user.get_full_name }}</strong>
+                {% if candidate_result.candidate.running_mate %}
+                <span style="font-size:.8rem; color:var(--blue-mid); margin-left:.4rem;">
+                  & {{ candidate_result.candidate.running_mate.get_full_name }}
+                </span>
+                {% endif %}
+                <div style="font-size:.75rem; color:var(--text-light); font-family:monospace;">
+                  {{ candidate_result.candidate.user.registration_number }}
+                </div>
+              </div>
+              <div style="text-align:right; flex-shrink:0;">
+                <span style="font-size:1.2rem; font-weight:800; color:{% if forloop.counter == 1 %}#7a5e0a{% else %}var(--text-primary){% endif %};">
+                  {{ candidate_result.vote_count }}
+                </span>
+                <span style="font-size:.8rem; color:var(--text-muted);">
+                  ({{ candidate_result.percentage|floatformat:1 }}%)
+                </span>
+              </div>
+            </div>
+
+            <!-- Progress bar -->
+            <div style="height:8px; background:var(--off-white); border-radius:99px; overflow:hidden; border:1px solid var(--border);">
+              <div style="height:100%; border-radius:99px; width:{{ candidate_result.percentage|floatformat:0 }}%;
+                background:{% if forloop.counter == 1 %}var(--gold){% elif forloop.counter == 2 %}var(--blue){% else %}var(--text-light){% endif %};
+                transition:width .4s ease;">
+              </div>
+            </div>
+          </div>
+
         </div>
         {% endfor %}
+
+      {% else %}
+      <div class="empty-state" style="padding:1.5rem;">
+        <i class="fas fa-inbox" style="font-size:2rem;"></i>
+        <p>No votes recorded for this position.</p>
+      </div>
+      {% endif %}
     </div>
     {% endfor %}
+
+  </div>
+  {% endfor %}
+
 {% else %}
-    <div >
-        <p>No results available yet.</p>
-    </div>
+<div class="card">
+  <div class="empty-state">
+    <i class="fas fa-chart-bar"></i>
+    <p><strong>Results not available yet.</strong></p>
+    <p style="margin-top:.5rem; font-size:.875rem;">Results will be published once the election ends or the commissioner releases them.</p>
+    <a href="{% url 'election:elections_list' %}" class="btn btn-outline" style="margin-top:1rem;">
+      <i class="fas fa-arrow-left"></i> Back to Elections
+    </a>
+  </div>
+</div>
 {% endif %}
 
-<a href="{% url 'election:elections_list' %}" style="margin-top: 2rem; display: inline-block;">← Back to Elections</a>
 {% endblock %}
