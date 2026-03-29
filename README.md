@@ -63,7 +63,7 @@
 - **[Cleven](https://github.com/cleven12)** — Project Manager & Lead Developer
 - **[Lajokjohn](https://github.com/Lajokjohn)** — Technical Lead
 - **[Faustine Emmanuel](https://github.com/FaustineEmmanuel)** — Feature Developer
-- **[almaleko2022@gmail.com(hhtps://github.com/almaleko2022@gmail.com)** - User Research & Prototyping
+- **[almaleko2022@gmail.com(https://github.com/almaleko2022@gmail.com)** - User Research & Prototyping
 - **[MWECAU ICT Club](https://github.com/mwecauictclub)** — Institution
 
 ---
