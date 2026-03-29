@@ -1,6 +1,6 @@
 # core/urls.py
 from django.urls import path
-from .views_ui import home, login_view, logout_view, register_view, dashboard_view, profile_edit_view
+from .views_ui import home, login_view, logout_view, register_view, dashboard_view, profile_edit_view, contributors_view
 from .views_commissioner import (
     commissioner_dashboard,
     dashboard_stats_api,
@@ -18,6 +18,8 @@ app_name = "core"
 urlpatterns = [
     # Home page
     path('', home, name='home'),
+    # Contributor page
+    path('contributors/', contributors_view, name='contributors'),
     
     # Django session-based authentication
     path('login/', login_view, name='login'),
@@ -38,4 +40,6 @@ urlpatterns = [
     path('api/observer/election/<int:election_id>/', observer_election_details_api, name='observer_election_details_api'),
     path('api/observer/votes/', observer_votes_api, name='observer_votes_api'),
     path('api/observer/tokens/', observer_tokens_api, name='observer_tokens_api'),
+
+
 ]
