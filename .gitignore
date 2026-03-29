@@ -5,9 +5,6 @@
 .env.local
 .env.*.local
 
-# Markdown files
-*.md
-
 # IDE & Editor
 .vscode
 .idea
