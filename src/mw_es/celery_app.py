@@ -1,5 +1,5 @@
 """
-Celery application configuration for MWECAU Election Platform.
+Celery application configuration for MWECAU DigiVote.
 This file initializes Celery with Django settings for handling asynchronous tasks.
 """
 import os

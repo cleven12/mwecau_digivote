@@ -1,6 +1,6 @@
-# 📚 MWECAU Election Platform Documentation
+# 📚 MWECAU DigiVote Documentation
 
-Welcome to the comprehensive documentation hub for the MWECAU Election Platform.
+Welcome to the comprehensive documentation hub for the MWECAU DigiVote.
 
 ## 🌐 Interactive Documentation
 

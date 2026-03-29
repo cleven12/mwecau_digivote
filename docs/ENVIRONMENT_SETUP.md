@@ -1,4 +1,4 @@
-# MWECAU Election Platform - Environment Setup Guide
+# MWECAU DigiVote - Environment Setup Guide
 
 Quick start guide for setting up environment variables for development and production.
 

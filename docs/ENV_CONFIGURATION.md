@@ -1,6 +1,6 @@
 # Environment Configuration Guide
 
-This document provides comprehensive guidance on setting up and managing environment variables for the MWECAU Election Platform across different deployment environments.
+This document provides comprehensive guidance on setting up and managing environment variables for the MWECAU DigiVote across different deployment environments.
 
 ## Files Overview
 

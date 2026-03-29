@@ -86,7 +86,7 @@ def notify_on_state_change(sender, instance, created, **kwargs):
         f"Previous state id: {old_state}\n"
         f"New state id: {new_state}\n\n"
         "If you did not request this change, please contact support immediately.\n"
-        "Regards,\nMWECAU Election Platform"
+        "Regards,\nMWECAU DigiVote"
     )
 
     try:
