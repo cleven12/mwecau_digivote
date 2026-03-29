@@ -145,8 +145,20 @@
 </style>
 
 <script>
-const ORG = 'mwecauictclub';
-const GH  = 'https://api.github.com';
+const GH = 'https://api.github.com';
+
+// Specific repositories to track (owner/repo format)
+const REPOS = [
+  'cleven12/mwecau_digivote',
+  'mwecauictclub/mwecau_digivote',
+  'mwecauictclub/ictclub-website',
+  'mwecauictclub/ICTClubX',
+  'mwecauictclub/reg-and-attendance-api',
+  'mwecauictclub/WhatsApp-ai-chatbot-',
+  'mwecauictclub/Mwecau_ict_club_portifolio',
+  // Add more repositories here as needed:
+  // 'owner/repo-name',
+];
 
 // Language → colour (GitHub's palette, best-effort subset)
 const LANG_COLORS = {
@@ -250,8 +262,14 @@ async function load() {
   const headMeta    = document.getElementById('contributors-heading-meta');
 
   try {
-    // 1. Fetch all public repos for the org
-    const repos = (await ghAll(`/orgs/${ORG}/repos`))
+    // 1. Fetch all specified repos in parallel
+    const repoResults = await Promise.allSettled(
+      REPOS.map(repoPath => gh(`/repos/${repoPath}`))
+    );
+    
+    const repos = repoResults
+      .filter(r => r.status === 'fulfilled')
+      .map(r => r.value)
       .filter(r => !r.archived)
       .sort((a, b) => b.stargazers_count - a.stargazers_count);
 
@@ -261,7 +279,7 @@ async function load() {
     document.getElementById('stat-repos').textContent = repos.length;
 
     if (repos.length === 0) {
-      reposGrid.innerHTML = '<p style="color:var(--text-muted)">No public repositories found.</p>';
+      reposGrid.innerHTML = '<p style="color:var(--text-muted)">No repositories found.</p>';
     } else {
       repos.forEach(r => reposGrid.appendChild(renderRepo(r)));
     }
@@ -269,7 +287,7 @@ async function load() {
     // 2. Fetch contributors for every repo in parallel
     const contribResults = await Promise.allSettled(
       repos.map(r =>
-        ghAll(`/repos/${ORG}/${r.name}/contributors`)
+        ghAll(`/repos/${r.owner.login}/${r.name}/contributors`)
           .then(cs => ({ repoName: r.name, contributors: cs }))
       )
     );
