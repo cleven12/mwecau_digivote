@@ -224,7 +224,7 @@ Response:
 **Objective**: Verify all verified voters receive tokens for the President level
 
 **Steps**:
-1. Login as any student (e.g., `reg-001@mail.com` / `@2025`)
+1. Login as any student (e.g , `reg-001@mail.com` / `@2025`)
 2. Call `GET /api/election/list/` to see active elections
 3. Verify the response includes the President level
 4. **To get your voting token**: Tokens are generated when elections are activated via email

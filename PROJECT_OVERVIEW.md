@@ -139,7 +139,7 @@ Student → Registers with Reg Number → Verifies Details → Votes → Results
 - **Scope**: Students grouped by academic programs
 - **Available Programs** (Sample):
   - **Postgraduate Programs**: Master of Business Administration (MWM06), Master of Science with Education (MWM07), Doctor of Philosophy in Education (MWPH01)
-  - **Undergraduate Programs**: Bachelor of Science in Computer Science (MW009), Bachelor of Science in Chemistry (MW010), Bachelor of Business Administration Management (MW003)
+  - **Undergraduate Programs**: Bachelor of Science in Computer Science (BsCS), Bachelor of Science in Chemistry (MW010), Bachelor of Business Administration Management (MW003)
   - **Diploma Programs**: Various certificate and diploma options
 - **Purpose**: Elect class representatives and course leaders
 - **Participants**: Students vote within their specific academic programs

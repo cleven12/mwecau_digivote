@@ -44,7 +44,7 @@ Concurrency & integrity
 
 Emailing and Celery notes
 - Celery tasks for notifications and confirmations are declared in `src/election/tasks.py` and the project settings include `django-celery-beat` and `django-celery-results` with a DB broker by default.
-- Many task helpers (e.g., `send_vote_confirmation_email`) are invoked as functions in the code; to execute them asynchronously run a Celery worker and `celery beat`.
+- Many task helpers (e.g , `send_vote_confirmation_email`) are invoked as functions in the code; to execute them asynchronously run a Celery worker and `celery beat`.
 
 Testing tips
 - To get tokens for testing query the `voter_tokens` table or use the `notify_voters_of_active_election` task in local dev (or invoke the task function directly).
