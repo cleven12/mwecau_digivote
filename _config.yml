@@ -1,5 +1,5 @@
 theme: minima
-title: "MWECAU Election Platform Documentation"
+title: "MWECAU DigiVote Documentation"
 description: "Modern digital voting system for Mwenge Catholic University"
 url: "https://mwecauictclub.github.io"
 baseurl: "/mwecau_election_platform"

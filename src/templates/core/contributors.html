@@ -1,0 +1,330 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Contributors — MWECAUSO DigiVote{% endblock %}
+
+{% block content %}
+
+<div style="margin-bottom:1.75rem;">
+  <h2 style="margin-bottom:.3rem;">
+    <i class="fab fa-github text-blue"></i> Contributors
+  </h2>
+  <p style="margin:0;color:var(--text-muted);">
+    Everyone who has contributed to MWECAU ICT Club open-source projects on GitHub.
+  </p>
+</div>
+
+<!-- Org card -->
+<div class="card" style="margin-bottom:1.75rem;">
+  <div style="display:flex;align-items:center;gap:1.25rem;flex-wrap:wrap;">
+    <img src="https://github.com/mwecauictclub.png"
+         alt="MWECAU ICT Club"
+         style="width:72px;height:72px;border-radius:50%;border:3px solid var(--blue-light);background:white;"
+         onerror="this.src='{% static 'images/mwecau.png' %}'">
+    <div style="flex:1;">
+      <h3 style="margin-bottom:.2rem;">MWECAU ICT Club</h3>
+      <p style="margin:0 0 .6rem;font-size:.875rem;">
+        Building open-source digital solutions for Mwenge Catholic University community.
+      </p>
+      <div style="display:flex;gap:.6rem;flex-wrap:wrap;">
+        <a href="https://github.com/mwecauictclub" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
+          <i class="fab fa-github"></i> @mwecauictclub
+        </a>
+        <a href="https://mwecau.ac.tz" target="_blank" rel="noopener" class="btn btn-outline btn-sm">
+          <i class="fas fa-globe"></i> mwecau.ac.tz
+        </a>
+      </div>
+    </div>
+    <div style="text-align:right;flex-shrink:0;">
+      <div id="org-stats" style="display:flex;gap:1.25rem;">
+        <div style="text-align:center;">
+          <div id="stat-repos" class="stat-value" style="font-size:1.4rem;">—</div>
+          <div class="stat-label">Repos</div>
+        </div>
+        <div style="text-align:center;">
+          <div id="stat-contributors" class="stat-value" style="font-size:1.4rem;">—</div>
+          <div class="stat-label">Contributors</div>
+        </div>
+        <div style="text-align:center;">
+          <div id="stat-commits" class="stat-value" style="font-size:1.4rem;">—</div>
+          <div class="stat-label">Contributions</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Repositories grid -->
+<div class="section-heading">
+  <i class="fas fa-code-branch"></i> Public Repositories
+  <span id="repos-loading" style="margin-left:.5rem;font-size:.8rem;font-weight:400;color:var(--text-muted);">
+    <i class="fas fa-spinner fa-spin"></i> fetching…
+  </span>
+</div>
+
+<div id="repos-grid"
+     style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;margin-bottom:2rem;">
+</div>
+
+<!-- Contributors grid -->
+<div class="section-heading" style="margin-top:.25rem;">
+  <i class="fas fa-users"></i> All Contributors
+  <span id="contributors-heading-meta"
+        style="margin-left:.5rem;font-size:.8rem;font-weight:500;color:var(--text-muted);text-transform:none;letter-spacing:0;">
+    <i class="fas fa-spinner fa-spin"></i> loading…
+  </span>
+</div>
+
+<div id="error-banner" style="display:none;" class="alert alert-warning">
+  <i class="fas fa-exclamation-triangle"></i>
+  <div>
+    <strong>GitHub API unavailable.</strong>
+    You may be rate-limited (60 req/hr unauthenticated) or offline.
+    <br><a href="https://github.com/mwecauictclub" target="_blank" rel="noopener" style="margin-top:.4rem;display:inline-block;">
+      View directly on GitHub →
+    </a>
+  </div>
+</div>
+
+<div id="contributors-grid"
+     style="display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:1rem;">
+  <!-- skeleton placeholders while loading -->
+  {% for i in "12345678" %}
+  <div class="contrib-skeleton" style="background:white;border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;text-align:center;animation:pulse 1.4s ease infinite;">
+    <div style="width:72px;height:72px;border-radius:50%;background:var(--off-white);margin:0 auto .75rem;"></div>
+    <div style="height:.85rem;background:var(--off-white);border-radius:4px;width:70%;margin:.3rem auto;"></div>
+    <div style="height:.7rem;background:var(--off-white);border-radius:4px;width:45%;margin:.3rem auto;"></div>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- No contributors state -->
+<div id="empty-state" style="display:none;">
+  <div class="card">
+    <div class="empty-state">
+      <i class="fab fa-github"></i>
+      <p><strong>No contributors found.</strong></p>
+      <p style="font-size:.875rem;margin-top:.4rem;">The repositories may be private or have no commit history yet.</p>
+      <a href="https://github.com/mwecauictclub" target="_blank" class="btn btn-outline" style="margin-top:1rem;">
+        <i class="fab fa-github"></i> Browse on GitHub
+      </a>
+    </div>
+  </div>
+</div>
+
+<style>
+@keyframes pulse {
+  0%,100% { opacity:1; }
+  50% { opacity:.5; }
+}
+.contrib-card {
+  background:white;
+  border:1.5px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:1.25rem;
+  text-align:center;
+  transition:transform .15s, box-shadow .15s, border-color .15s;
+}
+.contrib-card:hover {
+  transform:translateY(-3px);
+  box-shadow:var(--shadow-md);
+  border-color:var(--blue-mid);
+}
+.repo-card {
+  background:white;
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  padding:1.25rem;
+  transition:box-shadow .15s, border-color .15s;
+  display:flex;
+  flex-direction:column;
+  gap:.5rem;
+}
+.repo-card:hover { box-shadow:var(--shadow-md); border-color:var(--blue-light); }
+.repo-lang-dot { width:10px;height:10px;border-radius:50%;display:inline-block;flex-shrink:0; }
+</style>
+
+<script>
+const ORG = 'mwecauictclub';
+const GH  = 'https://api.github.com';
+
+// Language → colour (GitHub's palette, best-effort subset)
+const LANG_COLORS = {
+  Python:'#3572A5', JavaScript:'#f1e05a', TypeScript:'#3178c6',
+  HTML:'#e34c26', CSS:'#563d7c', Shell:'#89e051',
+  Java:'#b07219', 'C++':'#f34b7d', C:'#555555',
+  Ruby:'#701516', Go:'#00ADD8', Rust:'#dea584',
+  PHP:'#4F5D95', Swift:'#F05138', Kotlin:'#A97BFF',
+};
+
+async function gh(path) {
+  const r = await fetch(`${GH}${path}`, {
+    headers:{ Accept:'application/vnd.github+json' }
+  });
+  if (!r.ok) throw new Error(`${r.status} ${r.statusText}`);
+  return r.json();
+}
+
+// Fetch all pages of a paginated endpoint
+async function ghAll(path, perPage=100) {
+  let page = 1, all = [];
+  while (true) {
+    const sep = path.includes('?') ? '&' : '?';
+    const data = await gh(`${path}${sep}per_page=${perPage}&page=${page}`);
+    if (!Array.isArray(data) || data.length === 0) break;
+    all = all.concat(data);
+    if (data.length < perPage) break;
+    page++;
+  }
+  return all;
+}
+
+function renderRepo(repo) {
+  const langColor = LANG_COLORS[repo.language] || '#8b9dc3';
+  const card = document.createElement('div');
+  card.className = 'repo-card';
+  card.innerHTML = `
+    <div style="display:flex;align-items:center;gap:.5rem;">
+      <i class="fas fa-book" style="color:var(--text-light);font-size:.85rem;flex-shrink:0;"></i>
+      <a href="${repo.html_url}" target="_blank" rel="noopener"
+         style="font-weight:700;font-size:.95rem;word-break:break-word;">${repo.name}</a>
+      ${repo.fork ? '<span class="badge badge-warning" style="font-size:.65rem;">fork</span>' : ''}
+    </div>
+    <p style="font-size:.82rem;color:var(--text-muted);margin:0;flex:1;
+              display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">
+      ${repo.description || '<em>No description</em>'}
+    </p>
+    <div style="display:flex;gap:1rem;font-size:.78rem;color:var(--text-muted);align-items:center;flex-wrap:wrap;">
+      ${repo.language
+        ? `<span style="display:flex;align-items:center;gap:.3rem;">
+             <span class="repo-lang-dot" style="background:${langColor}"></span>${repo.language}
+           </span>`
+        : ''}
+      <span><i class="fas fa-star" style="color:var(--gold)"></i> ${repo.stargazers_count}</span>
+      <span><i class="fas fa-code-branch" style="color:var(--text-light)"></i> ${repo.forks_count}</span>
+      <span style="margin-left:auto;">
+        <a href="${repo.html_url}/graphs/contributors" target="_blank" rel="noopener"
+           style="font-size:.75rem;color:var(--blue-mid);">contributors →</a>
+      </span>
+    </div>
+  `;
+  return card;
+}
+
+function renderContrib(c) {
+  const card = document.createElement('div');
+  card.className = 'contrib-card';
+  const repoTags = c.repos.slice(0,3).map(r =>
+    `<span class="badge badge-blue" style="font-size:.68rem;margin:.15rem .1rem;">${r}</span>`
+  ).join('');
+  const extra = c.repos.length > 3
+    ? `<span class="badge badge-blue" style="font-size:.68rem;margin:.15rem .1rem;">+${c.repos.length - 3} more</span>`
+    : '';
+
+  card.innerHTML = `
+    <a href="${c.html_url}" target="_blank" rel="noopener" style="text-decoration:none;">
+      <img src="${c.avatar_url}&s=96"
+           alt="${c.login}"
+           loading="lazy"
+           style="width:72px;height:72px;border-radius:50%;border:2.5px solid var(--blue-light);
+                  margin-bottom:.75rem;transition:border-color .15s;"
+           onerror="this.src='https://github.com/identicons/${c.login}.png'">
+      <div style="font-weight:700;font-size:.9rem;color:var(--text-primary);
+                  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"
+           title="${c.login}">${c.login}</div>
+      <div style="font-size:.78rem;color:var(--text-muted);margin:.2rem 0 .6rem;">
+        ${c.contributions.toLocaleString()} contribution${c.contributions !== 1 ? 's' : ''}
+      </div>
+      <div style="min-height:1.6rem;">${repoTags}${extra}</div>
+    </a>
+  `;
+  return card;
+}
+
+async function load() {
+  const reposGrid   = document.getElementById('repos-grid');
+  const contribGrid = document.getElementById('contributors-grid');
+  const errorBanner = document.getElementById('error-banner');
+  const emptyState  = document.getElementById('empty-state');
+  const reposLoading= document.getElementById('repos-loading');
+  const headMeta    = document.getElementById('contributors-heading-meta');
+
+  try {
+    // 1. Fetch all public repos for the org
+    const repos = (await ghAll(`/orgs/${ORG}/repos`))
+      .filter(r => !r.archived)
+      .sort((a, b) => b.stargazers_count - a.stargazers_count);
+
+    // Render repos
+    reposGrid.innerHTML = '';
+    reposLoading.innerHTML = `<span style="color:var(--success);font-weight:600;">${repos.length} repos</span>`;
+    document.getElementById('stat-repos').textContent = repos.length;
+
+    if (repos.length === 0) {
+      reposGrid.innerHTML = '<p style="color:var(--text-muted)">No public repositories found.</p>';
+    } else {
+      repos.forEach(r => reposGrid.appendChild(renderRepo(r)));
+    }
+
+    // 2. Fetch contributors for every repo in parallel
+    const contribResults = await Promise.allSettled(
+      repos.map(r =>
+        ghAll(`/repos/${ORG}/${r.name}/contributors`)
+          .then(cs => ({ repoName: r.name, contributors: cs }))
+      )
+    );
+
+    // 3. Merge + dedupe
+    const merged = {};
+    let totalContributions = 0;
+
+    contribResults.forEach(result => {
+      if (result.status !== 'fulfilled') return;
+      const { repoName, contributors } = result.value;
+      (contributors || []).forEach(c => {
+        if (c.type === 'Bot' || c.login.toLowerCase().includes('[bot]')) return;
+        if (!merged[c.login]) {
+          merged[c.login] = { ...c, contributions: 0, repos: [] };
+        }
+        merged[c.login].contributions += c.contributions;
+        merged[c.login].repos.push(repoName);
+        totalContributions += c.contributions;
+      });
+    });
+
+    const sorted = Object.values(merged)
+      .sort((a, b) => b.contributions - a.contributions);
+
+    // Update stats
+    document.getElementById('stat-contributors').textContent = sorted.length;
+    document.getElementById('stat-commits').textContent =
+      totalContributions >= 1000
+        ? (totalContributions / 1000).toFixed(1) + 'k'
+        : totalContributions;
+
+    // Remove skeletons
+    contribGrid.innerHTML = '';
+
+    if (sorted.length === 0) {
+      emptyState.style.display = 'block';
+      headMeta.textContent = '(0)';
+      return;
+    }
+
+    headMeta.innerHTML = `<span style="color:var(--success);font-weight:600;">${sorted.length} people</span>`;
+    sorted.forEach(c => contribGrid.appendChild(renderContrib(c)));
+
+  } catch (err) {
+    console.error('Contributors load error:', err);
+    // Remove skeletons
+    contribGrid.innerHTML = '';
+    errorBanner.style.display = 'flex';
+    reposLoading.innerHTML = '<span style="color:var(--error)">failed to load</span>';
+    headMeta.innerHTML = '<span style="color:var(--error)">unavailable</span>';
+  }
+}
+
+load();
+</script>
+
+{% endblock %}

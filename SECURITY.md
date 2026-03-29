@@ -8,7 +8,7 @@
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability in the MWECAU Election Platform, please report it responsibly:
+If you discover a security vulnerability in the MWECAU DigiVote, please report it responsibly:
 
 ### Reporting Process
 

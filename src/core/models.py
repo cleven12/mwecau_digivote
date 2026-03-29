@@ -169,7 +169,7 @@ class User(AbstractUser):
             regex=r'^[A-Z0-9/]+$',
             message='Registration number must contain only uppercase letters, numbers, or slashes.'
         )],
-        help_text="University registration number (e.g., T/XXX/202X/XXX)"
+        help_text="University registration number (e.g., T/XXX/20XX/XXX)"
     )
     email = models.EmailField(
         _('email address'),

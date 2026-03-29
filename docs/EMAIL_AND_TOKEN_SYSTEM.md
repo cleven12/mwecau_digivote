@@ -61,11 +61,11 @@ Eligibility is determined by the **election level type** and **user's state/cour
 
 **Email Content:**
 ```
-Subject: MWECAU Election Platform - Registration Confirmed
+Subject: MWECAU DigiVote - Registration Confirmed
 
 Dear [Name],
 
-Welcome to the MWECAU Election Platform!
+Welcome to the MWECAU DigiVote!
 
 Your account has been verified. You are now registered as a voter.
 Your Voter ID: [UUID4]
@@ -102,7 +102,7 @@ MWECAU Election Commission
 
 **Email Content (notify_voters):**
 ```
-Subject: MWECAU Election Platform - New Election: [Title]
+Subject: MWECAU DigiVote - New Election: [Title]
 
 Dear [Name],
 
@@ -205,7 +205,7 @@ MWECAU Election Commission
 
 **Email Content:**
 ```
-Subject: MWECAU Election Platform - Vote Confirmation: [Title]
+Subject: MWECAU DigiVote - Vote Confirmation: [Title]
 
 Dear [Name],
 

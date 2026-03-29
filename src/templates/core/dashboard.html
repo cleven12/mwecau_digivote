@@ -1,108 +1,256 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
-{% block title %}Dashboard - MWECAU Voting{% endblock %}
+{% block title %}Dashboard — MWECAUSO DigiVote{% endblock %}
 
 {% block content %}
-<h2>Dashboard</h2>
 
-<div >
-    <h3>User Information</h3>
-    <table>
-        <tr>
-            <th>Field</th>
-            <th>Value</th>
-        </tr>
-        <tr>
-            <td>Name</td>
-            <td>{{ user.first_name }} {{ user.last_name }}</td>
-        </tr>
-        <tr>
-            <td>Registration Number</td>
-            <td>{{ user.registration_number }}</td>
-        </tr>
-        <tr>
-            <td>Email</td>
-            <td>{{ user.email }}</td>
-        </tr>
-        <tr>
-            <td>Voter ID</td>
-            <td>{{ user.voter_id }}</td>
-        </tr>
-        <tr>
-            <td>Role</td>
-            <td>{{ user.get_role_display }}</td>
-        </tr>
-        <tr>
-            <td>Verified</td>
-            <td>{% if user.is_verified %}<span style="color: green;">✓ Yes</span>{% else %}<span style="color: red;">✗ No</span>{% endif %}</td>
-        </tr>
-        {% if user.state %}
-        <tr>
-            <td>State</td>
-            <td>{{ user.state.name }}</td>
-        </tr>
-        {% endif %}
-        {% if user.course %}
-        <tr>
-            <td>Course</td>
-            <td>{{ user.course.name }} ({{ user.course.code }})</td>
-        </tr>
-        {% endif %}
-    </table>
+<!-- Page header -->
+<div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:1.75rem;">
+  <div>
+    <h2 style="margin-bottom:.25rem;">
+      <i class="fas fa-th-large text-blue"></i>
+      Welcome, {{ user.first_name }}
+    </h2>
+    <p style="margin:0; color:var(--text-muted);">
+      {{ user.registration_number }} &nbsp;·&nbsp;
+      <span class="badge {% if user.is_verified %}badge-success{% else %}badge-warning{% endif %}">
+        <i class="fas {% if user.is_verified %}fa-check-circle{% else %}fa-clock{% endif %}"></i>
+        {% if user.is_verified %}Verified{% else %}Pending Verification{% endif %}
+      </span>
+      &nbsp;
+      <span class="badge badge-blue">{{ user.get_role_display }}</span>
+    </p>
+  </div>
+  <a href="{% url 'core:profile_edit' %}" class="btn btn-outline btn-sm">
+    <i class="fas fa-user-edit"></i> Edit Profile
+  </a>
 </div>
 
-<div >
-    <h3>Active Elections</h3>
-    {% if active_elections %}
-    <ul>
-        {% for election in active_elections %}
-        <li>
-            <strong>{{ election.name }}</strong><br>
-            <small>Start: {{ election.start_date }} | End: {{ election.end_date }}</small><br>
-            <a href="{% url 'election:vote' election.id %}">Go to Voting Page</a> |
-            <a href="{% url 'election:results' election.id %}">View Results</a>
-        </li>
+<!-- Stats -->
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-icon blue"><i class="fas fa-vote-yea"></i></div>
+    <div class="stat-info">
+      <div class="stat-value">{{ total_tokens }}</div>
+      <div class="stat-label">Total Tokens</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
+    <div class="stat-info">
+      <div class="stat-value">{{ used_tokens }}</div>
+      <div class="stat-label">Votes Cast</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon gold"><i class="fas fa-poll"></i></div>
+    <div class="stat-info">
+      <div class="stat-value">{{ active_elections.count }}</div>
+      <div class="stat-label">Active Elections</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon red"><i class="fas fa-history"></i></div>
+    <div class="stat-info">
+      <div class="stat-value">{{ completed_elections.count }}</div>
+      <div class="stat-label">Completed</div>
+    </div>
+  </div>
+</div>
+
+{% if not user.is_verified %}
+<div class="alert alert-warning" style="margin-bottom:1.5rem;">
+  <i class="fas fa-exclamation-triangle"></i>
+  <div>
+    <strong>Account not yet verified.</strong>
+    Your account is pending verification by the Election Commissioner. You'll receive a notification once verified and tokens are issued.
+  </div>
+</div>
+{% endif %}
+
+<!-- Active Elections / Voting Tokens -->
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      <i class="fas fa-vote-yea"></i> Your Voting Tokens
+    </div>
+    <a href="{% url 'election:elections_list' %}" class="btn btn-outline btn-sm">
+      <i class="fas fa-list"></i> All Elections
+    </a>
+  </div>
+
+  {% if active_tokens %}
+  <div class="section-heading">
+    <i class="fas fa-circle" style="color:var(--success); font-size:.6rem"></i>
+    Active — Ready to Vote
+  </div>
+  <div class="table-wrapper" style="margin-bottom:1.5rem;">
+    <table>
+      <thead>
+        <tr>
+          <th>Election</th>
+          <th>Level</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in active_tokens %}
+        <tr>
+          <td><strong>{{ item.token.election.title }}</strong></td>
+          <td>{{ item.token.election_level.name }}</td>
+          <td>
+            {% if item.status == 'used' %}
+              <span class="badge badge-success"><i class="fas fa-check"></i> Voted</span>
+            {% else %}
+              <span class="badge badge-blue"><i class="fas fa-circle"></i> Available</span>
+            {% endif %}
+          </td>
+          <td>
+            {% if item.status == 'used' %}
+              <a href="{% url 'election:results' item.token.election.id %}" class="btn btn-outline btn-sm">
+                <i class="fas fa-chart-bar"></i> Results
+              </a>
+            {% else %}
+              <a href="{% url 'election:vote' item.token.election.id %}" class="btn btn-primary btn-sm">
+                <i class="fas fa-vote-yea"></i> Vote Now
+              </a>
+            {% endif %}
+          </td>
+        </tr>
         {% endfor %}
-    </ul>
-    <a href="{% url 'election:elections_list' %}"  style="margin-top: 1rem;">View All Elections</a>
-    {% else %}
-    <p>No active elections at this time.</p>
-    <a href="{% url 'election:elections_list' %}"  style="margin-top: 1rem;">Browse Elections</a>
-    {% endif %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+  {% if completed_tokens %}
+  <div class="section-heading">
+    <i class="fas fa-history" style="color:var(--text-muted)"></i>
+    Completed Elections
+  </div>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Election</th>
+          <th>Level</th>
+          <th>Your Vote</th>
+          <th>Results</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in completed_tokens %}
+        <tr>
+          <td>{{ item.token.election.title }}</td>
+          <td>{{ item.token.election_level.name }}</td>
+          <td>
+            {% if item.status == 'used' %}
+              <span class="badge badge-success"><i class="fas fa-check"></i> Voted</span>
+            {% else %}
+              <span class="badge badge-warning"><i class="fas fa-times"></i> Did not vote</span>
+            {% endif %}
+          </td>
+          <td>
+            <a href="{% url 'election:results' item.token.election.id %}" class="btn btn-outline btn-sm">
+              <i class="fas fa-chart-bar"></i> View Results
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+
+  {% if not active_tokens and not completed_tokens %}
+  <div class="empty-state">
+    <i class="fas fa-inbox"></i>
+    <p><strong>No voting tokens yet.</strong></p>
+    <p style="margin-top:.5rem; font-size:.875rem;">
+      Tokens are issued when an election you're eligible for is activated.
+      {% if upcoming_elections %} Check the upcoming elections below.{% endif %}
+    </p>
+  </div>
+  {% endif %}
 </div>
 
-<div >
-    <h3>Your Elections & Voting Status</h3>
-    {% if voting_tokens %}
-    <table>
-        <thead>
-            <tr>
-                <th>Election</th>
-                <th>Level</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for token in voting_tokens %}
-            <tr>
-                <td>{{ token.election.name }}</td>
-                <td>{{ token.election_level.name }}</td>
-                <td>{% if token.is_used %}<span style="color: green;">✓ Voted</span>{% else %}<span style="color: blue;">Ready to Vote</span>{% endif %}</td>
-                <td>
-                    {% if not token.is_used %}
-                        <a href="{% url 'election:vote' token.election.id %}">Cast Your Vote</a>
-                    {% else %}
-                        <a href="{% url 'election:results' token.election.id %}">View Results</a>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+<!-- Upcoming Elections -->
+{% if upcoming_elections %}
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      <i class="fas fa-calendar-alt"></i> Upcoming Elections
+    </div>
+  </div>
+  {% for election in upcoming_elections %}
+  <div style="display:flex; align-items:center; justify-content:space-between; padding:.85rem 0; border-bottom:1px solid var(--border); flex-wrap:wrap; gap:.5rem;">
+    <div>
+      <strong style="font-size:.95rem;">{{ election.title }}</strong><br>
+      <small>
+        <i class="fas fa-calendar-check" style="color:var(--blue)"></i>
+        Starts {{ election.start_date|date:"d M Y, H:i" }}
+        &nbsp;·&nbsp;
+        <i class="fas fa-calendar-times" style="color:var(--text-muted)"></i>
+        Ends {{ election.end_date|date:"d M Y, H:i" }}
+      </small>
+    </div>
+    <span class="badge badge-gold"><i class="fas fa-clock"></i> Upcoming</span>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<!-- User Info Card -->
+<div class="card">
+  <div class="card-header">
+    <div class="card-title"><i class="fas fa-user-circle"></i> Account Information</div>
+    {% if can_edit_profile %}
+    <a href="{% url 'core:profile_edit' %}" class="btn btn-outline btn-sm">
+      <i class="fas fa-edit"></i> Edit
+    </a>
     {% else %}
-    <p>You are eligible to participate in all active elections! Check back during election periods to cast your vote.</p>
+    <span class="badge badge-warning" title="Profile editing is locked during active elections">
+      <i class="fas fa-lock"></i> Locked during election
+    </span>
     {% endif %}
+  </div>
+
+  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:.25rem;">
+    <div class="info-row">
+      <span class="info-label">Full Name</span>
+      <span class="info-value">{{ user.first_name }} {{ user.last_name }}</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Reg. Number</span>
+      <span class="info-value" style="font-family:monospace">{{ user.registration_number }}</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Email</span>
+      <span class="info-value">{{ user.email|default:"—" }}</span>
+    </div>
+    <div class="info-row">
+      <span class="info-label">Voter ID</span>
+      <span class="info-value" style="font-family:monospace; font-size:.78rem">{{ user.voter_id|default:"Not assigned" }}</span>
+    </div>
+    {% if user.state %}
+    <div class="info-row">
+      <span class="info-label">State</span>
+      <span class="info-value">{{ user.state.name }}</span>
+    </div>
+    {% endif %}
+    {% if user.course %}
+    <div class="info-row">
+      <span class="info-label">Course</span>
+      <span class="info-value">{{ user.course.name }} ({{ user.course.code }})</span>
+    </div>
+    {% endif %}
+    <div class="info-row">
+      <span class="info-label">Gender</span>
+      <span class="info-value">{{ user.get_gender_display|default:"—" }}</span>
+    </div>
+  </div>
 </div>
 
 {% endblock %}

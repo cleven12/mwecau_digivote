@@ -1,95 +1,173 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
-{% block title %}Vote - {{ election.title }}{% endblock %}
+{% block title %}Vote — {{ election.title }}{% endblock %}
 
 {% block content %}
-<h2>{{ election.title }}</h2>
-<p>{{ election.description }}</p>
+
+<div style="margin-bottom:1.75rem;">
+  <a href="{% url 'election:elections_list' %}" style="font-size:.875rem; color:var(--text-muted); text-decoration:none;">
+    <i class="fas fa-arrow-left"></i> Back to Elections
+  </a>
+  <h2 style="margin-top:.5rem; margin-bottom:.4rem;">{{ election.title }}</h2>
+  {% if election.description %}
+  <p style="margin:0; max-width:620px;">{{ election.description }}</p>
+  {% endif %}
+  <div style="display:flex; gap:1rem; margin-top:.75rem; flex-wrap:wrap;">
+    <small><i class="fas fa-calendar-check" style="color:var(--blue)"></i> Opens {{ election.start_date|date:"d M Y, H:i" }}</small>
+    <small><i class="fas fa-calendar-times" style="color:var(--text-muted)"></i> Closes {{ election.end_date|date:"d M Y, H:i" }}</small>
+    <span class="badge badge-success"><i class="fas fa-circle" style="font-size:.5rem"></i> Election Active</span>
+  </div>
+</div>
 
 {% if voting_levels %}
-    {% for level_data in voting_levels %}
-    <div >
-        <h3>{{ level_data.level.name }}</h3>
-        
-        {% if level_data.has_voted %}
-            <div class="message success">
-                <p>✓ You have already voted in this level.</p>
-            </div>
-        {% else %}
-            {% for position in level_data.positions %}
-            <div style="margin-top: 2rem;">
-                <h4>{{ position.title }}</h4>
-                <p>{{ position.description }}</p>
-                
-                {% if position.candidates.all %}
-                    <div class="candidates-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
-                        {% for candidate in position.candidates.all %}
-                        <div  style="text-align: center; padding: 1.5rem;">
-                            <div style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 1rem;">
-                                <div>
-                                    {% if candidate.image %}
-                                        <img src="{{ candidate.image.url }}" alt="{{ candidate.user.get_full_name }}" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #667eea;">
-                                    {% else %}
-                                        <div style="width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white; font-weight: bold;">
-                                            {{ candidate.user.first_name|first }}{{ candidate.user.last_name|first }}
-                                        </div>
-                                    {% endif %}
-                                    <p style="margin-top: 0.5rem; font-weight: bold; font-size: 1.1rem;">{{ candidate.user.first_name }}</p>
-                                </div>
-                                
-                                {% if candidate.running_mate %}
-                                <div>
-                                    {% if candidate.running_mate_image %}
-                                        <img src="{{ candidate.running_mate_image.url }}" alt="{{ candidate.running_mate.get_full_name }}" style="width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 3px solid #764ba2;">
-                                    {% else %}
-                                        <div style="width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #764ba2 0%, #667eea 100%); display: flex; align-items: center; justify-content: center; font-size: 2rem; color: white; font-weight: bold;">
-                                            {{ candidate.running_mate.first_name|first }}{{ candidate.running_mate.last_name|first }}
-                                        </div>
-                                    {% endif %}
-                                    <p style="margin-top: 0.5rem; font-weight: bold; font-size: 1.1rem;">{{ candidate.running_mate.first_name }}</p>
-                                    <p style="font-size: 0.8rem; color: #666;">Running Mate</p>
-                                </div>
-                                {% endif %}
-                            </div>
-                            
-                            <h4 style="margin: 0.5rem 0;">{{ candidate.user.get_full_name }}</h4>
-                            {% if candidate.running_mate %}
-                                <p style="color: #667eea; font-weight: 500; margin-bottom: 0.5rem;">
-                                    & {{ candidate.running_mate.get_full_name }}
-                                </p>
-                            {% endif %}
-                            <p><small>{{ candidate.user.registration_number }}</small></p>
-                            <p style="text-align: left; margin-top: 1rem;">{{ candidate.bio|truncatewords:25 }}</p>
-                            {% if candidate.running_mate_bio %}
-                                <p style="text-align: left; color: #666; font-size: 0.9rem; margin-top: 0.5rem;">
-                                    <strong>Running Mate:</strong> {{ candidate.running_mate_bio|truncatewords:15 }}
-                                </p>
-                            {% endif %}
-                            
-                            <form method="post" action="{% url 'election:submit_vote' election.id %}" style="margin-top: 1rem;">
-                                {% csrf_token %}
-                                <input type="hidden" name="token_id" value="{{ level_data.token.id }}">
-                                <input type="hidden" name="candidate_id" value="{{ candidate.id }}">
-                                <button type="submit"  onclick="return confirm('Are you sure you want to vote for {{ candidate.user.get_full_name }}{% if candidate.running_mate %} & {{ candidate.running_mate.get_full_name }}{% endif %}? This action cannot be undone.');">
-                                    Vote for this Team
-                                </button>
-                            </form>
-                        </div>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    <p>No candidates for this position yet.</p>
-                {% endif %}
-            </div>
-            {% endfor %}
+
+  {% for level_data in voting_levels %}
+  <div class="card" style="margin-bottom:2rem;">
+    <div class="card-header">
+      <div class="card-title">
+        <i class="fas fa-layer-group"></i>
+        {{ level_data.level.name }}
+      </div>
+      {% if level_data.has_voted %}
+        <span class="badge badge-success"><i class="fas fa-check-circle"></i> Voted</span>
+      {% else %}
+        <span class="badge badge-blue"><i class="fas fa-vote-yea"></i> Cast your vote</span>
+      {% endif %}
+    </div>
+
+    {% if level_data.has_voted %}
+      <div class="alert alert-success">
+        <i class="fas fa-check-circle"></i>
+        <div>
+          <strong>Vote recorded successfully.</strong>
+          Your vote for this level has been submitted and cannot be changed. Thank you for participating!
+        </div>
+      </div>
+    {% else %}
+
+      {% for position in level_data.positions %}
+      <div style="margin-bottom:2rem;">
+        <div class="section-heading">
+          <i class="fas fa-user-tie"></i>
+          {{ position.title }}
+          {% if position.gender_restriction != 'any' %}
+          <span class="badge badge-gold" style="margin-left:.5rem;">{{ position.get_gender_restriction_display }} Only</span>
+          {% endif %}
+        </div>
+        {% if position.description %}
+        <p style="font-size:.875rem; margin-bottom:1rem;">{{ position.description }}</p>
         {% endif %}
-    </div>
-    {% endfor %}
+
+        {% if position.candidates.all %}
+        <div class="candidates-grid">
+          {% for candidate in position.candidates.all %}
+          <div class="candidate-card">
+
+            <!-- Avatars -->
+            <div class="candidate-avatars">
+              <div>
+                {% if candidate.image %}
+                  <img src="{{ candidate.image.url }}" alt="{{ candidate.user.get_full_name }}" class="avatar">
+                {% else %}
+                  <div class="avatar-initials">
+                    {{ candidate.user.first_name|first }}{{ candidate.user.last_name|first }}
+                  </div>
+                {% endif %}
+                <div style="font-size:.75rem; color:var(--text-muted); margin-top:.3rem;">Candidate</div>
+              </div>
+
+              {% if candidate.running_mate %}
+              <div style="display:flex; align-items:center; padding-top:0; color:var(--text-light); font-size:1.2rem;">
+                <i class="fas fa-handshake"></i>
+              </div>
+              <div>
+                {% if candidate.running_mate_image %}
+                  <img src="{{ candidate.running_mate_image.url }}" alt="{{ candidate.running_mate.get_full_name }}" class="avatar gold-av" style="border-color:var(--gold-dim)">
+                {% else %}
+                  <div class="avatar-initials gold-av">
+                    {{ candidate.running_mate.first_name|first }}{{ candidate.running_mate.last_name|first }}
+                  </div>
+                {% endif %}
+                <div style="font-size:.75rem; color:var(--text-muted); margin-top:.3rem;">Running Mate</div>
+              </div>
+              {% endif %}
+            </div>
+
+            <!-- Names -->
+            <div class="candidate-name">{{ candidate.user.get_full_name }}</div>
+            <div class="candidate-reg">{{ candidate.user.registration_number }}</div>
+
+            {% if candidate.running_mate %}
+            <div class="candidate-mate">
+              <i class="fas fa-user-friends"></i>
+              & {{ candidate.running_mate.get_full_name }}
+            </div>
+            {% endif %}
+
+            <!-- Bio -->
+            {% if candidate.bio %}
+            <div class="candidate-bio">{{ candidate.bio|truncatewords:30 }}</div>
+            {% endif %}
+
+            {% if candidate.running_mate_bio %}
+            <div class="candidate-bio" style="color:var(--text-light); font-size:.8rem; border-top:1px solid var(--border); padding-top:.75rem;">
+              <strong>Running Mate:</strong> {{ candidate.running_mate_bio|truncatewords:20 }}
+            </div>
+            {% endif %}
+
+            <!-- Vote Button -->
+            <form method="post" action="{% url 'election:submit_vote' election.id %}"
+                  onsubmit="return confirmVote('{{ candidate.user.get_full_name }}{% if candidate.running_mate %} & {{ candidate.running_mate.get_full_name }}{% endif %}')">
+              {% csrf_token %}
+              <input type="hidden" name="token_id" value="{{ level_data.token.id }}">
+              <input type="hidden" name="candidate_id" value="{{ candidate.id }}">
+              <button type="submit" class="btn btn-primary btn-block" style="margin-top:.75rem;">
+                <i class="fas fa-vote-yea"></i>
+                Vote{% if candidate.running_mate %} for this Team{% endif %}
+              </button>
+            </form>
+
+          </div>
+          {% endfor %}
+        </div>
+
+        {% else %}
+        <div class="empty-state" style="padding:2rem 1rem;">
+          <i class="fas fa-user-slash"></i>
+          <p>No candidates registered for this position yet.</p>
+        </div>
+        {% endif %}
+      </div>
+      {% endfor %}
+
+    {% endif %}
+  </div>
+  {% endfor %}
+
 {% else %}
-    <div >
-        <p>You don't have voting tokens for this election. Please contact the election commissioner.</p>
-    </div>
+<div class="card">
+  <div class="empty-state">
+    <i class="fas fa-ticket-alt"></i>
+    <p><strong>No voting tokens found for this election.</strong></p>
+    <p style="margin-top:.5rem; font-size:.875rem;">
+      You may not be eligible for this election, or your tokens haven't been issued yet.
+      Contact the Election Commissioner for assistance.
+    </p>
+    <a href="{% url 'election:elections_list' %}" class="btn btn-outline" style="margin-top:1rem;">
+      <i class="fas fa-arrow-left"></i> Back to Elections
+    </a>
+  </div>
+</div>
 {% endif %}
 
-<a href="{% url 'election:elections_list' %}" style="margin-top: 2rem; display: inline-block;">← Back to Elections</a>
+<script>
+function confirmVote(name) {
+  return confirm(
+    'Confirm your vote for:\n\n' + name + '\n\n' +
+    'This action is final and cannot be changed. Proceed?'
+  );
+}
+</script>
+
 {% endblock %}

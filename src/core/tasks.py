@@ -32,10 +32,10 @@ def send_verification_email(user_id):
 
     if not active_elections.exists():
         # No active elections, send simple verification email
-        subject = "MWECAU Election Platform - Registration Confirmed"
+        subject = "MWECAU DigiVote - Registration Confirmed"
         message = (
             f"Dear {user.get_full_name()},\n\n"
-            f"Welcome to the MWECAU Election Platform!\n\n"
+            f"Welcome to the MWECAU DigiVote!\n\n"
             f"Your account has been verified. You are now registered as a voter.\n"
             f"Your Voter ID: {user.voter_id}\n\n"
             f"You will receive notification emails when new elections are activated.\n\n"
@@ -72,10 +72,10 @@ def send_verification_email(user_id):
                 for level_name, token in tokens:
                     tokens_text += f"  - {level_name}: {token}\n"
             
-            subject = "MWECAU Election Platform - Registration Confirmed"
+            subject = "MWECAU DigiVote - Registration Confirmed"
             message = (
                 f"Dear {user.get_full_name()},\n\n"
-                f"Welcome to the MWECAU Election Platform!\n\n"
+                f"Welcome to the MWECAU DigiVote!\n\n"
                 f"Your account has been verified. You are now registered as a voter.\n"
                 f"Your Voter ID: {user.voter_id}\n\n"
                 f"You have been assigned to the following active elections:\n"
@@ -85,10 +85,10 @@ def send_verification_email(user_id):
                 f"Regards,\nMWECAU Election Commission"
             )
         else:
-            subject = "MWECAU Election Platform - Registration Confirmed"
+            subject = "MWECAU DigiVote - Registration Confirmed"
             message = (
                 f"Dear {user.get_full_name()},\n\n"
-                f"Welcome to the MWECAU Election Platform!\n\n"
+                f"Welcome to the MWECAU DigiVote!\n\n"
                 f"Your account has been verified. You are now registered as a voter.\n"
                 f"Your Voter ID: {user.voter_id}\n\n"
                 f"You will receive notification emails when you become eligible for elections.\n\n"
@@ -121,7 +121,7 @@ def send_password_reset_email(user_id, new_password):
     if not user.email:
         return
         
-    subject = "MWECAU Election Platform - Password Reset"
+    subject = "MWECAU DigiVote - Password Reset"
     message = (
         f"Dear {user.get_full_name()},\n\n"
         f"Your password has been reset:\n"
@@ -152,7 +152,7 @@ def send_commissioner_contact_email(user_id, message_content):
         print("No verified commissioners found to send contact message.")
         return
 
-    subject = "MWECAU Election Platform - User Contact Request"
+    subject = "MWECAU DigiVote - User Contact Request"
     message = (
         f"Message from {user.get_full_name()} ({user.registration_number}):\n\n"
         f"{message_content}\n\n"

@@ -18,6 +18,9 @@ def home(request):
     """Home/landing page view."""
     return render(request, 'core/landing.html')
 
+def contributors_view(request):
+    """Public contributors page - no login required."""
+    return render(request, 'core/contributors.html')
 
 @require_http_methods(["GET", "POST"])
 def login_view(request):
