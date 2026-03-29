@@ -1,0 +1,525 @@
+/* ============================================================
+   MWECAU DigiVote — Django Admin Override
+   Matches main app brand: Royal Blue #1a3a8f | Gold #c9a227
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --blue:       #1a3a8f;
+  --blue-dark:  #112670;
+  --blue-mid:   #2550b8;
+  --blue-light: #e8edf8;
+  --gold:       #c9a227;
+  --gold-light: #f0d060;
+  --gold-dim:   #fdf5dc;
+  --white:      #ffffff;
+  --off-white:  #f5f6fa;
+  --border:     #d1d9e8;
+  --text:       #0f1e4a;
+  --text-muted: #4a5568;
+  --success:    #1a7a4a;
+  --error:      #b91c1c;
+  --radius:     8px;
+  --radius-lg:  14px;
+  --shadow:     0 4px 16px rgba(26,58,143,.12);
+}
+
+/* ============================================================
+   GLOBAL
+   ============================================================ */
+body, #content, #content-main, .module, #changelist {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
+  color: var(--text) !important;
+  background: var(--off-white) !important;
+}
+
+a { color: var(--blue-mid) !important; }
+a:hover { color: var(--blue) !important; }
+
+/* ============================================================
+   HEADER / BRANDING
+   ============================================================ */
+#header {
+  background: var(--blue) !important;
+  color: white !important;
+  padding: 0 1.5rem !important;
+  height: 68px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  box-shadow: 0 2px 16px rgba(17,38,112,.35) !important;
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 100 !important;
+}
+
+#site-name {
+  display: flex !important;
+  align-items: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+#site-name a {
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.8rem !important;
+  text-decoration: none !important;
+  color: white !important;
+}
+
+#site-name img {
+  width: 44px !important;
+  height: 44px !important;
+  border-radius: 50% !important;
+  border: 2px solid rgba(201,162,39,.6) !important;
+  object-fit: cover !important;
+  background: white !important;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+.brand-name {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: white;
+  letter-spacing: -0.01em;
+}
+.brand-sub {
+  font-size: 0.68rem;
+  color: var(--gold-light);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+#user-tools {
+  color: rgba(255,255,255,.85) !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+}
+#user-tools a {
+  color: var(--gold-light) !important;
+  padding: 0.35rem 0.75rem !important;
+  border-radius: var(--radius) !important;
+  transition: background 0.16s !important;
+}
+#user-tools a:hover {
+  background: rgba(255,255,255,.15) !important;
+  text-decoration: none !important;
+}
+
+/* ============================================================
+   BREADCRUMBS
+   ============================================================ */
+div.breadcrumbs {
+  background: var(--blue-dark) !important;
+  color: rgba(255,255,255,.7) !important;
+  padding: 0.6rem 1.5rem !important;
+  font-size: 0.82rem !important;
+  border-bottom: none !important;
+}
+div.breadcrumbs a {
+  color: var(--gold-light) !important;
+}
+div.breadcrumbs a:hover {
+  color: white !important;
+  text-decoration: none !important;
+}
+
+/* ============================================================
+   SIDEBAR NAV
+   ============================================================ */
+#nav-sidebar {
+  background: var(--white) !important;
+  border-right: 1px solid var(--border) !important;
+}
+
+.sticky { position: sticky; top: 68px; }
+
+#nav-sidebar .module caption,
+#nav-sidebar .module h2 {
+  background: var(--blue) !important;
+  color: white !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  padding: 0.6rem 1rem !important;
+}
+
+#nav-sidebar th a,
+#nav-sidebar td a {
+  color: var(--text) !important;
+  font-size: 0.875rem !important;
+  padding: 0.35rem 0.5rem !important;
+  display: block !important;
+  border-radius: var(--radius) !important;
+  transition: background 0.16s, color 0.16s !important;
+}
+#nav-sidebar th a:hover,
+#nav-sidebar td a:hover {
+  background: var(--blue-light) !important;
+  color: var(--blue) !important;
+  text-decoration: none !important;
+}
+
+/* ============================================================
+   CONTENT AREA
+   ============================================================ */
+#content {
+  padding: 1.5rem 2rem !important;
+}
+
+#content h1 {
+  font-size: 1.6rem !important;
+  font-weight: 800 !important;
+  color: var(--text) !important;
+  margin-bottom: 1.25rem !important;
+  letter-spacing: -0.02em !important;
+}
+
+/* ============================================================
+   MODULES / CARDS
+   ============================================================ */
+.module {
+  background: var(--white) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-lg) !important;
+  box-shadow: 0 1px 3px rgba(26,58,143,.08) !important;
+  margin-bottom: 1.5rem !important;
+  overflow: hidden !important;
+}
+
+.module h2, .module caption, .inline-group h2 {
+  background: var(--blue) !important;
+  color: white !important;
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  padding: 0.65rem 1rem !important;
+  border-radius: 0 !important;
+}
+
+/* ============================================================
+   DASHBOARD APP LIST
+   ============================================================ */
+#content-main .app-election,
+#content-main .app-core {
+  border-top: 3px solid var(--blue) !important;
+}
+
+.app-list tr.model-row td a:hover {
+  color: var(--blue) !important;
+}
+
+/* ============================================================
+   CHANGELIST TABLE
+   ============================================================ */
+#changelist-form .results {
+  border-radius: var(--radius-lg) !important;
+  overflow: hidden !important;
+  border: 1px solid var(--border) !important;
+  box-shadow: var(--shadow) !important;
+}
+
+#result_list thead th {
+  background: var(--blue) !important;
+  color: white !important;
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.04em !important;
+  text-transform: uppercase !important;
+  padding: 0.85rem 1rem !important;
+  border: none !important;
+}
+
+#result_list thead th a {
+  color: white !important;
+}
+#result_list thead th.sorted a {
+  color: var(--gold-light) !important;
+}
+
+#result_list tbody tr:hover td {
+  background: var(--blue-light) !important;
+}
+#result_list tbody tr:nth-child(even) td {
+  background: var(--off-white) !important;
+}
+#result_list tbody tr:nth-child(even):hover td {
+  background: var(--blue-light) !important;
+}
+
+#result_list td {
+  padding: 0.8rem 1rem !important;
+  font-size: 0.875rem !important;
+  border-bottom: 1px solid var(--border) !important;
+  border-top: none !important;
+  vertical-align: middle !important;
+}
+
+/* ============================================================
+   SEARCH & FILTERS
+   ============================================================ */
+#toolbar {
+  background: var(--white) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-lg) !important;
+  padding: 0.75rem 1rem !important;
+  margin-bottom: 1rem !important;
+  box-shadow: 0 1px 3px rgba(26,58,143,.06) !important;
+}
+
+#searchbar {
+  border: 2px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  padding: 0.55rem 0.9rem !important;
+  font-family: inherit !important;
+  font-size: 0.9rem !important;
+  color: var(--text) !important;
+  transition: border-color 0.16s, box-shadow 0.16s !important;
+}
+#searchbar:focus {
+  outline: none !important;
+  border-color: var(--blue-mid) !important;
+  box-shadow: 0 0 0 3px rgba(37,80,184,.15) !important;
+}
+
+#changelist-filter {
+  background: var(--white) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-lg) !important;
+  overflow: hidden !important;
+}
+
+#changelist-filter h2 {
+  background: var(--blue) !important;
+  color: white !important;
+  font-size: 0.78rem !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  padding: 0.65rem 1rem !important;
+}
+
+#changelist-filter h3 {
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  color: var(--text-muted) !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  padding: 0.5rem 1rem 0.25rem !important;
+}
+
+#changelist-filter li a {
+  color: var(--blue-mid) !important;
+  font-size: 0.875rem !important;
+  padding: 0.2rem 1rem !important;
+  display: block !important;
+}
+#changelist-filter li.selected a {
+  color: var(--blue) !important;
+  font-weight: 700 !important;
+}
+
+/* ============================================================
+   FORMS (ADD / CHANGE)
+   ============================================================ */
+.form-row {
+  padding: 0.9rem 1rem !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+.form-row:last-child { border-bottom: none !important; }
+
+.form-row label {
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  color: var(--text) !important;
+}
+
+input[type=text], input[type=password], input[type=email],
+input[type=number], input[type=date], input[type=url],
+select, textarea {
+  border: 2px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  padding: 0.6rem 0.9rem !important;
+  font-family: inherit !important;
+  font-size: 0.9rem !important;
+  color: var(--text) !important;
+  transition: border-color 0.16s, box-shadow 0.16s !important;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none !important;
+  border-color: var(--blue-mid) !important;
+  box-shadow: 0 0 0 3px rgba(37,80,184,.15) !important;
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.button, input[type=submit], input[type=button],
+.submit-row input, a.button {
+  background: var(--blue) !important;
+  color: white !important;
+  border: 2px solid var(--blue) !important;
+  border-radius: var(--radius) !important;
+  padding: 0.6rem 1.3rem !important;
+  font-family: inherit !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  transition: all 0.16s !important;
+  text-decoration: none !important;
+}
+.button:hover, input[type=submit]:hover, a.button:hover {
+  background: var(--blue-dark) !important;
+  border-color: var(--blue-dark) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: var(--shadow) !important;
+  text-decoration: none !important;
+  color: white !important;
+}
+
+.button.default, input[type=submit].default {
+  background: var(--gold) !important;
+  color: var(--blue-dark) !important;
+  border-color: var(--gold) !important;
+}
+.button.default:hover {
+  background: #b8911f !important;
+  border-color: #b8911f !important;
+  color: var(--blue-dark) !important;
+}
+
+.deletelink, a.deletelink {
+  background: #b91c1c !important;
+  border-color: #b91c1c !important;
+  color: white !important;
+}
+.deletelink:hover {
+  background: #991b1b !important;
+  border-color: #991b1b !important;
+  color: white !important;
+}
+
+.submit-row {
+  background: var(--off-white) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-lg) !important;
+  padding: 1rem 1.25rem !important;
+  margin-top: 1rem !important;
+  gap: 0.75rem !important;
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+}
+
+/* ============================================================
+   PAGINATION
+   ============================================================ */
+.paginator {
+  font-size: 0.875rem !important;
+  color: var(--text-muted) !important;
+}
+.paginator a {
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius) !important;
+  padding: 0.3rem 0.65rem !important;
+  color: var(--blue-mid) !important;
+  transition: all 0.16s !important;
+}
+.paginator a:hover {
+  background: var(--blue) !important;
+  color: white !important;
+  border-color: var(--blue) !important;
+  text-decoration: none !important;
+}
+.paginator .this-page {
+  background: var(--blue) !important;
+  color: white !important;
+  border: 1px solid var(--blue) !important;
+  border-radius: var(--radius) !important;
+  padding: 0.3rem 0.65rem !important;
+}
+
+/* ============================================================
+   MESSAGES
+   ============================================================ */
+ul.messagelist li {
+  border-radius: var(--radius) !important;
+  padding: 0.8rem 1rem 0.8rem 2.5rem !important;
+  font-size: 0.9rem !important;
+  font-weight: 500 !important;
+  margin-bottom: 0.5rem !important;
+}
+ul.messagelist li.success {
+  background: #e6f4ec !important;
+  color: #1a7a4a !important;
+  border-left: 4px solid #1a7a4a !important;
+}
+ul.messagelist li.error {
+  background: #fde8e8 !important;
+  color: #b91c1c !important;
+  border-left: 4px solid #b91c1c !important;
+}
+ul.messagelist li.warning {
+  background: #fef3cd !important;
+  color: #92610a !important;
+  border-left: 4px solid var(--gold) !important;
+}
+
+/* ============================================================
+   OBJECT TOOLS (top-right buttons on changelist)
+   ============================================================ */
+.object-tools li a {
+  background: var(--gold) !important;
+  color: var(--blue-dark) !important;
+  border-radius: var(--radius) !important;
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+  padding: 0.45rem 1rem !important;
+  transition: all 0.16s !important;
+}
+.object-tools li a:hover {
+  background: #b8911f !important;
+  color: var(--blue-dark) !important;
+  text-decoration: none !important;
+}
+
+/* ============================================================
+   INLINE ADMIN
+   ============================================================ */
+.inline-group {
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-lg) !important;
+  overflow: hidden !important;
+  margin-top: 1.5rem !important;
+}
+.inline-related h3 {
+  background: var(--blue-light) !important;
+  color: var(--blue) !important;
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+  padding: 0.5rem 1rem !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+.add-row a {
+  color: var(--blue-mid) !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 767px) {
+  #header { height: auto !important; padding: 0.75rem 1rem !important; flex-direction: column !important; gap: 0.5rem !important; align-items: flex-start !important; }
+  #content { padding: 1rem !important; }
+  .brand-sub { display: none; }
+}
