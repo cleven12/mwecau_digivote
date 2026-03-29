@@ -903,3 +903,16 @@ INFO 2025-12-08 23:29:14,697 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
 INFO 2025-12-08 23:29:17,150 basehttp "GET /admin/core/collegedata/ HTTP/1.1" 200 22769
 INFO 2025-12-08 23:29:17,201 basehttp "GET /admin/jsi18n/ HTTP/1.1" 200 3342
 INFO 2025-12-08 23:31:52,403 autoreload /home/nevelc/Private/repo/university_elec_api/venv/lib/python3.13/site-packages/django/conf/global_settings.py changed, reloading.
+INFO 2026-03-22 15:15:50,056 autoreload Watching for file changes with StatReloader
+INFO 2026-03-22 15:16:02,990 autoreload Watching for file changes with StatReloader
+INFO 2026-03-22 15:16:24,993 log "GET / HTTP/1.1" 200 14611
+INFO 2026-03-22 15:16:25,131 log "GET /admin/ HTTP/1.1" 302 0
+INFO 2026-03-22 15:16:25,267 log "GET /static/css/style.css HTTP/1.1" 200 3729
+INFO 2026-03-22 15:16:25,307 log "GET /admin/login/?next=/admin/ HTTP/1.1" 200 4094
+INFO 2026-03-22 15:16:37,159 log "GET /login/ HTTP/1.1" 200 2812
+WARNING 2026-03-22 15:16:37,581 log Not Found: /favicon.ico
+WARNING 2026-03-22 15:16:37,582 log "GET /favicon.ico HTTP/1.1" 404 6886
+INFO 2026-03-22 16:01:12,589 autoreload /home/cleven/Private/cleven-github/mwecau_ict_prj/digivote/src/election/models.py changed, reloading.
+INFO 2026-03-22 16:04:21,603 autoreload Watching for file changes with StatReloader
+INFO 2026-03-22 16:05:29,141 autoreload /home/cleven/Private/cleven-github/mwecau_ict_prj/digivote/src/election/models.py changed, reloading.
+INFO 2026-03-22 16:05:30,384 autoreload Watching for file changes with StatReloader

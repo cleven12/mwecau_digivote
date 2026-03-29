@@ -140,18 +140,6 @@ class Election(models.Model):
         self.is_active = False
         self.save(update_fields=['is_active'])
         return True
-    def activate(self):
-        """Activate the election and generate voter tokens."""
-        from .tasks import notify_voters_of_active_election
-        if not self.is_active:
-            self.is_active = True
-            self.save()
-            # Generate tokens and send notifications
-            notify_voters_of_active_election(self.id)
-
-    def save(self, *args, **kwargs):
-        """Override save, potentially to trigger notifications."""
-        super().save(*args, **kwargs)
 
 
 class Position(models.Model):
@@ -269,22 +257,11 @@ class Candidate(models.Model):
                 raise ValidationError({
                     'position': 'Position must belong to an election level in this election.'
                 })
-
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        db_table = 'candidates'
-        verbose_name = 'Candidate'
-        verbose_name_plural = 'Candidates'
-        unique_together = ['user', 'election', 'position']
-        indexes = [
-            models.Index(fields=['election', 'position']),
-            models.Index(fields=['user']),
-        ]
-
-    def __str__(self):
-        return f"{self.user.get_full_name()} - {self.position} ({self.election.title})"
+    
+    def save(self, *args, **kwargs):
+        """Override save to enforce validation."""
+        self.full_clean()
+        super().save(*args, **kwargs)
 
     def get_vote_count(self):
         """Calculate the current vote count for this candidate."""
@@ -330,11 +307,26 @@ class VoterToken(models.Model):
         return f"Token for {self.user.get_full_name()} - {self.election.title} - {self.election_level} ({status})"
 
     def mark_as_used(self):
-        """Mark the token as used."""
-        if not self.is_used:
-            self.is_used = True
-            self.used_at = timezone.now()
-            self.save(update_fields=['is_used', 'used_at'])
+        """
+        Mark the token as used atomically to prevent double voting.
+        Returns True if successful, False if already used.
+        """
+        from django.db.models import F
+        
+        # Atomic update: only update if is_used is False
+        updated = VoterToken.objects.filter(
+            id=self.id,
+            is_used=False
+        ).update(
+            is_used=True,
+            used_at=timezone.now()
+        )
+        
+        if updated > 0:
+            # Refresh instance to reflect the update
+            self.refresh_from_db()
+            return True
+        return False
 
     def is_valid(self):
         """Check if the token is valid (not used and not expired)."""
