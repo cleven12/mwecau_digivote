@@ -1,321 +1,225 @@
-{% extends "core/base.html" %}
+{% extends 'core/base.html' %}
 {% load static %}
 
-{% block title %}Election Observer Dashboard{% endblock %}
+{% block title %}Observer Dashboard — MWECAUSO DigiVote{% endblock %}
 
 {% block content %}
-<div >
-    <div >
-        <div >
-            <h1>Election Observer Dashboard</h1>
-            <p >Comprehensive view of all election data and voting activity</p>
-        </div>
-    </div>
 
-    <!-- Statistics Row 1: Users -->
-    <div >
-        <div >
-            <div >
-                <div >
-                    <h5 >Total Users</h5>
-                    <h2>{{ total_users }}</h2>
-                    <small>Verified: {{ verified_users }}</small>
-                </div>
-            </div>
-        </div>
-        <div >
-            <div >
-                <div >
-                    <h5 >Verified Users</h5>
-                    <h2>{{ verified_users }}</h2>
-                    <small>Unverified: {{ unverified_users }}</small>
-                </div>
-            </div>
-        </div>
-        <div >
-            <div >
-                <div >
-                    <h5 >Active Elections</h5>
-                    <h2>{{ active_elections }}</h2>
-                    <small>Completed: {{ completed_elections }}</small>
-                </div>
-            </div>
-        </div>
-        <div >
-            <div >
-                <div >
-                    <h5 >Total Elections</h5>
-                    <h2>{{ total_elections }}</h2>
-                    <small>Total ever created</small>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Statistics Row 2: Voting & Candidates -->
-    <div >
-        <div >
-            <div >
-                <div >
-                    <h5 >Total Votes</h5>
-                    <h2 >{{ total_votes }}</h2>
-                    <small >Votes cast</small>
-                </div>
-            </div>
-        </div>
-        <div >
-            <div >
-                <div >
-                    <h5 >Total Candidates</h5>
-                    <h2 >{{ total_candidates }}</h2>
-                    <small >Running candidates</small>
-                </div>
-            </div>
-        </div>
-        <div >
-            <div >
-                <div >
-                    <h5 >Voter Tokens</h5>
-                    <h2 >{{ used_tokens }}/{{ total_tokens }}</h2>
-                    <small >Used/Total tokens</small>
-                </div>
-            </div>
-        </div>
-        <div >
-            <div >
-                <div >
-                    <h5 >Unused Tokens</h5>
-                    <h2 >{{ unused_tokens }}</h2>
-                    <small >Not yet used</small>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Statistics by State -->
-    <div >
-        <div >
-            <div >
-                <div >
-                    <h5>Voter Statistics by State</h5>
-                </div>
-                <div >
-                    {% if state_stats %}
-                        <div class="table-responsive">
-                            <table class="table table-sm table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>State</th>
-                                        <th>Total Voters</th>
-                                        <th>Verified</th>
-                                        <th>Unverified</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for state in state_stats %}
-                                        <tr>
-                                            <td>{{ state.name }}</td>
-                                            <td>{{ state.total_voters }}</td>
-                                            <td><span >{{ state.verified_voters }}</span></td>
-                                            <td><span >{{ state.total_voters|add:"-state.verified_voters" }}</span></td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    {% else %}
-                        <p >No state data available</p>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-
-        <!-- Statistics by Course -->
-        <div >
-            <div >
-                <div >
-                    <h5>Voter Statistics by Course</h5>
-                </div>
-                <div >
-                    {% if course_stats %}
-                        <div class="table-responsive">
-                            <table class="table table-sm table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Course</th>
-                                        <th>Code</th>
-                                        <th>Total</th>
-                                        <th>Verified</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for course in course_stats %}
-                                        <tr>
-                                            <td>{{ course.name }}</td>
-                                            <td><code>{{ course.code }}</code></td>
-                                            <td>{{ course.total_voters }}</td>
-                                            <td><span >{{ course.verified_voters }}</span></td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    {% else %}
-                        <p >No course data available</p>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Recent Elections -->
-    <div >
-        <div >
-            <div >
-                <div >
-                    <h5>Recent Elections</h5>
-                </div>
-                <div >
-                    {% if recent_elections %}
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Title</th>
-                                        <th>Start Date</th>
-                                        <th>End Date</th>
-                                        <th>Status</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for election in recent_elections %}
-                                        <tr>
-                                            <td>
-                                                <strong>{{ election.title }}</strong>
-                                                {% if election.description %}
-                                                    <br><small >{{ election.description|truncatewords:10 }}</small>
-                                                {% endif %}
-                                            </td>
-                                            <td>{{ election.start_date|date:"M d, Y H:i" }}</td>
-                                            <td>{{ election.end_date|date:"M d, Y H:i" }}</td>
-                                            <td>
-                                                {% if election.has_ended %}
-                                                    <span >Ended</span>
-                                                {% elif election.is_active %}
-                                                    <span >Active</span>
-                                                {% else %}
-                                                    <span >Pending</span>
-                                                {% endif %}
-                                            </td>
-                                            <td>
-                                                <a href="{% url 'election:election_results' election.id %}" >
-                                                    View Results
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    {% else %}
-                        <p >No elections found</p>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Recent Votes -->
-    <div >
-        <div >
-            <div >
-                <div >
-                    <h5>Recent Votes (Last 50)</h5>
-                </div>
-                <div >
-                    {% if recent_votes %}
-                        <div class="table-responsive">
-                            <table class="table table-hover table-sm">
-                                <thead>
-                                    <tr>
-                                        <th>Election</th>
-                                        <th>Level</th>
-                                        <th>Candidate</th>
-                                        <th>Position</th>
-                                        <th>Voter ID</th>
-                                        <th>Time</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for vote in recent_votes %}
-                                        <tr>
-                                            <td>{{ vote.election.title }}</td>
-                                            <td><span >{{ vote.election_level.name }}</span></td>
-                                            <td>{{ vote.candidate.user.get_full_name }}</td>
-                                            <td>
-                                                {% if vote.candidate.position %}
-                                                    {{ vote.candidate.position.title }}
-                                                {% else %}
-                                                    <span >-</span>
-                                                {% endif %}
-                                            </td>
-                                            <td><code>{{ vote.voter.voter_id }}</code></td>
-                                            <td><small>{{ vote.timestamp|date:"M d H:i:s" }}</small></td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    {% else %}
-                        <p >No votes recorded yet</p>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- API Access Info -->
-    <div >
-        <div >
-            <div >
-                <div >
-                    <h5>API Endpoints (JSON)</h5>
-                </div>
-                <div >
-                    <p class="mb-2"><strong>View election details with all votes:</strong></p>
-                    <code >/api/observer/election/&lt;election_id&gt;/</code>
-
-                    <p class="mb-2"><strong>View all votes in system:</strong></p>
-                    <code >/api/observer/votes/</code>
-
-                    <p class="mb-2"><strong>View token statistics:</strong></p>
-                    <code >/api/observer/tokens/</code>
-
-                    <p >These endpoints provide JSON data for programmatic access to election data.</p>
-                </div>
-            </div>
-        </div>
-    </div>
+<div style="margin-bottom:1.75rem;">
+  <div style="display:flex; align-items:center; gap:.75rem; flex-wrap:wrap;">
+    <h2 style="margin-bottom:.25rem;">
+      <i class="fas fa-eye text-blue"></i> Observer Dashboard
+    </h2>
+    <span class="badge badge-blue"><i class="fas fa-lock"></i> Read-only</span>
+  </div>
+  <p style="margin:0; color:var(--text-muted);">Comprehensive view of election data and voting activity</p>
 </div>
 
-<style>
-    .card {
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        transition: box-shadow 0.3s;
-    }
-    .card:hover {
-        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-    }
-    .table-responsive {
-        border-radius: 4px;
-    }
-    code {
-        color: #e83e8c;
-        background-color: #f8f9fa;
-        padding: 2px 6px;
-        border-radius: 3px;
-    }
-</style>
+<!-- Row 1: User stats -->
+<div class="stats-grid" style="margin-bottom:1rem;">
+  <div class="stat-card">
+    <div class="stat-icon blue"><i class="fas fa-users"></i></div>
+    <div>
+      <div class="stat-value">{{ total_users }}</div>
+      <div class="stat-label">Total Users</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon green"><i class="fas fa-user-check"></i></div>
+    <div>
+      <div class="stat-value">{{ verified_users }}</div>
+      <div class="stat-label">Verified Users</div>
+      <div style="font-size:.75rem; color:var(--text-light); margin-top:.1rem;">{{ unverified_users }} unverified</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon gold"><i class="fas fa-poll"></i></div>
+    <div>
+      <div class="stat-value">{{ active_elections }}</div>
+      <div class="stat-label">Active Elections</div>
+      <div style="font-size:.75rem; color:var(--text-light); margin-top:.1rem;">{{ completed_elections }} completed</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon blue"><i class="fas fa-layer-group"></i></div>
+    <div>
+      <div class="stat-value">{{ total_elections }}</div>
+      <div class="stat-label">Total Elections</div>
+    </div>
+  </div>
+</div>
+
+<!-- Row 2: Voting stats -->
+<div class="stats-grid" style="margin-bottom:1.75rem;">
+  <div class="stat-card">
+    <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
+    <div>
+      <div class="stat-value">{{ total_votes }}</div>
+      <div class="stat-label">Total Votes Cast</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon blue"><i class="fas fa-user-tie"></i></div>
+    <div>
+      <div class="stat-value">{{ total_candidates }}</div>
+      <div class="stat-label">Total Candidates</div>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon gold"><i class="fas fa-ticket-alt"></i></div>
+    <div>
+      <div class="stat-value">{{ used_tokens }}/{{ total_tokens }}</div>
+      <div class="stat-label">Tokens Used</div>
+    </div>
+  </div>
+  {% if total_tokens > 0 %}
+  <div class="stat-card">
+    <div class="stat-icon {% if turnout_percentage >= 50 %}green{% else %}red{% endif %}">
+      <i class="fas fa-percentage"></i>
+    </div>
+    <div>
+      <div class="stat-value">{{ turnout_percentage|default:"0" }}%</div>
+      <div class="stat-label">Voter Turnout</div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+
+<!-- Active elections overview -->
+{% if active_election_details %}
+<div class="card">
+  <div class="card-header">
+    <div class="card-title">
+      <i class="fas fa-circle" style="color:var(--success); font-size:.6rem"></i>
+      Active Elections — Live Overview
+    </div>
+  </div>
+  {% for election in active_election_details %}
+  <div style="padding:1rem 0; border-bottom:1px solid var(--border);">
+    <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:.5rem; margin-bottom:.75rem;">
+      <div>
+        <strong style="font-size:1rem;">{{ election.title }}</strong>
+        <div style="font-size:.82rem; color:var(--text-muted); margin-top:.2rem;">
+          Closes {{ election.end_date|date:"d M Y, H:i" }}
+        </div>
+      </div>
+      <span class="badge badge-success"><i class="fas fa-circle" style="font-size:.4rem"></i> Live</span>
+    </div>
+
+    {% if election.levels.all %}
+    <div style="display:flex; gap:.4rem; flex-wrap:wrap;">
+      {% for level in election.levels.all %}
+      <span class="badge badge-blue"><i class="fas fa-layer-group"></i> {{ level.name }}</span>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<!-- State distribution -->
+{% if state_stats %}
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:1.25rem; margin-bottom:1.5rem;">
+
+  <div class="card" style="margin-bottom:0;">
+    <div class="card-header">
+      <div class="card-title"><i class="fas fa-map-marked-alt"></i> Voters by State</div>
+    </div>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr><th>State</th><th>Total</th><th>Verified</th><th>Unverified</th></tr>
+        </thead>
+        <tbody>
+          {% for stat in state_stats %}
+          <tr>
+            <td>{{ stat.name }}</td>
+            <td>{{ stat.total_voters }}</td>
+            <td><span class="badge badge-success">{{ stat.verified_voters }}</span></td>
+            <td><span class="badge badge-warning">{{ stat.unverified_voters|default:0 }}</span></td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="4" style="text-align:center; color:var(--text-muted); padding:1rem;">No data</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:0;">
+    <div class="card-header">
+      <div class="card-title"><i class="fas fa-graduation-cap"></i> Voters by Course</div>
+    </div>
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr><th>Course</th><th>Code</th><th>Students</th></tr>
+        </thead>
+        <tbody>
+          {% for stat in course_stats %}
+          <tr>
+            <td>{{ stat.name }}</td>
+            <td style="font-family:monospace; font-size:.82rem;">{{ stat.code }}</td>
+            <td><span class="badge badge-blue">{{ stat.verified_students }}</span></td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="3" style="text-align:center; color:var(--text-muted); padding:1rem;">No data</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+{% endif %}
+
+<!-- Recent votes audit trail -->
+{% if recent_votes %}
+<div class="card">
+  <div class="card-header">
+    <div class="card-title"><i class="fas fa-history"></i> Recent Voting Activity</div>
+    <span class="badge badge-blue">Anonymous — voter identity protected</span>
+  </div>
+  <div class="table-wrapper">
+    <table>
+      <thead>
+        <tr>
+          <th>Election</th>
+          <th>Level</th>
+          <th>Position</th>
+          <th>Candidate</th>
+          <th>Time</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for vote in recent_votes %}
+        <tr>
+          <td style="font-size:.85rem;">{{ vote.election.title }}</td>
+          <td style="font-size:.85rem;">{{ vote.election_level.name }}</td>
+          <td style="font-size:.85rem;">{{ vote.candidate.position.title }}</td>
+          <td><strong>{{ vote.candidate.user.get_full_name }}</strong></td>
+          <td style="font-size:.82rem; color:var(--text-muted);">{{ vote.timestamp|date:"d M, H:i" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="5" style="text-align:center; color:var(--text-muted); padding:1.5rem;">No votes recorded yet</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+
+{% if not active_election_details and not state_stats and not recent_votes %}
+<div class="card">
+  <div class="empty-state">
+    <i class="fas fa-eye"></i>
+    <p><strong>No active election data to display.</strong></p>
+    <p style="margin-top:.5rem; font-size:.875rem;">Election statistics will appear here once an election is active.</p>
+  </div>
+</div>
+{% endif %}
+
 {% endblock %}
