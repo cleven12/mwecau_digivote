@@ -5,82 +5,172 @@
 
 {% block content %}
 
-<div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin-bottom:1.75rem;">
+<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.75rem;">
   <div>
     <h2 style="margin-bottom:.25rem;"><i class="fas fa-poll text-blue"></i> Elections</h2>
-    <p style="margin:0; color:var(--text-muted);">All elections you are eligible to participate in</p>
+    <p style="margin:0;color:var(--text-muted);">
+      {{ all_elections_count }} election{{ all_elections_count|pluralize }} total
+      {% if user.is_verified %}
+      &nbsp;·&nbsp; <span class="badge badge-success"><i class="fas fa-check-circle"></i> Verified voter</span>
+      {% else %}
+      &nbsp;·&nbsp; <span class="badge badge-warning"><i class="fas fa-clock"></i> Pending verification</span>
+      {% endif %}
+    </p>
   </div>
+  {# Commissioner/staff shortcut #}
+  {% if user.is_commissioner or user.is_staff %}
+  <a href="{% url 'admin:election_election_add' %}" class="btn btn-primary btn-sm">
+    <i class="fas fa-plus"></i> Create Election
+  </a>
+  {% endif %}
 </div>
 
-{% if elections %}
+{# ---- ACTIVE ---- #}
+{% if active_elections %}
+<div class="section-heading">
+  <i class="fas fa-circle" style="color:var(--success);font-size:.55rem"></i> Active — Voting Open
+</div>
 
-  {% for election in elections %}
-  <div class="card" style="margin-bottom:1.25rem;">
-    <div style="display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; flex-wrap:wrap;">
-      <div style="flex:1; min-width:0;">
-        <h3 style="margin-bottom:.3rem;">{{ election.title }}</h3>
-        {% if election.description %}
-        <p style="margin-bottom:.75rem; font-size:.9rem;">{{ election.description }}</p>
-        {% endif %}
-
-        <div style="display:flex; gap:1.25rem; flex-wrap:wrap; font-size:.85rem; color:var(--text-muted);">
-          <span>
-            <i class="fas fa-calendar-check" style="color:var(--blue)"></i>
-            Opens: <strong>{{ election.start_date|date:"d M Y, H:i" }}</strong>
-          </span>
-          <span>
-            <i class="fas fa-calendar-times" style="color:var(--text-muted)"></i>
-            Closes: <strong>{{ election.end_date|date:"d M Y, H:i" }}</strong>
-          </span>
-        </div>
-
-        <!-- Levels -->
-        {% if election.levels.all %}
-        <div style="margin-top:.75rem; display:flex; gap:.4rem; flex-wrap:wrap;">
-          {% for level in election.levels.all %}
-          <span class="badge badge-blue">
-            <i class="fas fa-layer-group"></i> {{ level.name }}
-          </span>
-          {% endfor %}
-        </div>
-        {% endif %}
+{% for item in active_elections %}
+<div class="card" style="border-left:4px solid var(--success);margin-bottom:1rem;">
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+    <div style="flex:1;min-width:0;">
+      <h3 style="margin-bottom:.3rem;">{{ item.election.title }}</h3>
+      {% if item.election.description %}
+      <p style="margin-bottom:.75rem;font-size:.9rem;">{{ item.election.description }}</p>
+      {% endif %}
+      <div style="display:flex;gap:1.25rem;flex-wrap:wrap;font-size:.84rem;color:var(--text-muted);margin-bottom:.75rem;">
+        <span><i class="fas fa-calendar-check" style="color:var(--blue)"></i> Opened: <strong>{{ item.election.start_date|date:"d M Y, H:i" }}</strong></span>
+        <span><i class="fas fa-calendar-times"></i> Closes: <strong>{{ item.election.end_date|date:"d M Y, H:i" }}</strong></span>
       </div>
-
-      <!-- Status + actions -->
-      <div style="display:flex; flex-direction:column; align-items:flex-end; gap:.6rem; flex-shrink:0;">
-        {% if election.is_ongoing %}
-          <span class="badge badge-success" style="font-size:.8rem;">
-            <i class="fas fa-circle" style="font-size:.5rem"></i> Voting Open
-          </span>
-          <a href="{% url 'election:vote' election.id %}" class="btn btn-primary btn-sm">
-            <i class="fas fa-vote-yea"></i> Vote Now
-          </a>
-        {% elif election.has_ended %}
-          <span class="badge badge-error" style="font-size:.8rem;">
-            <i class="fas fa-flag-checkered"></i> Ended
-          </span>
-        {% else %}
-          <span class="badge badge-gold" style="font-size:.8rem;">
-            <i class="fas fa-clock"></i> Upcoming
-          </span>
-        {% endif %}
-
-        {% if election.has_ended or user.is_staff or user.is_commissioner %}
-        <a href="{% url 'election:results' election.id %}" class="btn btn-outline btn-sm">
-          <i class="fas fa-chart-bar"></i> Results
-        </a>
-        {% endif %}
+      {% if item.election.levels.all %}
+      <div style="display:flex;gap:.4rem;flex-wrap:wrap;">
+        {% for level in item.election.levels.all %}
+        <span class="badge badge-blue"><i class="fas fa-layer-group"></i> {{ level.name }}</span>
+        {% endfor %}
       </div>
+      {% endif %}
+
+      {# Eligibility hint #}
+      {% if not item.is_eligible %}
+        {% if item.eligibility_reason == "not_verified" %}
+        <div class="alert alert-warning" style="margin-top:.75rem;padding:.6rem .9rem;">
+          <i class="fas fa-clock"></i> Your account isn't verified yet — contact the Commissioner to get voting tokens.
+        </div>
+        {% elif item.eligibility_reason == "no_token" %}
+        <div class="alert alert-info" style="margin-top:.75rem;padding:.6rem .9rem;">
+          <i class="fas fa-info-circle"></i> You don't have tokens for this election — you may not be in an eligible level.
+        </div>
+        {% endif %}
+      {% elif item.has_voted %}
+      <div class="alert alert-success" style="margin-top:.75rem;padding:.6rem .9rem;">
+        <i class="fas fa-check-circle"></i> You've already voted in this election. Thank you!
+      </div>
+      {% endif %}
+    </div>
+
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.6rem;flex-shrink:0;">
+      <span class="badge badge-success"><i class="fas fa-circle" style="font-size:.4rem"></i> Live</span>
+
+      {% if item.can_vote %}
+      <a href="{% url 'election:vote' item.election.id %}" class="btn btn-primary">
+        <i class="fas fa-vote-yea"></i> Vote Now
+      </a>
+      {% elif item.has_voted %}
+      <a href="{% url 'election:vote' item.election.id %}" class="btn btn-outline btn-sm">
+        <i class="fas fa-eye"></i> Review
+      </a>
+      {% endif %}
+
+      {% if item.can_view_results %}
+      <a href="{% url 'election:results' item.election.id %}" class="btn btn-outline btn-sm">
+        <i class="fas fa-chart-bar"></i> Live Results
+      </a>
+      {% endif %}
     </div>
   </div>
-  {% endfor %}
+</div>
+{% endfor %}
+{% endif %}
 
-{% else %}
+{# ---- UPCOMING ---- #}
+{% if upcoming_elections %}
+<div class="section-heading" style="margin-top:1.5rem;">
+  <i class="fas fa-clock" style="color:var(--gold)"></i> Upcoming
+</div>
+
+{% for item in upcoming_elections %}
+<div class="card" style="border-left:4px solid var(--gold);margin-bottom:1rem;">
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+    <div style="flex:1;min-width:0;">
+      <h3 style="margin-bottom:.3rem;">{{ item.election.title }}</h3>
+      {% if item.election.description %}
+      <p style="margin-bottom:.65rem;font-size:.9rem;">{{ item.election.description }}</p>
+      {% endif %}
+      <div style="display:flex;gap:1.25rem;flex-wrap:wrap;font-size:.84rem;color:var(--text-muted);">
+        <span><i class="fas fa-calendar-check" style="color:var(--gold)"></i> Starts: <strong>{{ item.election.start_date|date:"d M Y, H:i" }}</strong></span>
+        <span><i class="fas fa-calendar-times"></i> Closes: <strong>{{ item.election.end_date|date:"d M Y, H:i" }}</strong></span>
+      </div>
+      {% if item.election.levels.all %}
+      <div style="display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.6rem;">
+        {% for level in item.election.levels.all %}
+        <span class="badge badge-blue"><i class="fas fa-layer-group"></i> {{ level.name }}</span>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.6rem;flex-shrink:0;">
+      <span class="badge badge-gold"><i class="fas fa-clock"></i> Upcoming</span>
+      {% if item.can_view_results %}
+      <a href="{% url 'election:results' item.election.id %}" class="btn btn-outline btn-sm">
+        <i class="fas fa-chart-bar"></i> Results
+      </a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endfor %}
+{% endif %}
+
+{# ---- ENDED ---- #}
+{% if ended_elections %}
+<div class="section-heading" style="margin-top:1.5rem;">
+  <i class="fas fa-flag-checkered" style="color:var(--text-muted)"></i> Completed
+</div>
+
+{% for item in ended_elections %}
+<div class="card" style="border-left:4px solid var(--border);margin-bottom:1rem;opacity:.92;">
+  <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:1rem;flex-wrap:wrap;">
+    <div style="flex:1;min-width:0;">
+      <h3 style="margin-bottom:.3rem;color:var(--text-muted);">{{ item.election.title }}</h3>
+      <div style="display:flex;gap:1.25rem;flex-wrap:wrap;font-size:.84rem;color:var(--text-muted);">
+        <span><i class="fas fa-calendar-check"></i> {{ item.election.start_date|date:"d M Y" }}</span>
+        <span><i class="fas fa-calendar-times"></i> Ended {{ item.election.end_date|date:"d M Y" }}</span>
+      </div>
+      {% if item.has_voted %}
+      <div style="margin-top:.5rem;">
+        <span class="badge badge-success"><i class="fas fa-check"></i> You voted</span>
+      </div>
+      {% endif %}
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:flex-end;gap:.6rem;flex-shrink:0;">
+      <span class="badge badge-error"><i class="fas fa-flag-checkered"></i> Ended</span>
+      <a href="{% url 'election:results' item.election.id %}" class="btn btn-outline btn-sm">
+        <i class="fas fa-chart-bar"></i> Final Results
+      </a>
+    </div>
+  </div>
+</div>
+{% endfor %}
+{% endif %}
+
+{# ---- EMPTY STATE ---- #}
+{% if not active_elections and not upcoming_elections and not ended_elections %}
 <div class="card">
   <div class="empty-state">
     <i class="fas fa-poll"></i>
     <p><strong>No elections available right now.</strong></p>
-    <p style="margin-top:.5rem; font-size:.875rem;">Check back during an active election period, or contact the Election Commissioner.</p>
+    <p style="margin-top:.5rem;font-size:.875rem;">Check back when an election is scheduled, or contact the Election Commissioner.</p>
     <a href="{% url 'core:dashboard' %}" class="btn btn-outline" style="margin-top:1rem;">
       <i class="fas fa-home"></i> Back to Dashboard
     </a>

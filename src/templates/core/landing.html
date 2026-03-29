@@ -13,23 +13,57 @@
     Mwenge Catholic University's secure, transparent, and fair student government election platform.
     <em>"Lux Mundi – Light of the World."</em>
   </p>
+
   <div class="cta-buttons">
     {% if user.is_authenticated %}
-    <a href="{% url 'core:dashboard' %}" class="btn btn-gold btn-lg">
-      <i class="fas fa-th-large"></i> Go to Dashboard
-    </a>
-    <a href="{% url 'election:elections_list' %}" class="btn btn-outline" style="border-color:rgba(255,255,255,.5); color:white;">
-      <i class="fas fa-poll"></i> View Elections
-    </a>
+      {# --- Role-based CTAs --- #}
+      {% if user.is_commissioner or user.is_staff %}
+        <a href="{% url 'core:commissioner_dashboard' %}" class="btn btn-gold btn-lg">
+          <i class="fas fa-chart-line"></i> Commissioner Dashboard
+        </a>
+        <a href="{% url 'election:elections_list' %}" class="btn btn-outline" style="border-color:rgba(255,255,255,.5);color:white;">
+          <i class="fas fa-poll"></i> Manage Elections
+        </a>
+      {% elif user.is_observer %}
+        <a href="{% url 'core:observer_dashboard' %}" class="btn btn-gold btn-lg">
+          <i class="fas fa-eye"></i> Observer Dashboard
+        </a>
+        <a href="{% url 'election:elections_list' %}" class="btn btn-outline" style="border-color:rgba(255,255,255,.5);color:white;">
+          <i class="fas fa-poll"></i> View Elections
+        </a>
+      {% elif user.is_candidate %}
+        <a href="{% url 'core:dashboard' %}" class="btn btn-gold btn-lg">
+          <i class="fas fa-user-tie"></i> Candidate Dashboard
+        </a>
+        <a href="{% url 'election:elections_list' %}" class="btn btn-outline" style="border-color:rgba(255,255,255,.5);color:white;">
+          <i class="fas fa-poll"></i> Your Elections
+        </a>
+      {% else %}
+        {# voter / class_leader / default #}
+        <a href="{% url 'core:dashboard' %}" class="btn btn-gold btn-lg">
+          <i class="fas fa-th-large"></i> My Dashboard
+        </a>
+        <a href="{% url 'election:elections_list' %}" class="btn btn-outline" style="border-color:rgba(255,255,255,.5);color:white;">
+          <i class="fas fa-vote-yea"></i> Vote Now
+        </a>
+      {% endif %}
+
     {% else %}
-    <a href="{% url 'core:login' %}" class="btn btn-gold btn-lg">
-      <i class="fas fa-sign-in-alt"></i> Login to Vote
-    </a>
-    <a href="{% url 'core:register' %}" class="btn btn-outline" style="border-color:rgba(255,255,255,.5); color:white;">
-      <i class="fas fa-user-plus"></i> Create Account
-    </a>
+      <a href="{% url 'core:login' %}" class="btn btn-gold btn-lg">
+        <i class="fas fa-sign-in-alt"></i> Login to Vote
+      </a>
+      <a href="{% url 'core:register' %}" class="btn btn-outline" style="border-color:rgba(255,255,255,.5);color:white;">
+        <i class="fas fa-user-plus"></i> Create Account
+      </a>
     {% endif %}
   </div>
+
+  {% if user.is_authenticated %}
+  <p style="margin-top:1rem; font-size:.8rem; color:rgba(255,255,255,.5);">
+    Signed in as <strong style="color:rgba(255,255,255,.8);">{{ user.first_name }} {{ user.last_name }}</strong>
+    &nbsp;·&nbsp; {{ user.get_role_display }}
+  </p>
+  {% endif %}
 </div>
 
 <!-- Feature cards -->
@@ -37,62 +71,38 @@
   <div class="feature-card">
     <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
     <h4>Secure & Private</h4>
-    <p>Every vote is anonymous. Token-based voting ensures only eligible, verified students can participate — one vote per person, per level.</p>
+    <p>Token-based voting ensures only eligible, verified students can participate — one vote per person per level. Your ballot is completely anonymous.</p>
   </div>
   <div class="feature-card">
-    <div class="feature-icon" style="background:var(--gold-dim); color:#7a5e0a"><i class="fas fa-eye"></i></div>
+    <div class="feature-icon" style="background:var(--gold-dim);color:#7a5e0a"><i class="fas fa-eye"></i></div>
     <h4>Transparent Results</h4>
-    <p>Live vote counting with real-time results visible to all. No back-room counting, no surprises — just democracy in action.</p>
+    <p>Live vote counting with real-time results. No back-room counting — results are published the moment polls close.</p>
   </div>
   <div class="feature-card">
-    <div class="feature-icon" style="background:var(--success-bg); color:var(--success)"><i class="fas fa-layer-group"></i></div>
+    <div class="feature-icon" style="background:var(--success-bg);color:var(--success)"><i class="fas fa-layer-group"></i></div>
     <h4>Multi-Level Elections</h4>
-    <p>Support for President, State Leader, and Course Representative elections — each voter gets the right tokens for their eligible positions.</p>
+    <p>Supports President, State Leader, and Course Representative elections. Each voter automatically gets tokens for their eligible positions.</p>
   </div>
   <div class="feature-card">
-    <div class="feature-icon" style="background:var(--error-bg); color:var(--error)"><i class="fas fa-mobile-alt"></i></div>
+    <div class="feature-icon" style="background:var(--error-bg);color:var(--error)"><i class="fas fa-mobile-alt"></i></div>
     <h4>Works Everywhere</h4>
-    <p>Fully responsive — vote from your phone, tablet, or laptop. No app needed, just your registration number and password.</p>
+    <p>Fully responsive — vote from your phone, tablet, or laptop. No app install needed.</p>
   </div>
 </div>
 
-<!-- How to vote -->
-<div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-bottom:2.5rem; align-items:start;">
+<!-- How to vote + About side by side -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:2.5rem;">
+
   <div class="card">
     <div class="card-header">
       <div class="card-title"><i class="fas fa-list-ol"></i> How to Vote</div>
     </div>
     <ol class="steps-list">
-      <li>
-        <div>
-          <strong>Create your account</strong><br>
-          <small>Use your university registration number to verify and register.</small>
-        </div>
-      </li>
-      <li>
-        <div>
-          <strong>Wait for verification</strong><br>
-          <small>The Election Commissioner will verify your account and issue voting tokens.</small>
-        </div>
-      </li>
-      <li>
-        <div>
-          <strong>Review candidates</strong><br>
-          <small>Read each candidate's bio and platform before deciding.</small>
-        </div>
-      </li>
-      <li>
-        <div>
-          <strong>Cast your vote</strong><br>
-          <small>Submit your vote during the active election window. Votes are final.</small>
-        </div>
-      </li>
-      <li>
-        <div>
-          <strong>Check results</strong><br>
-          <small>Live results are published as soon as the election closes.</small>
-        </div>
-      </li>
+      <li><div><strong>Create your account</strong><br><small>Use your university registration number to verify and register.</small></div></li>
+      <li><div><strong>Wait for verification</strong><br><small>The Election Commissioner verifies your account and issues voting tokens.</small></div></li>
+      <li><div><strong>Review candidates</strong><br><small>Read each candidate's bio and platform before deciding.</small></div></li>
+      <li><div><strong>Cast your vote</strong><br><small>Submit during the active window — votes are final and anonymous.</small></div></li>
+      <li><div><strong>Check results</strong><br><small>Live results publish as soon as the election closes.</small></div></li>
     </ol>
   </div>
 
@@ -100,24 +110,25 @@
     <div class="card-header">
       <div class="card-title"><i class="fas fa-university"></i> About MWECAUSO</div>
     </div>
-    <div style="text-align:center; margin-bottom:1.25rem;">
+    <div style="text-align:center;margin-bottom:1rem;">
       <img src="{% static 'images/mwecau.png' %}" alt="MWECAU Logo"
-           style="width:72px; height:72px; border-radius:50%; border:2px solid var(--blue-light);">
-      <div style="font-size:.85rem; color:var(--blue); font-weight:600; margin-top:.5rem;">
+           style="width:64px;height:64px;border-radius:50%;border:2px solid var(--blue-light);">
+      <div style="font-size:.82rem;color:var(--blue);font-weight:600;margin-top:.5rem;">
         Mwenge Catholic University Student Government Organization
       </div>
     </div>
     <p style="font-size:.875rem;">
       MWECAUSO is the official student government of Mwenge Catholic University, representing students across all faculties, courses, and states on campus.
     </p>
-    <p style="font-size:.875rem; margin:0;">
-      This platform was built to modernize student elections — replacing paper ballots with a digital system that is faster, fairer, and fully auditable.
+    <p style="font-size:.875rem;margin-bottom:1rem;">
+      This platform modernizes student elections — replacing paper ballots with a digital system that is faster, fairer, and fully auditable.
     </p>
-    <div style="margin-top:1rem; padding:0.85rem; background:var(--blue-light); border-radius:var(--radius); font-size:.825rem; color:var(--blue);">
+    <div style="padding:.85rem;background:var(--blue-light);border-radius:var(--radius);font-size:.82rem;color:var(--blue);">
       <i class="fas fa-info-circle"></i>
-      For support, contact the ICT Office: <a href="mailto:admin@mwecau.ac.tz">admin@mwecau.ac.tz</a>
+      Need help? Contact ICT Office: <a href="mailto:admin@mwecau.ac.tz">admin@mwecau.ac.tz</a>
     </div>
   </div>
+
 </div>
 
 <!-- Election Levels -->
@@ -125,35 +136,35 @@
   <div class="card-header">
     <div class="card-title"><i class="fas fa-sitemap"></i> Election Levels</div>
   </div>
-  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:1rem;">
-    <div style="text-align:center; padding:1.25rem; background:var(--blue-light); border-radius:var(--radius);">
-      <i class="fas fa-crown" style="font-size:2rem; color:var(--gold); margin-bottom:.75rem; display:block;"></i>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;">
+    <div style="text-align:center;padding:1.25rem;background:var(--blue-light);border-radius:var(--radius);">
+      <i class="fas fa-crown" style="font-size:2rem;color:var(--gold);margin-bottom:.75rem;display:block;"></i>
       <strong>President Election</strong>
-      <p style="font-size:.82rem; margin:.4rem 0 0; color:var(--text-muted);">University-wide. All verified students vote.</p>
+      <p style="font-size:.82rem;margin:.4rem 0 0;color:var(--text-muted);">University-wide. All verified students vote.</p>
     </div>
-    <div style="text-align:center; padding:1.25rem; background:var(--gold-dim); border-radius:var(--radius);">
-      <i class="fas fa-map-marker-alt" style="font-size:2rem; color:var(--gold); margin-bottom:.75rem; display:block;"></i>
+    <div style="text-align:center;padding:1.25rem;background:var(--gold-dim);border-radius:var(--radius);">
+      <i class="fas fa-map-marker-alt" style="font-size:2rem;color:var(--gold);margin-bottom:.75rem;display:block;"></i>
       <strong>State Leaders</strong>
-      <p style="font-size:.82rem; margin:.4rem 0 0; color:var(--text-muted);">Regional reps from each dormitory/state.</p>
+      <p style="font-size:.82rem;margin:.4rem 0 0;color:var(--text-muted);">Regional reps from each dormitory/state.</p>
     </div>
-    <div style="text-align:center; padding:1.25rem; background:var(--success-bg); border-radius:var(--radius);">
-      <i class="fas fa-graduation-cap" style="font-size:2rem; color:var(--success); margin-bottom:.75rem; display:block;"></i>
+    <div style="text-align:center;padding:1.25rem;background:var(--success-bg);border-radius:var(--radius);">
+      <i class="fas fa-graduation-cap" style="font-size:2rem;color:var(--success);margin-bottom:.75rem;display:block;"></i>
       <strong>Course Representatives</strong>
-      <p style="font-size:.82rem; margin:.4rem 0 0; color:var(--text-muted);">Leaders for each academic programme.</p>
+      <p style="font-size:.82rem;margin:.4rem 0 0;color:var(--text-muted);">Leaders for each academic programme.</p>
     </div>
   </div>
 </div>
 
-<!-- CTA bottom -->
+<!-- Bottom CTA — only for unauthenticated -->
 {% if not user.is_authenticated %}
-<div style="background:linear-gradient(135deg, var(--blue-dark) 0%, var(--blue) 100%); color:white; padding:2.5rem; border-radius:var(--radius-xl); text-align:center; margin-bottom:1rem;">
-  <h3 style="color:white; margin-bottom:.5rem;">Ready to make your voice heard?</h3>
-  <p style="color:rgba(255,255,255,.8); margin-bottom:1.5rem;">Registration is quick — you just need your university registration number.</p>
+<div style="background:linear-gradient(135deg,var(--blue-dark) 0%,var(--blue) 100%);color:white;padding:2.5rem;border-radius:var(--radius-xl);text-align:center;margin-bottom:1rem;">
+  <h3 style="color:white;margin-bottom:.5rem;">Ready to make your voice heard?</h3>
+  <p style="color:rgba(255,255,255,.8);margin-bottom:1.5rem;">Registration is quick — you just need your university registration number.</p>
   <div class="cta-buttons">
     <a href="{% url 'core:register' %}" class="btn btn-gold btn-lg">
       <i class="fas fa-user-plus"></i> Get Started
     </a>
-    <a href="{% url 'core:login' %}" class="btn btn-outline" style="border-color:rgba(255,255,255,.5); color:white;">
+    <a href="{% url 'core:login' %}" class="btn btn-outline" style="border-color:rgba(255,255,255,.5);color:white;">
       <i class="fas fa-sign-in-alt"></i> Already registered? Login
     </a>
   </div>
