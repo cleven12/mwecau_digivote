@@ -93,7 +93,7 @@ def notify_on_state_change(sender, instance, created, **kwargs):
         send_mail(
             subject=subject,
             message=message,
-            from_email=getattr(settings, 'DEFAULT_FROM_EMAIL', None) or 'no-reply@example.com',
+            from_email=getattr(settings, 'DEFAULT_FROM_EMAIL', None) or 'mwecauictclub@gmail.com',
             recipient_list=[instance.email],
             fail_silently=False,
         )

@@ -20,7 +20,7 @@ class UserModelTestCase(TestCase):
     def test_user_creation(self):
         """Test creating a user"""
         user = User.objects.create_user(
-            registration_number="T/CS/2024/001",
+            registration_number="T/DEG/2024/001",
             password="testpass123",
             first_name="John",
             last_name="Doe",
@@ -28,7 +28,7 @@ class UserModelTestCase(TestCase):
             state=self.state,
             course=self.course
         )
-        self.assertEqual(user.registration_number, "T/CS/2024/001")
+        self.assertEqual(user.registration_number, "T/DEG/2024/001")
         self.assertEqual(user.first_name, "John")
         self.assertTrue(user.check_password("testpass123"))
         self.assertIsNotNone(user.voter_id)
@@ -36,19 +36,19 @@ class UserModelTestCase(TestCase):
     def test_user_authentication(self):
         """Test user login with registration number"""
         User.objects.create_user(
-            registration_number="T/CS/2024/002",
+            registration_number="T/DEG/2024/002",
             password="testpass123",
             first_name="Jane",
             last_name="Smith"
         )
-        user = authenticate(registration_number="T/CS/2024/002", password="testpass123")
+        user = authenticate(registration_number="T/DEG/2024/002", password="testpass123")
         self.assertIsNotNone(user)
         self.assertEqual(user.first_name, "Jane")
     
     def test_user_gender_choices(self):
         """Test user gender field"""
         user = User.objects.create_user(
-            registration_number="T/CS/2024/003",
+            registration_number="T/DEG/2024/003",
             password="testpass",
             gender="female"
         )
@@ -57,7 +57,7 @@ class UserModelTestCase(TestCase):
     def test_user_role_assignment(self):
         """Test user role assignment"""
         user = User.objects.create_user(
-            registration_number="T/CS/2024/004",
+            registration_number="T/DEG/2024/004",
             password="testpass",
             role=User.ROLE_VOTER
         )
@@ -74,7 +74,7 @@ class CollegeDataTestCase(TestCase):
     def test_college_data_creation(self):
         """Test creating college data"""
         college_data = CollegeData.objects.create(
-            registration_number="T/CS/2024/005",
+            registration_number="T/DEG/2024/005",
             first_name="Alice",
             last_name="Brown",
             email="alice@test.com",
@@ -82,13 +82,13 @@ class CollegeDataTestCase(TestCase):
             course=self.course,
             state=self.state
         )
-        self.assertEqual(college_data.registration_number, "T/CS/2024/005")
+        self.assertEqual(college_data.registration_number, "T/DEG/2024/005")
         self.assertFalse(college_data.is_used)
     
     def test_mark_college_data_as_used(self):
         """Test marking college data as used"""
         college_data = CollegeData.objects.create(
-            registration_number="T/CS/2024/006",
+            registration_number="T/DEG/2024/006",
             first_name="Bob",
             last_name="Johnson",
             course=self.course
@@ -141,7 +141,7 @@ class VoterTokenTestCase(TestCase):
         self.course = Course.objects.create(name="Computer Science", code="CS101")
         
         self.user = User.objects.create_user(
-            registration_number="T/CS/2024/007",
+            registration_number="T/DEG/2024/007",
             password="testpass",
             first_name="Charlie",
             last_name="Davis",
@@ -198,7 +198,7 @@ class CandidateTestCase(TestCase):
         self.course = Course.objects.create(name="Computer Science", code="CS101")
         
         self.user = User.objects.create_user(
-            registration_number="T/CS/2024/008",
+            registration_number="T/DEG/2024/008",
             password="testpass",
             first_name="Eve",
             last_name="White",
@@ -244,7 +244,7 @@ class VotingTestCase(TestCase):
         
         # Create voter
         self.voter = User.objects.create_user(
-            registration_number="T/CS/2024/009",
+            registration_number="T/DEG/2024/009",
             password="testpass",
             first_name="Frank",
             last_name="Green",
@@ -255,7 +255,7 @@ class VotingTestCase(TestCase):
         
         # Create candidate
         self.candidate_user = User.objects.create_user(
-            registration_number="T/CS/2024/010",
+            registration_number="T/DEG/2024/010",
             password="testpass",
             first_name="Grace",
             last_name="Black",
@@ -320,7 +320,7 @@ class RegistrationViewTestCase(TestCase):
         self.state = State.objects.create(name="Dar es Salaam")
         self.course = Course.objects.create(name="Computer Science", code="CS101")
         self.college_data = CollegeData.objects.create(
-            registration_number="T/CS/2024/011",
+            registration_number="T/DEG/2024/011",
             first_name="Henry",
             last_name="Iron",
             email="henry@test.com",
@@ -332,7 +332,7 @@ class RegistrationViewTestCase(TestCase):
         """Test registration step 1 with valid registration number"""
         response = self.client.post('/register/', {
             'step': '1',
-            'registration_number': 'T/CS/2024/011'
+            'registration_number': 'T/DEG/2024/011'
         })
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'Step 2', response.content)
@@ -353,7 +353,7 @@ class LoginViewTestCase(TestCase):
     def setUp(self):
         self.client = Client()
         self.user = User.objects.create_user(
-            registration_number="T/CS/2024/012",
+            registration_number="T/DEG/2024/012",
             password="testpass123",
             first_name="Iris",
             last_name="Moon"
@@ -362,7 +362,7 @@ class LoginViewTestCase(TestCase):
     def test_login_valid_credentials(self):
         """Test login with valid credentials"""
         response = self.client.post('/login/', {
-            'registration_number': 'T/CS/2024/012',
+            'registration_number': 'T/DEG/2024/012',
             'password': 'testpass123'
         }, follow=True)
         self.assertEqual(response.status_code, 200)
@@ -371,7 +371,7 @@ class LoginViewTestCase(TestCase):
     def test_login_invalid_credentials(self):
         """Test login with invalid credentials"""
         response = self.client.post('/login/', {
-            'registration_number': 'T/CS/2024/012',
+            'registration_number': 'T/DEG/2024/012',
             'password': 'wrongpass'
         })
         self.assertEqual(response.status_code, 200)
@@ -386,7 +386,7 @@ class SecurityTestCase(TestCase):
         self.state = State.objects.create(name="Dar es Salaam")
         self.course = Course.objects.create(name="Computer Science", code="CS101")
         self.user = User.objects.create_user(
-            registration_number="T/CS/2024/013",
+            registration_number="T/DEG/2024/013",
             password="testpass123",
             first_name="Jack",
             last_name="Ruby",
@@ -396,7 +396,7 @@ class SecurityTestCase(TestCase):
     
     def test_password_hashing(self):
         """Test that passwords are hashed"""
-        user = User.objects.get(registration_number="T/CS/2024/013")
+        user = User.objects.get(registration_number="T/DEG/2024/013")
         self.assertNotEqual(user.password, "testpass123")
         self.assertTrue(user.check_password("testpass123"))
     
@@ -406,7 +406,7 @@ class SecurityTestCase(TestCase):
         # Email must be unique - attempting to create duplicate should fail
         try:
             User.objects.create_user(
-                registration_number="T/CS/2024/014",
+                registration_number="T/DEG/2024/014",
                 password="testpass",
                 email=self.user.email
             )
@@ -419,7 +419,7 @@ class SecurityTestCase(TestCase):
     def test_csrf_protection(self):
         """Test CSRF token requirement"""
         response = self.client.post('/login/', {
-            'registration_number': 'T/CS/2024/013',
+            'registration_number': 'T/DEG/2024/013',
             'password': 'testpass123'
         })
         # Should either show CSRF error or require token in forms
@@ -439,12 +439,12 @@ class DataIntegrityTestCase(TestCase):
     def test_registration_number_unique(self):
         """Test registration number uniqueness"""
         User.objects.create_user(
-            registration_number="T/CS/2024/015",
+            registration_number="T/DEG/2024/015",
             password="testpass"
         )
         with self.assertRaises(Exception):
             User.objects.create_user(
-                registration_number="T/CS/2024/015",
+                registration_number="T/DEG/2024/015",
                 password="testpass"
             )
     
