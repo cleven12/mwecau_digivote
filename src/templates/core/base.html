@@ -2,77 +2,132 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}MWECAU Digital Voting System{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}MWECAU DigiVote{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  {% block extra_head %}{% endblock %}
 </head>
 <body>
-    <header>
-        <div class="header-content">
-            <h1><i class="fas fa-vote-yea"></i> MWECAU Digital Voting System</h1>
-            <p class="header-subtitle">Student Government Elections</p>
+
+  <header>
+    <div class="header-inner">
+      <a href="{% url 'core:home' %}" class="header-brand">
+        <img src="{% static 'images/mwecau.png' %}" alt="MWECAU Logo">
+        <div class="brand-text">
+          <span class="brand-name">MWECAUSO DigiVote</span>
+          <span class="brand-sub">Student Elections Platform</span>
         </div>
-        {% if user.is_authenticated %}
-        <nav >
-            <a href="{% url 'core:dashboard' %}" class="nav-link"><i class="fas fa-home"></i> Dashboard</a>
-            <a href="{% url 'core:home' %}" class="nav-link"><i class="fas fa-info-circle"></i> About</a>
-            <a href="{% url 'election:elections_list' %}" class="nav-link"><i class="fas fa-poll"></i> Elections</a>
-            <a href="{% url 'core:profile_edit' %}" class="nav-link"><i class="fas fa-user-edit"></i> Profile</a>
-            <a href="{% url 'core:logout' %}" class="nav-link logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a>
-            <span class="user-info">{{ user.first_name }} {{ user.last_name }}</span>
-        </nav>
+      </a>
+
+      {% if user.is_authenticated %}
+      <nav aria-label="Main navigation">
+        <a href="{% url 'core:dashboard' %}" class="nav-link">
+          <i class="fas fa-th-large"></i><span>Dashboard</span>
+        </a>
+        <a href="{% url 'election:elections_list' %}" class="nav-link">
+          <i class="fas fa-poll"></i><span>Elections</span>
+        </a>
+        <a href="{% url 'core:profile_edit' %}" class="nav-link">
+          <i class="fas fa-user-edit"></i><span>Profile</span>
+        </a>
+        {% if user.is_commissioner or user.is_staff %}
+        <a href="{% url 'core:commissioner_dashboard' %}" class="nav-link">
+          <i class="fas fa-cog"></i><span>Admin</span>
+        </a>
+        {% endif %}
+        <a href="{% url 'core:logout' %}" class="nav-link logout-link">
+          <i class="fas fa-sign-out-alt"></i><span>Logout</span>
+        </a>
+        <span class="user-badge">
+          <i class="fas fa-user-circle"></i> {{ user.first_name }}
+        </span>
+      </nav>
+      {% else %}
+      <nav aria-label="Main navigation">
+        <a href="{% url 'core:home' %}" class="nav-link">
+          <i class="fas fa-home"></i><span>Home</span>
+        </a>
+        <a href="{% url 'core:login' %}" class="nav-link">
+          <i class="fas fa-sign-in-alt"></i><span>Login</span>
+        </a>
+        <a href="{% url 'core:register' %}" class="btn btn-gold btn-sm">
+          <i class="fas fa-user-plus"></i> Register
+        </a>
+      </nav>
+      {% endif %}
+    </div>
+  </header>
+
+  <main>
+    {% if messages %}
+    <div class="messages" role="alert" aria-live="polite">
+      {% for message in messages %}
+        {% if message.tags == 'success' %}
+          <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i>
+            <span>{{ message }}</span>
+          </div>
+        {% elif message.tags == 'error' %}
+          <div class="alert alert-error">
+            <i class="fas fa-exclamation-circle"></i>
+            <span>{{ message }}</span>
+          </div>
+        {% elif message.tags == 'warning' %}
+          <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span>{{ message }}</span>
+          </div>
         {% else %}
-        <nav >
-            <a href="{% url 'core:home' %}" class="nav-link"><i class="fas fa-home"></i> Home</a>
-            <a href="{% url 'core:login' %}" class="nav-link"><i class="fas fa-sign-in-alt"></i> Login</a>
-            <a href="{% url 'core:register' %}" class="nav-link"><i class="fas fa-user-plus"></i> Register</a>
-        </nav>
+          <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i>
+            <span>{{ message }}</span>
+          </div>
         {% endif %}
-    </header>
+      {% endfor %}
+    </div>
+    {% endif %}
 
-    <main>
-        {% if messages %}
-        <div class="messages">
-            {% for message in messages %}
-            <div >
-                <i class="fas fa-info-circle"></i> {{ message }}
-            </div>
-            {% endfor %}
-        </div>
-        {% endif %}
+    {% block content %}{% endblock %}
+  </main>
 
-        {% block content %}{% endblock %}
-    </main>
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img src="{% static 'images/mwecau.png' %}" alt="MWECAU">
+        <h4>MWECAUSO DigiVote</h4>
+        <p>Mwenge Catholic University<br>Student Government Elections</p>
+        <p style="margin-top:.5rem; font-size:.75rem; color: rgba(255,255,255,.4);">"Lux Mundi – Light of the World"</p>
+      </div>
+      <div>
+        <h5>Quick Links</h5>
+        <ul>
+          <li><a href="{% url 'core:home' %}">Home</a></li>
+          {% if user.is_authenticated %}
+          <li><a href="{% url 'core:dashboard' %}">Dashboard</a></li>
+          <li><a href="{% url 'election:elections_list' %}">Elections</a></li>
+          <li><a href="{% url 'core:profile_edit' %}">My Profile</a></li>
+          {% else %}
+          <li><a href="{% url 'core:login' %}">Login</a></li>
+          <li><a href="{% url 'core:register' %}">Register</a></li>
+          {% endif %}
+        </ul>
+      </div>
+      <div>
+        <h5>Contact</h5>
+        <ul>
+          <li><a href="mailto:elections@mwecau.ac.tz"><i class="fas fa-envelope" style="margin-right:.4rem"></i>elections@mwecau.ac.tz</a></li>
+          <li><a href="https://mwecau.ac.tz" target="_blank"><i class="fas fa-globe" style="margin-right:.4rem"></i>mwecau.ac.tz</a></li>
+          <li style="color:rgba(255,255,255,.5); font-size:.85rem; margin-top:.5rem;">P.O. Box 1226, Moshi<br>Kilimanjaro, Tanzania</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; {% now "Y" %} MWECAUSO. All rights reserved.</span>
+      <span>Built with <i class="fas fa-heart" style="color:var(--gold)"></i> by <a href="#">Cleven</a> · MWECAU ICT Club</span>
+    </div>
+  </footer>
 
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h4>MWECAUSO</h4>
-                <p>Mwenge Catholic University Student Government</p>
-            </div>
-            <div class="footer-section">
-                <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="{% url 'core:home' %}">Home</a></li>
-                    <li><a href="#about">About Us</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </div>
-            <div class="footer-section">
-                <h4>Follow Us</h4>
-                <div class="social-links">
-                    <a href="#" title="Facebook"><i class="fab fa-facebook"></i></a>
-                    <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
-                    <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
-                </div>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 MWECAUSO Digital Voting System. All rights reserved.</p>
-            <p class="developer-credit"><small>Platform developed with <span style="opacity: 0.3;">by Cleven</span></small></p>
-        </div>
-    </footer>
 </body>
 </html>

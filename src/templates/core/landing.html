@@ -1,430 +1,163 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
-{% block title %}MWECAU Student Elections - MWECAUSO{% endblock %}
+{% block title %}MWECAUSO DigiVote — Student Elections Platform{% endblock %}
 
 {% block content %}
-<style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
 
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        line-height: 1.6;
-        color: #333;
-    }
-
-    .hero {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 80px 20px;
-        text-align: center;
-        margin-bottom: 40px;
-        border-radius: 10px;
-    }
-
-    .hero h1 {
-        font-size: 2.8rem;
-        margin-bottom: 15px;
-        font-weight: 700;
-    }
-
-    .hero p {
-        font-size: 1.3rem;
-        margin-bottom: 30px;
-        opacity: 0.95;
-    }
-
-    .cta-buttons {
-        display: flex;
-        gap: 15px;
-        justify-content: center;
-        flex-wrap: wrap;
-    }
-
-    .btn-primary, .btn-secondary {
-        padding: 12px 30px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 1rem;
-        text-decoration: none;
-        transition: all 0.3s ease;
-        display: inline-block;
-    }
-
-    .btn-primary {
-        background: white;
-        color: #667eea;
-        font-weight: 600;
-    }
-
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-    }
-
-    .btn-secondary {
-        background: rgba(255, 255, 255, 0.2);
-        color: white;
-        border: 2px solid white;
-    }
-
-    .btn-secondary:hover {
-        background: white;
-        color: #667eea;
-    }
-
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 20px;
-    }
-
-    .section {
-        margin-bottom: 60px;
-        padding: 40px 0;
-    }
-
-    .section-title {
-        font-size: 2.2rem;
-        margin-bottom: 30px;
-        color: #667eea;
-        text-align: center;
-        font-weight: 700;
-    }
-
-    .logo-container {
-        text-align: center;
-        margin: 30px 0;
-    }
-
-    .logo-container img {
-        max-width: 200px;
-        height: auto;
-        margin: 15px;
-    }
-
-    .voting-guide {
-        background: #f8f9fa;
-        padding: 30px;
-        border-radius: 8px;
-        border-left: 5px solid #667eea;
-    }
-
-    .voting-guide h3 {
-        color: #667eea;
-        margin-bottom: 15px;
-    }
-
-    .voting-guide ul {
-        list-style-position: inside;
-        line-height: 1.8;
-    }
-
-    .voting-guide li {
-        margin-bottom: 10px;
-    }
-
-    .elections-section {
-        background: white;
-        padding: 30px;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-
-    .election-card {
-        background: #f8f9fa;
-        padding: 20px;
-        margin: 15px 0;
-        border-radius: 6px;
-        border-top: 4px solid #667eea;
-    }
-
-    .election-card h4 {
-        color: #667eea;
-        margin-bottom: 10px;
-    }
-
-    .reviews-container {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-        gap: 20px;
-        margin-top: 30px;
-    }
-
-    .review-card {
-        background: white;
-        padding: 25px;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        animation: fadeInOut 8s infinite;
-    }
-
-    @keyframes fadeInOut {
-        0%, 100% { opacity: 0.5; }
-        50% { opacity: 1; }
-    }
-
-    .stars {
-        color: #ffc107;
-        margin-bottom: 10px;
-    }
-
-    .review-text {
-        font-style: italic;
-        color: #666;
-        margin: 10px 0;
-    }
-
-    .reviewer-name {
-        font-weight: 600;
-        color: #333;
-        margin-top: 15px;
-    }
-
-    .contact-section {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
-        padding: 40px;
-        border-radius: 8px;
-        text-align: center;
-    }
-
-    .contact-section h3 {
-        margin-bottom: 20px;
-        font-size: 1.8rem;
-    }
-
-    .contact-info {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 20px;
-        margin-top: 30px;
-        text-align: left;
-    }
-
-    .contact-item {
-        background: rgba(255, 255, 255, 0.1);
-        padding: 20px;
-        border-radius: 6px;
-        backdrop-filter: blur(10px);
-    }
-
-    .contact-item i {
-        margin-right: 10px;
-        font-size: 1.5rem;
-    }
-
-    .about-section {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 40px;
-        align-items: center;
-    }
-
-    .about-text h3 {
-        color: #667eea;
-        margin-bottom: 15px;
-        font-size: 1.8rem;
-    }
-
-    .about-text p {
-        margin-bottom: 15px;
-        line-height: 1.8;
-        color: #555;
-    }
-
-    .features-list {
-        list-style: none;
-    }
-
-    .features-list li {
-        margin: 10px 0;
-        padding-left: 25px;
-        position: relative;
-    }
-
-    .features-list li:before {
-        content: "✓";
-        position: absolute;
-        left: 0;
-        color: #667eea;
-        font-weight: bold;
-    }
-
-    .about-image {
-        text-align: center;
-    }
-
-    .about-image img {
-        max-width: 100%;
-        border-radius: 8px;
-        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-    }
-
-    @media (max-width: 768px) {
-        .hero h1 {
-            font-size: 2rem;
-        }
-
-        .section-title {
-            font-size: 1.8rem;
-        }
-
-        .about-section {
-            grid-template-columns: 1fr;
-        }
-
-        .contact-info {
-            grid-template-columns: 1fr;
-        }
-    }
-</style>
-
+<!-- Hero -->
 <div class="hero">
-    <h1><i class="fas fa-vote-yea"></i> MWECAUSO Elections</h1>
-    <p>Your Voice Matters - Secure, Transparent, and Fair Student Government Elections</p>
-    <div class="cta-buttons">
-        {% if user.is_authenticated %}
-        <a href="{% url 'election:elections_list' %}" >
-            <i class="fas fa-poll"></i> View Elections
-        </a>
-        {% else %}
-        <a href="{% url 'core:login' %}" >
-            <i class="fas fa-sign-in-alt"></i> Login to Vote
-        </a>
-        <a href="{% url 'core:register' %}" >
-            <i class="fas fa-user-plus"></i> Create Account
-        </a>
-        {% endif %}
-    </div>
+  <img src="{% static 'images/mwecau.png' %}" alt="MWECAU Logo" class="hero-logo">
+  <h1>MWECAUSO DigiVote</h1>
+  <p class="hero-sub">
+    Mwenge Catholic University's secure, transparent, and fair student government election platform.
+    <em>"Lux Mundi – Light of the World."</em>
+  </p>
+  <div class="cta-buttons">
+    {% if user.is_authenticated %}
+    <a href="{% url 'core:dashboard' %}" class="btn btn-gold btn-lg">
+      <i class="fas fa-th-large"></i> Go to Dashboard
+    </a>
+    <a href="{% url 'election:elections_list' %}" class="btn btn-outline" style="border-color:rgba(255,255,255,.5); color:white;">
+      <i class="fas fa-poll"></i> View Elections
+    </a>
+    {% else %}
+    <a href="{% url 'core:login' %}" class="btn btn-gold btn-lg">
+      <i class="fas fa-sign-in-alt"></i> Login to Vote
+    </a>
+    <a href="{% url 'core:register' %}" class="btn btn-outline" style="border-color:rgba(255,255,255,.5); color:white;">
+      <i class="fas fa-user-plus"></i> Create Account
+    </a>
+    {% endif %}
+  </div>
 </div>
 
-<div >
-    <!-- Logo Section -->
-    <div >
-        <h2 class="section-title">About MWECAUSO</h2>
-        <img src="https://via.placeholder.com/200x200?text=MWECAUSO+Logo" alt="MWECAUSO Logo">
-        <p style="font-weight: 600; color: #667eea;">Mwenge Catholic University Student Government Organization</p>
-    </div>
-
-    <!-- Voting Guide Section -->
-    <div class="section">
-        <h2 class="section-title">Voting Guide</h2>
-        <div class="voting-guide">
-            <h3><i class="fas fa-info-circle"></i> How to Vote</h3>
-            <ul>
-                <li><strong>Step 1 - Verify Eligibility:</strong> Only registered and verified students can participate in elections</li>
-                <li><strong>Step 2 - Account Setup:</strong> Create your account with your registration number and email address</li>
-                <li><strong>Step 3 - Review Candidates:</strong> Learn about the candidates running for various positions</li>
-                <li><strong>Step 4 - Cast Your Vote:</strong> Vote for your preferred candidates during election periods</li>
-                <li><strong>Step 5 - View Results:</strong> See real-time election results and candidate performance</li>
-            </ul>
-
-            <h3 style="margin-top: 25px;"><i class="fas fa-shield-alt"></i> Security & Transparency</h3>
-            <ul>
-                <li><strong>Secure Authentication:</strong> Two-step verification ensures only eligible voters can participate</li>
-                <li><strong>Anonymous Voting:</strong> Your vote is completely confidential and cannot be traced back to you</li>
-                <li><strong>Audit Trail:</strong> All voting activities are logged and monitored for transparency</li>
-                <li><strong>Real-time Results:</strong> Live vote counting with instant result publication</li>
-                <li><strong>No Duplicate Voting:</strong> The system prevents any voter from voting multiple times</li>
-            </ul>
-
-            <h3 style="margin-top: 25px;"><i class="fas fa-question-circle"></i> Election Levels</h3>
-            <ul>
-                <li><strong>President Election:</strong> University-wide elections for student government president</li>
-                <li><strong>State Leaders:</strong> Regional representatives from different states/regions</li>
-                <li><strong>Course Representatives:</strong> Leaders representing specific academic programs</li>
-            </ul>
-        </div>
-    </div>
-
-    <!-- Upcoming Elections Section -->
-    <div class="section">
-        <h2 class="section-title">Upcoming Elections</h2>
-        <div class="elections-section">
-            <p style="text-align: center; color: #666; font-size: 1.1rem;">
-                <i class="fas fa-calendar-check"></i> Check back soon for upcoming election schedules
-            </p>
-            <iframe src="/admin/" style="width: 100%; border: 1px solid #ddd; border-radius: 8px; min-height: 300px; margin-top: 20px; display: none;"></iframe>
-        </div>
-    </div>
-
-    <!-- Reviews Section -->
-    <div class="section">
-        <h2 class="section-title">What Students Say</h2>
-        <div >
-            <div >
-                <div class="stars">★★★★★</div>
-                <p class="review-text">"This voting system is very user-friendly and secure. I felt confident casting my vote!"</p>
-                <p class="reviewer-name">- Sarah M., 2nd Year</p>
-            </div>
-            <div >
-                <div class="stars">★★★★★</div>
-                <p class="review-text">"Transparent and fair elections. MWECAUSO did an amazing job implementing this platform."</p>
-                <p class="reviewer-name">- James K., 3rd Year</p>
-            </div>
-            <div >
-                <div class="stars">★★★★★</div>
-                <p class="review-text">"Quick, reliable, and easy to use. Best student election system I've experienced."</p>
-                <p class="reviewer-name">- Diana L., 1st Year</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- About Us Section -->
-    <div class="section">
-        <h2 class="section-title">About This Platform</h2>
-        <div class="about-section">
-            <div class="about-text">
-                <h3>Democratic Elections for Student Government</h3>
-                <p>The MWECAUSO Digital Voting System is a modern, secure platform designed to facilitate fair and transparent student government elections at Mwenge Catholic University.</p>
-                <p>Our mission is to make the voting process accessible, secure, and transparent for all eligible students while maintaining the highest standards of election integrity.</p>
-                
-                <h3 style="margin-top: 25px;">Key Features</h3>
-                <ul class="features-list">
-                    <li>Secure authentication system</li>
-                    <li>Anonymous voting mechanism</li>
-                    <li>Real-time result tracking</li>
-                    <li>Multi-level election support</li>
-                    <li>Fraud prevention measures</li>
-                    <li>Comprehensive audit trails</li>
-                </ul>
-            </div>
-            <div class="about-image">
-                <img src="https://via.placeholder.com/400x400?text=Student+Elections" alt="Student Elections">
-            </div>
-        </div>
-    </div>
-
-    <!-- Contact Section -->
-    <div class="section">
-        <div class="contact-section" id="contact">
-            <h3><i class="fas fa-envelope"></i> Get in Touch</h3>
-            <p>Have questions about the election process? Contact us!</p>
-            <div class="contact-info">
-                <div class="contact-item">
-                    <i class="fas fa-envelope"></i>
-                    <strong>Email</strong><br>
-                    <a href="mailto:elections@mwecau.edu" style="color: white; text-decoration: none;">elections@mwecau.edu</a>
-                </div>
-                <div class="contact-item">
-                    <i class="fas fa-phone"></i>
-                    <strong>Phone</strong><br>
-                    +255 XXX XXX XXX
-                </div>
-                <div class="contact-item">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <strong>Office</strong><br>
-                    Mwenge Catholic University<br>
-                    Dar es Salaam, Tanzania
-                </div>
-            </div>
-        </div>
-    </div>
+<!-- Feature cards -->
+<div class="feature-grid">
+  <div class="feature-card">
+    <div class="feature-icon"><i class="fas fa-shield-alt"></i></div>
+    <h4>Secure & Private</h4>
+    <p>Every vote is anonymous. Token-based voting ensures only eligible, verified students can participate — one vote per person, per level.</p>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon" style="background:var(--gold-dim); color:#7a5e0a"><i class="fas fa-eye"></i></div>
+    <h4>Transparent Results</h4>
+    <p>Live vote counting with real-time results visible to all. No back-room counting, no surprises — just democracy in action.</p>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon" style="background:var(--success-bg); color:var(--success)"><i class="fas fa-layer-group"></i></div>
+    <h4>Multi-Level Elections</h4>
+    <p>Support for President, State Leader, and Course Representative elections — each voter gets the right tokens for their eligible positions.</p>
+  </div>
+  <div class="feature-card">
+    <div class="feature-icon" style="background:var(--error-bg); color:var(--error)"><i class="fas fa-mobile-alt"></i></div>
+    <h4>Works Everywhere</h4>
+    <p>Fully responsive — vote from your phone, tablet, or laptop. No app needed, just your registration number and password.</p>
+  </div>
 </div>
+
+<!-- How to vote -->
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-bottom:2.5rem; align-items:start;">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title"><i class="fas fa-list-ol"></i> How to Vote</div>
+    </div>
+    <ol class="steps-list">
+      <li>
+        <div>
+          <strong>Create your account</strong><br>
+          <small>Use your university registration number to verify and register.</small>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Wait for verification</strong><br>
+          <small>The Election Commissioner will verify your account and issue voting tokens.</small>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Review candidates</strong><br>
+          <small>Read each candidate's bio and platform before deciding.</small>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Cast your vote</strong><br>
+          <small>Submit your vote during the active election window. Votes are final.</small>
+        </div>
+      </li>
+      <li>
+        <div>
+          <strong>Check results</strong><br>
+          <small>Live results are published as soon as the election closes.</small>
+        </div>
+      </li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title"><i class="fas fa-university"></i> About MWECAUSO</div>
+    </div>
+    <div style="text-align:center; margin-bottom:1.25rem;">
+      <img src="{% static 'images/mwecau.png' %}" alt="MWECAU Logo"
+           style="width:72px; height:72px; border-radius:50%; border:2px solid var(--blue-light);">
+      <div style="font-size:.85rem; color:var(--blue); font-weight:600; margin-top:.5rem;">
+        Mwenge Catholic University Student Government Organization
+      </div>
+    </div>
+    <p style="font-size:.875rem;">
+      MWECAUSO is the official student government of Mwenge Catholic University, representing students across all faculties, courses, and states on campus.
+    </p>
+    <p style="font-size:.875rem; margin:0;">
+      This platform was built to modernize student elections — replacing paper ballots with a digital system that is faster, fairer, and fully auditable.
+    </p>
+    <div style="margin-top:1rem; padding:0.85rem; background:var(--blue-light); border-radius:var(--radius); font-size:.825rem; color:var(--blue);">
+      <i class="fas fa-info-circle"></i>
+      For support, contact the ICT Office: <a href="mailto:admin@mwecau.ac.tz">admin@mwecau.ac.tz</a>
+    </div>
+  </div>
+</div>
+
+<!-- Election Levels -->
+<div class="card" style="margin-bottom:2.5rem;">
+  <div class="card-header">
+    <div class="card-title"><i class="fas fa-sitemap"></i> Election Levels</div>
+  </div>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:1rem;">
+    <div style="text-align:center; padding:1.25rem; background:var(--blue-light); border-radius:var(--radius);">
+      <i class="fas fa-crown" style="font-size:2rem; color:var(--gold); margin-bottom:.75rem; display:block;"></i>
+      <strong>President Election</strong>
+      <p style="font-size:.82rem; margin:.4rem 0 0; color:var(--text-muted);">University-wide. All verified students vote.</p>
+    </div>
+    <div style="text-align:center; padding:1.25rem; background:var(--gold-dim); border-radius:var(--radius);">
+      <i class="fas fa-map-marker-alt" style="font-size:2rem; color:var(--gold); margin-bottom:.75rem; display:block;"></i>
+      <strong>State Leaders</strong>
+      <p style="font-size:.82rem; margin:.4rem 0 0; color:var(--text-muted);">Regional reps from each dormitory/state.</p>
+    </div>
+    <div style="text-align:center; padding:1.25rem; background:var(--success-bg); border-radius:var(--radius);">
+      <i class="fas fa-graduation-cap" style="font-size:2rem; color:var(--success); margin-bottom:.75rem; display:block;"></i>
+      <strong>Course Representatives</strong>
+      <p style="font-size:.82rem; margin:.4rem 0 0; color:var(--text-muted);">Leaders for each academic programme.</p>
+    </div>
+  </div>
+</div>
+
+<!-- CTA bottom -->
+{% if not user.is_authenticated %}
+<div style="background:linear-gradient(135deg, var(--blue-dark) 0%, var(--blue) 100%); color:white; padding:2.5rem; border-radius:var(--radius-xl); text-align:center; margin-bottom:1rem;">
+  <h3 style="color:white; margin-bottom:.5rem;">Ready to make your voice heard?</h3>
+  <p style="color:rgba(255,255,255,.8); margin-bottom:1.5rem;">Registration is quick — you just need your university registration number.</p>
+  <div class="cta-buttons">
+    <a href="{% url 'core:register' %}" class="btn btn-gold btn-lg">
+      <i class="fas fa-user-plus"></i> Get Started
+    </a>
+    <a href="{% url 'core:login' %}" class="btn btn-outline" style="border-color:rgba(255,255,255,.5); color:white;">
+      <i class="fas fa-sign-in-alt"></i> Already registered? Login
+    </a>
+  </div>
+</div>
+{% endif %}
+
 {% endblock %}

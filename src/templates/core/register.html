@@ -1,95 +1,151 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
-{% block title %}Register - MWECAU Voting{% endblock %}
+{% block title %}Register — MWECAUSO DigiVote{% endblock %}
 
 {% block content %}
-<h2>Register New Account</h2>
+<div class="auth-wrapper">
+  <div class="auth-card" style="max-width:520px;">
 
-{% if step == 1 %}
-<h3>Step 1: Verify Registration Number</h3>
-<p>Enter your registration number to verify your credentials in our college database.</p>
-
-<form method="post">
-    {% csrf_token %}
-    <input type="hidden" name="step" value="1">
-    
-    <div>
-        <label for="registration_number">Registration Number:</label>
-        <input type="text" id="registration_number" name="registration_number" required autofocus>
+    <div class="auth-logo">
+      <img src="{% static 'images/mwecau.png' %}" alt="MWECAU Logo">
+      <div class="auth-title">
+        {% if step == 2 %}Complete Your Registration{% else %}Create an Account{% endif %}
+      </div>
+      <div class="auth-sub">MWECAUSO Student Elections Platform</div>
     </div>
 
-    <button type="submit">Verify</button>
-</form>
-
-{% elif step == 2 %}
-<h3>Step 2: Complete Your Registration</h3>
-<p>Your credentials have been verified. Please complete your registration details.</p>
-
-<form method="post">
-    {% csrf_token %}
-    <input type="hidden" name="step" value="2">
-    <input type="hidden" name="registration_number" value="{{ registration_number }}">
-    
-    <h4>Pre-filled Information (from College Data)</h4>
-    <div>
-        <label>Registration Number:</label>
-        <strong>{{ registration_number }}</strong>
-    </div>
-    
-    <div>
-        <label>Name:</label>
-        <strong>{{ first_name }} {{ last_name }}</strong>
-    </div>
-    
-    <div>
-        <label>Gender:</label>
-        <strong>{{ gender }}</strong>
-    </div>
-    
-    <hr>
-    
-    <h4>Complete Your Details</h4>
-    
-    <div>
-        <label for="email">Email Address:</label>
-        <input type="email" id="email" name="email" value="{{ suggested_email }}" required>
+    <!-- Step indicator -->
+    <div style="display:flex; gap:.5rem; margin-bottom:1.75rem; align-items:center;">
+      <div style="flex:1; display:flex; align-items:center; gap:.5rem;">
+        <div style="width:28px; height:28px; border-radius:50%; background:var(--blue); color:white; display:flex; align-items:center; justify-content:center; font-size:.8rem; font-weight:700; flex-shrink:0;">1</div>
+        <span style="font-size:.85rem; font-weight:600; color:{% if step == 1 %}var(--blue){% else %}var(--text-muted){% endif %}">Verify ID</span>
+      </div>
+      <div style="flex:1; height:2px; background:{% if step == 2 %}var(--blue){% else %}var(--border){% endif %};"></div>
+      <div style="flex:1; display:flex; align-items:center; gap:.5rem;">
+        <div style="width:28px; height:28px; border-radius:50%; background:{% if step == 2 %}var(--blue){% else %}var(--border){% endif %}; color:{% if step == 2 %}white{% else %}var(--text-muted){% endif %}; display:flex; align-items:center; justify-content:center; font-size:.8rem; font-weight:700; flex-shrink:0;">2</div>
+        <span style="font-size:.85rem; font-weight:600; color:{% if step == 2 %}var(--blue){% else %}var(--text-muted){% endif %}">Set Up Account</span>
+      </div>
     </div>
 
-    <div>
-        <label for="state">State:</label>
-        <select id="state" name="state" required>
-            <option value="">Select State</option>
-            {% for state in states %}
-            <option value="{{ state.id }}">{{ state.name }}</option>
+    {% if step == 1 %}
+    <!-- STEP 1: Check registration number -->
+    <form method="post" novalidate>
+      {% csrf_token %}
+      <input type="hidden" name="step" value="1">
+
+      <div class="form-group">
+        <label for="registration_number">
+          <i class="fas fa-id-card" style="color:var(--blue); margin-right:.35rem"></i>
+          Registration Number
+        </label>
+        <input
+          type="text"
+          id="registration_number"
+          name="registration_number"
+          placeholder="e.g. T/CS/2024/001"
+          autofocus
+          required
+          style="text-transform:uppercase"
+        >
+        <div class="form-hint">
+          Enter the registration number issued by the university. Your details will be verified against our student records.
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top:1rem">
+        <i class="fas fa-search"></i> Verify & Continue
+      </button>
+    </form>
+
+    {% elif step == 2 %}
+    <!-- STEP 2: Complete registration -->
+    <form method="post" novalidate>
+      {% csrf_token %}
+      <input type="hidden" name="step" value="2">
+      <input type="hidden" name="registration_number" value="{{ registration_number }}">
+
+      <!-- Pre-filled from college data -->
+      <div style="background:var(--blue-light); border:1px solid var(--border); border-radius:var(--radius); padding:1rem; margin-bottom:1.5rem;">
+        <div style="font-size:.8rem; font-weight:700; color:var(--blue); text-transform:uppercase; letter-spacing:.06em; margin-bottom:.6rem;">
+          <i class="fas fa-check-circle"></i> Identity Verified
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:.4rem; font-size:.875rem;">
+          <div><span style="color:var(--text-muted)">Name:</span> <strong>{{ first_name }} {{ last_name }}</strong></div>
+          <div><span style="color:var(--text-muted)">Reg No:</span> <strong>{{ registration_number }}</strong></div>
+          {% if gender %}<div><span style="color:var(--text-muted)">Gender:</span> <strong>{{ gender|capfirst }}</strong></div>{% endif %}
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">
+          <i class="fas fa-envelope" style="color:var(--blue); margin-right:.35rem"></i>
+          Email Address
+        </label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          value="{{ suggested_email }}"
+          placeholder="your.email@example.com"
+          required
+        >
+        <div class="form-hint">Used for vote notifications and account recovery</div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+        <div class="form-group">
+          <label for="password">
+            <i class="fas fa-lock" style="color:var(--blue); margin-right:.35rem"></i>
+            Password
+          </label>
+          <input type="password" id="password" name="password" placeholder="Min. 8 characters" required>
+        </div>
+        <div class="form-group">
+          <label for="password_confirm">Confirm Password</label>
+          <input type="password" id="password_confirm" name="password_confirm" placeholder="Repeat password" required>
+        </div>
+      </div>
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+        <div class="form-group">
+          <label for="state">
+            <i class="fas fa-map-marker-alt" style="color:var(--blue); margin-right:.35rem"></i>
+            State / Dormitory
+          </label>
+          <select id="state" name="state" required>
+            <option value="">— Select state —</option>
+            {% for s in states %}
+            <option value="{{ s.id }}">{{ s.name }}</option>
             {% endfor %}
-        </select>
-    </div>
-
-    <div>
-        <label for="course">Course:</label>
-        <select id="course" name="course" required>
-            <option value="">Select Course</option>
-            {% for course in courses %}
-            <option value="{{ course.id }}" {% if course.id == course_id %}selected{% endif %}>
-                {{ course.name }} ({{ course.code }})
-            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="course">
+            <i class="fas fa-graduation-cap" style="color:var(--blue); margin-right:.35rem"></i>
+            Course
+          </label>
+          <select id="course" name="course" required>
+            <option value="">— Select course —</option>
+            {% for c in courses %}
+            <option value="{{ c.id }}" {% if c.id == course_id %}selected{% endif %}>{{ c.code }}</option>
             {% endfor %}
-        </select>
+          </select>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top:.5rem">
+        <i class="fas fa-user-check"></i> Create My Account
+      </button>
+    </form>
+    {% endif %}
+
+    <div style="text-align:center; margin-top:1.25rem; padding-top:1rem; border-top:1px solid var(--border);">
+      <p style="margin:0; font-size:.875rem; color:var(--text-muted);">
+        Already have an account? <a href="{% url 'core:login' %}" style="font-weight:600">Sign in</a>
+      </p>
     </div>
 
-    <div>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
-    </div>
-
-    <div>
-        <label for="password_confirm">Confirm Password:</label>
-        <input type="password" id="password_confirm" name="password_confirm" required>
-    </div>
-
-    <button type="submit">Complete Registration</button>
-</form>
-{% endif %}
-
-<p>Already have an account? <a href="{% url 'core:login' %}">Login here</a></p>
+  </div>
+</div>
 {% endblock %}

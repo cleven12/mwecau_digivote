@@ -1,25 +1,65 @@
 {% extends 'core/base.html' %}
+{% load static %}
 
-{% block title %}Login - MWECAU Voting{% endblock %}
+{% block title %}Login — MWECAUSO DigiVote{% endblock %}
 
 {% block content %}
-<h2>Login</h2>
+<div class="auth-wrapper">
+  <div class="auth-card">
 
-<form method="post">
-    {% csrf_token %}
-    
-    <div>
-        <label for="registration_number">Registration Number:</label>
-        <input type="text" id="registration_number" name="registration_number" required>
+    <div class="auth-logo">
+      <img src="{% static 'images/mwecau.png' %}" alt="MWECAU Logo">
+      <div class="auth-title">Welcome Back</div>
+      <div class="auth-sub">Sign in to your MWECAUSO DigiVote account</div>
     </div>
 
-    <div>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
+    <form method="post" novalidate>
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label for="registration_number">
+          <i class="fas fa-id-card" style="color:var(--blue); margin-right:.35rem"></i>
+          Registration Number
+        </label>
+        <input
+          type="text"
+          id="registration_number"
+          name="registration_number"
+          placeholder="e.g. T/CS/2024/001"
+          autocomplete="username"
+          autofocus
+          required
+        >
+        <div class="form-hint">Enter the registration number assigned by your institution</div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">
+          <i class="fas fa-lock" style="color:var(--blue); margin-right:.35rem"></i>
+          Password
+        </label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="Your password"
+          autocomplete="current-password"
+          required
+        >
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top:1.5rem">
+        <i class="fas fa-sign-in-alt"></i> Sign In
+      </button>
+    </form>
+
+    <div style="text-align:center; margin-top:1.5rem; padding-top:1.25rem; border-top:1px solid var(--border);">
+      <p style="margin:0; font-size:.875rem; color:var(--text-muted);">
+        Don't have an account yet?
+        <a href="{% url 'core:register' %}" style="font-weight:600">Create one here</a>
+      </p>
     </div>
 
-    <button type="submit">Login</button>
-</form>
-
-<p>Don't have an account? <a href="{% url 'core:register' %}">Register here</a></p>
+  </div>
+</div>
 {% endblock %}
