@@ -185,7 +185,7 @@ class Candidate(models.Model):
     bio = models.TextField(blank=True, help_text="Biography or statement from the candidate")
     platform = models.TextField(blank=True, help_text="Campaign platform or key points")
     image = models.ImageField(upload_to='candidate_images/', null=True, blank=True, help_text="Profile image of the candidate")
-    running_mate = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='running_mate_for', help_text="Running mate (e.g., Vice President candidate)")
+    running_mate = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='running_mate_for', help_text="Running mate (e.g , Vice President candidate)")
     running_mate_bio = models.TextField(blank=True, help_text="Biography of the running mate")
     running_mate_image = models.ImageField(upload_to='candidate_images/', null=True, blank=True, help_text="Profile image of the running mate")
     vote_count = models.PositiveIntegerField(default=0, help_text="Cached count of votes received")

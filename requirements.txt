@@ -6,3 +6,7 @@ celery
 django-celery-beat
 django-celery-results
 djangorestframework-simplejwt
+whitenoise>=6.6.0
+gunicorn>=21.2.0
+psycopg2-binary>=2.9.9
+

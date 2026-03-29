@@ -5,6 +5,9 @@
 .env.local
 .env.*.local
 
+# Markdown files
+*.md
+
 # IDE & Editor
 .vscode
 .idea
@@ -76,6 +79,7 @@ htmlcov/
 *.tmp
 *.temp
 *.bak
+*.zip
 *.swp
 
 # Node (if frontend is included)

@@ -96,7 +96,7 @@ def send_verification_email(user_id):
         send_mail(
             subject=subject,
             message=message,
-            from_email=getattr(settings, 'DEFAULT_FROM_EMAIL', None) or 'no-reply@example.com',
+            from_email=getattr(settings, 'DEFAULT_FROM_EMAIL', None) or 'mwecauictclub@gmail.com',
             recipient_list=[user.email],
             fail_silently=False
         )
@@ -173,7 +173,7 @@ def notify_voters_of_active_election(election_id):
                     send_mail(
                         subject=subject,
                         message=message,
-                        from_email=getattr(settings, 'DEFAULT_FROM_EMAIL', None) or 'no-reply@example.com',
+                        from_email=getattr(settings, 'DEFAULT_FROM_EMAIL', None) or 'mwecauictclub@gmail.com',
                         recipient_list=[user.email],
                         fail_silently=False
                     )
@@ -263,7 +263,7 @@ def send_election_starting_reminder(election_id):
                 send_mail(
                     subject=subject,
                     message=message,
-                    from_email=getattr(settings, 'DEFAULT_FROM_EMAIL', None) or 'no-reply@example.com',
+                    from_email=getattr(settings, 'DEFAULT_FROM_EMAIL', None) or 'mwecauictclub@gmail.com',
                     recipient_list=[user.email],
                     fail_silently=False
                 )
@@ -306,7 +306,7 @@ def send_vote_confirmation_email(user_id, election_id, level_id):
         send_mail(
             subject=subject,
             message=message,
-            from_email=getattr(settings, 'DEFAULT_FROM_EMAIL', None) or 'no-reply@example.com',
+            from_email=getattr(settings, 'DEFAULT_FROM_EMAIL', None) or 'mwecauictclub@gmail.com',
             recipient_list=[user.email],
             fail_silently=False
         )
@@ -377,7 +377,7 @@ def send_non_voters_reminder(election_id):
                 send_mail(
                     subject=subject,
                     message=message,
-                    from_email=getattr(settings, 'DEFAULT_FROM_EMAIL', None) or 'no-reply@example.com',
+                    from_email=getattr(settings, 'DEFAULT_FROM_EMAIL', None) or 'mwecauictclub@gmail.com',
                     recipient_list=[user.email],
                     fail_silently=False
                 )
@@ -428,7 +428,7 @@ def send_custom_election_notification(election_id, custom_message):
                 send_mail(
                     subject=subject,
                     message=message,
-                    from_email=getattr(settings, 'DEFAULT_FROM_EMAIL', None) or 'no-reply@example.com',
+                    from_email=getattr(settings, 'DEFAULT_FROM_EMAIL', None) or 'mwecauictclub@gmail.com',
                     recipient_list=[user.email],
                     fail_silently=False
                 )

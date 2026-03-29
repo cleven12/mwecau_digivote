@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='user',
             name='registration_number',
-            field=models.CharField(help_text='University registration number (e.g., T/XXX/20XX/XXX)', max_length=20, unique=True, validators=[django.core.validators.RegexValidator(message='Registration number must contain only uppercase letters, numbers, or slashes.', regex='^[A-Z0-9/]+$')]),
+            field=models.CharField(help_text='University registration number (e.g , T/XXX/20XX/XXX)', max_length=20, unique=True, validators=[django.core.validators.RegexValidator(message='Registration number must contain only uppercase letters, numbers, or slashes.', regex='^[A-Z0-9/]+$')]),
         ),
     ]

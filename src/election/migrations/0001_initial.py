@@ -82,7 +82,7 @@ class Migration(migrations.Migration):
                 ('vote_count', models.PositiveIntegerField(default=0, help_text='Cached count of votes received')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
-                ('running_mate', models.ForeignKey(blank=True, help_text='Running mate (e.g., Vice President candidate)', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='running_mate_for', to=settings.AUTH_USER_MODEL)),
+                ('running_mate', models.ForeignKey(blank=True, help_text='Running mate (e.g , Vice President candidate)', null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='running_mate_for', to=settings.AUTH_USER_MODEL)),
                 ('user', models.ForeignKey(help_text='The user who is the candidate', on_delete=django.db.models.deletion.CASCADE, related_name='candidacies', to=settings.AUTH_USER_MODEL)),
                 ('election', models.ForeignKey(help_text='The election they are running in', on_delete=django.db.models.deletion.CASCADE, related_name='candidates', to='election.election')),
                 ('position', models.ForeignKey(help_text='The specific position they are running for', on_delete=django.db.models.deletion.CASCADE, related_name='candidates', to='election.position')),

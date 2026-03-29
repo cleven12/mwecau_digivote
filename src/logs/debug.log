@@ -1427,3 +1427,520 @@ INFO 2026-03-29 20:58:38,130 log "GET /profile/edit/ HTTP/1.1" 200 9287
 INFO 2026-03-29 20:58:39,150 log "GET /elections/ HTTP/1.1" 200 3019
 INFO 2026-03-29 20:58:41,331 log "GET /profile/edit/ HTTP/1.1" 200 9287
 INFO 2026-03-29 20:58:46,381 log "GET /dashboard/ HTTP/1.1" 200 7929
+INFO 2026-03-29 21:01:17,609 autoreload /home/cleven/Private/mwecau-ict-github/mwecau_digivote/src/mw_es/settings.py changed, reloading.
+INFO 2026-03-29 21:01:18,476 autoreload Watching for file changes with StatReloader
+INFO 2026-03-29 21:01:59,254 log "GET /dashboard/ HTTP/1.1" 200 7929
+INFO 2026-03-29 21:02:02,189 log "GET /profile/edit/ HTTP/1.1" 200 8063
+INFO 2026-03-29 21:02:33,435 log "GET /profile/edit/ HTTP/1.1" 200 8063
+INFO 2026-03-29 21:02:36,307 log "GET /profile/edit/ HTTP/1.1" 200 8063
+INFO 2026-03-29 21:02:36,818 log "GET /elections/ HTTP/1.1" 200 3019
+INFO 2026-03-29 21:02:37,821 log "GET /dashboard/ HTTP/1.1" 200 7929
+INFO 2026-03-29 21:03:42,294 log "GET /dashboard/ HTTP/1.1" 200 7929
+INFO 2026-03-29 21:03:43,043 log "GET /elections/ HTTP/1.1" 200 3019
+INFO 2026-03-29 21:03:43,909 log "GET /profile/edit/ HTTP/1.1" 200 8063
+INFO 2026-03-29 21:04:26,467 log "GET /elections/ HTTP/1.1" 200 3691
+INFO 2026-03-29 21:04:27,794 log "GET /dashboard/ HTTP/1.1" 200 7929
+INFO 2026-03-29 21:04:29,232 log "GET /elections/ HTTP/1.1" 200 3691
+INFO 2026-03-29 21:04:44,585 log "GET /admin/election/votertoken/ HTTP/1.1" 200 76694
+INFO 2026-03-29 21:04:44,605 log "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-29 21:04:54,775 log "GET /admin/election/votertoken/add/ HTTP/1.1" 200 29988
+INFO 2026-03-29 21:04:54,793 log "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-29 21:05:07,685 log "GET /admin/election/votertoken/ HTTP/1.1" 200 76694
+INFO 2026-03-29 21:05:07,700 log "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-29 21:05:36,119 log "POST /admin/election/votertoken/ HTTP/1.1" 200 19026
+INFO 2026-03-29 21:05:36,136 log "GET /static/admin/js/cancel.js HTTP/1.1" 200 884
+INFO 2026-03-29 21:05:37,491 log "POST /admin/election/votertoken/ HTTP/1.1" 302 0
+INFO 2026-03-29 21:05:37,593 log "GET /admin/election/votertoken/ HTTP/1.1" 200 75396
+INFO 2026-03-29 21:05:37,609 log "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-29 21:05:43,957 log "GET /elections/ HTTP/1.1" 200 3691
+INFO 2026-03-29 21:05:45,440 log "GET /dashboard/ HTTP/1.1" 200 6750
+INFO 2026-03-29 21:05:50,384 log "GET /elections/ HTTP/1.1" 200 3691
+INFO 2026-03-29 21:05:51,616 log "GET /dashboard/ HTTP/1.1" 200 6750
+INFO 2026-03-29 21:05:57,904 log "GET /admin/election/votertoken/add/ HTTP/1.1" 200 29988
+INFO 2026-03-29 21:05:57,921 log "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-29 21:06:14,117 log "POST /admin/election/votertoken/add/ HTTP/1.1" 200 30222
+INFO 2026-03-29 21:06:14,133 log "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-29 21:06:27,341 log "POST /admin/election/votertoken/add/ HTTP/1.1" 302 0
+INFO 2026-03-29 21:06:27,441 log "GET /admin/election/votertoken/ HTTP/1.1" 200 76258
+INFO 2026-03-29 21:06:27,459 log "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-29 21:06:32,687 log "GET /admin/election/votertoken/add/ HTTP/1.1" 200 29988
+INFO 2026-03-29 21:06:32,709 log "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-29 21:06:54,250 log "POST /admin/election/votertoken/add/ HTTP/1.1" 302 0
+INFO 2026-03-29 21:06:54,394 log "GET /admin/election/votertoken/ HTTP/1.1" 200 77002
+INFO 2026-03-29 21:06:54,413 log "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-29 21:06:58,481 log "GET /dashboard/ HTTP/1.1" 200 7927
+INFO 2026-03-29 21:07:01,914 log "GET /elections/1/vote/ HTTP/1.1" 200 15737
+INFO 2026-03-29 21:07:04,858 log "GET /elections/ HTTP/1.1" 200 3691
+INFO 2026-03-29 21:07:12,310 log "GET /elections/ HTTP/1.1" 200 3691
+INFO 2026-03-29 21:07:12,880 log "GET /dashboard/ HTTP/1.1" 200 7927
+INFO 2026-03-29 21:07:16,184 log "GET /elections/ HTTP/1.1" 200 3691
+INFO 2026-03-29 21:07:17,290 log "GET /dashboard/ HTTP/1.1" 200 7927
+INFO 2026-03-29 21:08:02,100 log "GET /elections/ HTTP/1.1" 200 3691
+INFO 2026-03-29 21:08:03,331 log "GET /dashboard/ HTTP/1.1" 200 7927
+INFO 2026-03-29 21:08:05,744 log "GET /elections/1/vote/ HTTP/1.1" 200 15737
+INFO 2026-03-29 21:08:10,864 log "POST /elections/1/vote/submit/ HTTP/1.1" 302 0
+INFO 2026-03-29 21:08:10,882 log "GET /elections/1/vote/ HTTP/1.1" 200 8474
+INFO 2026-03-29 21:08:15,803 log "POST /elections/1/vote/submit/ HTTP/1.1" 302 0
+INFO 2026-03-29 21:08:15,820 log "GET /elections/1/vote/ HTTP/1.1" 200 5519
+INFO 2026-03-29 21:08:19,228 log "GET /profile/edit/ HTTP/1.1" 200 8063
+INFO 2026-03-29 21:08:27,653 log "GET /admin/election/election/ HTTP/1.1" 200 23449
+INFO 2026-03-29 21:08:27,671 log "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-29 21:08:28,627 log "GET /admin/election/election/1/change/ HTTP/1.1" 200 28218
+INFO 2026-03-29 21:08:28,644 log "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-29 21:08:46,436 log "POST /admin/election/election/1/change/ HTTP/1.1" 302 0
+INFO 2026-03-29 21:08:46,472 log "GET /admin/election/election/1/change/ HTTP/1.1" 200 28484
+INFO 2026-03-29 21:08:46,553 log "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-29 21:08:51,466 log "GET /profile/edit/ HTTP/1.1" 200 7787
+INFO 2026-03-29 21:09:11,501 log "GET /dashboard/ HTTP/1.1" 200 7872
+INFO 2026-03-29 21:09:13,924 log "GET /elections/1/results/ HTTP/1.1" 200 47978
+INFO 2026-03-29 21:10:04,925 log "GET /profile/edit/ HTTP/1.1" 200 7787
+INFO 2026-03-29 21:10:14,356 log "GET /elections/ HTTP/1.1" 200 3691
+INFO 2026-03-29 21:10:15,050 log "GET /dashboard/ HTTP/1.1" 200 7872
+INFO 2026-03-29 21:12:24,507 log "GET /admin/core/state/ HTTP/1.1" 200 21568
+INFO 2026-03-29 21:12:24,526 log "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-29 21:12:25,212 log "GET /admin/core/user/ HTTP/1.1" 200 46581
+INFO 2026-03-29 21:12:25,228 log "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-29 21:12:32,128 log "GET /admin/core/user/?q=clara HTTP/1.1" 200 29791
+INFO 2026-03-29 21:12:32,144 log "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-29 21:12:33,408 log "GET /admin/core/user/2/change/?_changelist_filters=q%3Dclara HTTP/1.1" 200 52332
+INFO 2026-03-29 21:12:33,425 log "GET /static/admin/img/icon-deletelink.svg HTTP/1.1" 304 0
+INFO 2026-03-29 21:12:33,426 log "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-29 21:12:39,324 log "POST /admin/core/user/2/change/?_changelist_filters=q%3Dclara HTTP/1.1" 302 0
+INFO 2026-03-29 21:12:39,394 log "GET /admin/core/user/2/change/?_changelist_filters=q%3Dclara HTTP/1.1" 200 52577
+INFO 2026-03-29 21:12:39,456 log "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-29 21:12:47,132 log "GET /dashboard/ HTTP/1.1" 200 8007
+INFO 2026-03-29 21:12:50,497 log "GET /commissioner/ HTTP/1.1" 200 11614
+INFO 2026-03-29 21:13:29,075 log "GET /admin/election/candidate/ HTTP/1.1" 302 0
+INFO 2026-03-29 21:13:29,103 log "GET /admin/login/?next=/admin/election/candidate/ HTTP/1.1" 200 3654
+INFO 2026-03-29 21:13:29,183 log "GET /static/admin/css/base.css HTTP/1.1" 200 23100
+INFO 2026-03-29 21:13:29,194 log "GET /static/admin/css/dark_mode.css HTTP/1.1" 200 3538
+INFO 2026-03-29 21:13:29,195 log "GET /static/admin/css/login.css HTTP/1.1" 200 951
+INFO 2026-03-29 21:13:29,196 log "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2810
+INFO 2026-03-29 21:13:29,197 log "GET /static/admin/js/theme.js HTTP/1.1" 200 1653
+INFO 2026-03-29 21:13:29,197 log "GET /static/admin/css/responsive.css HTTP/1.1" 200 16273
+INFO 2026-03-29 21:13:29,203 log "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+INFO 2026-03-29 21:13:34,923 log "GET /admin/core/collegedata/ HTTP/1.1" 302 0
+INFO 2026-03-29 21:13:34,936 log "GET /admin/login/?next=/admin/core/collegedata/ HTTP/1.1" 200 3650
+INFO 2026-03-29 21:13:38,496 log "GET /admin/ HTTP/1.1" 302 0
+INFO 2026-03-29 21:13:38,513 log "GET /admin/login/?next=/admin/ HTTP/1.1" 200 3616
+INFO 2026-03-29 21:13:45,352 log "GET /commissioner/ HTTP/1.1" 200 11614
+INFO 2026-03-29 21:13:46,221 log "GET /profile/edit/ HTTP/1.1" 200 7922
+INFO 2026-03-29 21:13:47,330 log "GET /elections/ HTTP/1.1" 200 3819
+INFO 2026-03-29 21:13:48,178 log "GET /dashboard/ HTTP/1.1" 200 8007
+INFO 2026-03-29 21:13:51,446 log "GET /commissioner/ HTTP/1.1" 200 11614
+INFO 2026-03-29 21:13:55,539 log "GET /admin/election/election/ HTTP/1.1" 302 0
+INFO 2026-03-29 21:13:55,552 log "GET /admin/login/?next=/admin/election/election/ HTTP/1.1" 200 3652
+INFO 2026-03-29 21:14:28,518 log "POST /admin/core/user/2/change/?_changelist_filters=q%3Dclara HTTP/1.1" 302 0
+INFO 2026-03-29 21:14:28,572 log "GET /admin/core/user/2/change/?_changelist_filters=q%3Dclara HTTP/1.1" 200 52577
+INFO 2026-03-29 21:14:28,634 log "GET /admin/jsi18n/ HTTP/1.1" 200 3342
+INFO 2026-03-29 21:14:33,832 log "GET /commissioner/ HTTP/1.1" 302 0
+INFO 2026-03-29 21:14:33,852 log "GET / HTTP/1.1" 200 9320
+INFO 2026-03-29 21:14:38,830 log "GET /dashboard/ HTTP/1.1" 200 7884
+INFO 2026-03-29 21:14:43,377 log "GET /elections/ HTTP/1.1" 200 3691
+INFO 2026-03-29 21:14:46,915 log "GET /dashboard/ HTTP/1.1" 200 7884
+INFO 2026-03-29 21:15:08,373 log "GET /dashboard/ HTTP/1.1" 200 7884
+INFO 2026-03-29 21:15:09,285 log "GET /dashboard/ HTTP/1.1" 200 7884
+INFO 2026-03-29 21:15:09,588 log "GET /dashboard/ HTTP/1.1" 200 7884
+INFO 2026-03-29 21:15:09,782 log "GET /dashboard/ HTTP/1.1" 200 7884
+INFO 2026-03-29 21:15:09,969 log "GET /dashboard/ HTTP/1.1" 200 7884
+INFO 2026-03-29 21:15:12,229 log "GET /elections/ HTTP/1.1" 200 3691
+INFO 2026-03-29 21:15:13,065 log "GET /dashboard/ HTTP/1.1" 200 7884
+INFO 2026-03-29 21:15:14,658 log "GET /elections/1/results/ HTTP/1.1" 200 47978
+INFO 2026-03-29 21:15:18,634 log "GET / HTTP/1.1" 200 9040
+INFO 2026-03-29 21:15:23,508 log "GET /elections/ HTTP/1.1" 200 3691
+INFO 2026-03-29 21:15:23,990 log "GET /dashboard/ HTTP/1.1" 200 7884
+INFO 2026-03-29 21:15:30,921 log "GET /profile/edit/ HTTP/1.1" 200 7799
+INFO 2026-03-29 21:15:34,327 log "POST /profile/edit/ HTTP/1.1" 200 8053
+INFO 2026-03-29 21:15:37,889 log "GET / HTTP/1.1" 200 9040
+INFO 2026-03-29 21:15:39,799 log "GET /dashboard/ HTTP/1.1" 200 7884
+INFO 2026-03-29 21:17:00,298 log "GET / HTTP/1.1" 200 9040
+INFO 2026-03-29 21:17:05,228 log "GET /observer HTTP/1.1" 301 0
+INFO 2026-03-29 21:17:05,262 log "GET /observer/ HTTP/1.1" 200 16894
+INFO 2026-03-29 21:17:40,496 log "GET /profile/edit/ HTTP/1.1" 200 7799
+INFO 2026-03-29 21:17:43,859 log "GET /elections/ HTTP/1.1" 200 3691
+INFO 2026-03-29 21:17:44,710 log "GET /dashboard/ HTTP/1.1" 200 7884
+INFO 2026-03-29 21:17:48,813 log "GET /elections/ HTTP/1.1" 200 3691
+INFO 2026-03-29 21:17:49,738 log "GET /dashboard/ HTTP/1.1" 200 7884
+INFO 2026-03-29 21:17:54,213 log "GET / HTTP/1.1" 200 9040
+INFO 2026-03-29 21:21:15,679 log "GET /dashboard/ HTTP/1.1" 200 7884
+INFO 2026-03-29 21:21:17,341 log "GET /elections/ HTTP/1.1" 200 3691
+ERROR 2026-03-29 21:25:02,484 log Internal Server Error: /
+Traceback (most recent call last):
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/src/core/views_ui.py", line 19, in home
+    return render(request, 'core/landing.html')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 174, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 1052, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 1052, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/defaulttags.py", line 511, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/urls/base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/urls/resolvers.py", line 842, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'contributors' not found. 'contributors' is not a valid view function or pattern name.
+ERROR 2026-03-29 21:25:02,488 log "GET / HTTP/1.1" 500 146630
+ERROR 2026-03-29 21:25:34,708 log Internal Server Error: /
+Traceback (most recent call last):
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/src/core/views_ui.py", line 19, in home
+    return render(request, 'core/landing.html')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 174, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 1052, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 1052, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/defaulttags.py", line 511, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/urls/base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/urls/resolvers.py", line 842, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'contributors' not found. 'contributors' is not a valid view function or pattern name.
+ERROR 2026-03-29 21:25:34,710 log "GET / HTTP/1.1" 500 146799
+ERROR 2026-03-29 21:25:52,511 log Internal Server Error: /
+Traceback (most recent call last):
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/src/core/views_ui.py", line 19, in home
+    return render(request, 'core/landing.html')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 174, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 1052, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 1052, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/defaulttags.py", line 511, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/urls/base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/urls/resolvers.py", line 842, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'contributors' not found. 'contributors' is not a valid view function or pattern name.
+ERROR 2026-03-29 21:25:52,513 log "GET / HTTP/1.1" 500 146769
+INFO 2026-03-29 21:26:08,703 log "GET / HTTP/1.1" 200 9195
+INFO 2026-03-29 21:26:16,963 log "GET /dashboard/ HTTP/1.1" 200 8039
+INFO 2026-03-29 21:26:19,708 log "GET /elections/ HTTP/1.1" 200 3846
+INFO 2026-03-29 21:26:20,772 log "GET /profile/edit/ HTTP/1.1" 200 7954
+INFO 2026-03-29 21:26:23,437 log "GET /dashboard/ HTTP/1.1" 200 8039
+INFO 2026-03-29 21:26:27,097 log "GET /logout/ HTTP/1.1" 302 0
+INFO 2026-03-29 21:26:27,108 log "GET /login/ HTTP/1.1" 200 4904
+INFO 2026-03-29 21:26:33,813 log "POST /login/ HTTP/1.1" 200 4910
+INFO 2026-03-29 21:26:37,125 log "POST /login/ HTTP/1.1" 302 0
+INFO 2026-03-29 21:26:37,137 log "GET /dashboard/ HTTP/1.1" 200 7633
+INFO 2026-03-29 21:26:41,144 log "GET /elections/1/vote/ HTTP/1.1" 302 0
+INFO 2026-03-29 21:26:41,177 log "GET /elections/ HTTP/1.1" 200 4272
+INFO 2026-03-29 21:26:43,318 log "GET /elections/ HTTP/1.1" 200 3975
+INFO 2026-03-29 21:26:44,642 log "GET /profile/edit/ HTTP/1.1" 200 8054
+INFO 2026-03-29 21:26:45,569 log "GET /commissioner/ HTTP/1.1" 200 11770
+INFO 2026-03-29 21:26:49,725 log "GET /commissioner/ HTTP/1.1" 200 11770
+INFO 2026-03-29 21:26:51,964 log "GET /commissioner/ HTTP/1.1" 200 11770
+INFO 2026-03-29 21:26:52,545 log "GET /commissioner/ HTTP/1.1" 200 11770
+INFO 2026-03-29 21:26:52,758 log "GET /commissioner/ HTTP/1.1" 200 11770
+INFO 2026-03-29 21:26:53,078 log "GET /commissioner/ HTTP/1.1" 200 11770
+INFO 2026-03-29 21:26:53,390 log "GET /commissioner/ HTTP/1.1" 200 11770
+INFO 2026-03-29 21:26:53,567 log "GET /commissioner/ HTTP/1.1" 200 11770
+INFO 2026-03-29 21:26:53,748 log "GET /commissioner/ HTTP/1.1" 200 11770
+INFO 2026-03-29 21:26:53,961 log "GET /commissioner/ HTTP/1.1" 200 11770
+INFO 2026-03-29 21:26:54,130 log "GET /commissioner/ HTTP/1.1" 200 11770
+INFO 2026-03-29 21:26:54,365 log "GET /commissioner/ HTTP/1.1" 200 11770
+INFO 2026-03-29 21:26:54,954 log "GET /profile/edit/ HTTP/1.1" 200 8054
+INFO 2026-03-29 21:26:55,876 log "GET /elections/ HTTP/1.1" 200 3975
+INFO 2026-03-29 21:26:56,937 log "GET /dashboard/ HTTP/1.1" 200 7370
+INFO 2026-03-29 21:27:03,332 log "GET /elections/ HTTP/1.1" 200 3975
+INFO 2026-03-29 21:27:05,762 log "GET /commissioner/ HTTP/1.1" 200 11770
+INFO 2026-03-29 21:27:06,164 log "GET /profile/edit/ HTTP/1.1" 200 8054
+INFO 2026-03-29 21:27:06,713 log "GET /elections/ HTTP/1.1" 200 3975
+INFO 2026-03-29 21:27:07,289 log "GET /dashboard/ HTTP/1.1" 200 7370
+INFO 2026-03-29 21:27:14,585 log "GET / HTTP/1.1" 200 9324
+INFO 2026-03-29 21:27:24,685 log "GET /elections/ HTTP/1.1" 200 3975
+ERROR 2026-03-29 21:29:42,634 log Internal Server Error: /
+Traceback (most recent call last):
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/src/core/views_ui.py", line 19, in home
+    return render(request, 'core/landing.html')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 174, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 1052, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/loader_tags.py", line 160, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 1052, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/defaulttags.py", line 511, in render
+    url = reverse(view_name, args=args, kwargs=kwargs, current_app=current_app)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/urls/base.py", line 98, in reverse
+    resolved_url = resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/urls/resolvers.py", line 842, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'contributors' not found. 'contributors' is not a valid view function or pattern name.
+ERROR 2026-03-29 21:29:42,635 log "GET / HTTP/1.1" 500 146696
+ERROR 2026-03-29 21:30:24,969 log Internal Server Error: /
+Traceback (most recent call last):
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 577, in parse
+    compile_func = self.tags[command]
+                   ~~~~~~~~~^^^^^^^^^
+KeyError: 'comment%'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/core/handlers/base.py", line 198, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/src/core/views_ui.py", line 19, in home
+    return render(request, 'core/landing.html')
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/backends/django.py", line 107, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 174, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 166, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 1091, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 1052, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/loader_tags.py", line 135, in render
+    compiled_parent = self.get_parent(context)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/loader_tags.py", line 132, in get_parent
+    return self.find_template(parent, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/loader_tags.py", line 110, in find_template
+    template, origin = context.template.engine.find_template(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 157, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 199, in compile_nodelist
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 579, in parse
+    self.invalid_block_tag(token, command, parse_until)
+  File "/home/cleven/Private/mwecau-ict-github/mwecau_digivote/venv/lib/python3.12/site-packages/django/template/base.py", line 644, in invalid_block_tag
+    raise self.error(
+django.template.exceptions.TemplateSyntaxError: Template: /home/cleven/Private/mwecau-ict-github/mwecau_digivote/src/templates/core/base.html, Invalid block tag on line 130: 'comment%'. Did you forget to register or load this tag?
+ERROR 2026-03-29 21:30:24,971 log "GET / HTTP/1.1" 500 187647
+INFO 2026-03-29 21:30:35,854 log "GET / HTTP/1.1" 200 9266
+INFO 2026-03-29 21:30:35,868 log "GET /static/css/style.css HTTP/1.1" 304 0
+INFO 2026-03-29 21:30:35,869 log "GET /static/images/mwecau.png HTTP/1.1" 304 0
+INFO 2026-03-29 21:30:41,537 log "GET /logout/ HTTP/1.1" 302 0
+INFO 2026-03-29 21:30:41,545 log "GET /login/ HTTP/1.1" 200 4904
+INFO 2026-03-29 21:30:44,789 log "GET / HTTP/1.1" 200 9296
+INFO 2026-03-29 21:33:02,291 autoreload /home/cleven/Private/mwecau-ict-github/mwecau_digivote/src/core/urls.py changed, reloading.
+INFO 2026-03-29 21:33:03,647 autoreload Watching for file changes with StatReloader
+INFO 2026-03-29 21:33:39,189 autoreload /home/cleven/Private/mwecau-ict-github/mwecau_digivote/src/core/urls.py changed, reloading.
+INFO 2026-03-29 21:33:39,790 autoreload Watching for file changes with StatReloader
+INFO 2026-03-29 21:37:48,428 autoreload Watching for file changes with StatReloader
+INFO 2026-03-29 21:40:44,672 autoreload /home/cleven/Private/mwecau-ict-github/mwecau_digivote/src/core/views_ui.py changed, reloading.
+INFO 2026-03-29 21:40:45,295 autoreload Watching for file changes with StatReloader
+INFO 2026-03-29 21:41:33,361 autoreload /home/cleven/Private/mwecau-ict-github/mwecau_digivote/src/core/urls.py changed, reloading.
+INFO 2026-03-29 21:41:34,028 autoreload Watching for file changes with StatReloader
+INFO 2026-03-29 21:41:40,924 log "GET / HTTP/1.1" 200 9340
+INFO 2026-03-29 21:41:44,996 log "GET /contributors/ HTTP/1.1" 200 19107
+INFO 2026-03-29 21:42:15,925 log "GET /contributors/ HTTP/1.1" 200 19107
+WARNING 2026-03-29 21:42:27,846 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-29 21:42:27,848 log "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 7264
+INFO 2026-03-29 21:42:40,246 log "GET /contributors/ HTTP/1.1" 200 19107
+WARNING 2026-03-29 21:42:40,468 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-29 21:42:40,468 log "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 7264
+INFO 2026-03-29 21:44:50,849 log "GET /contributors/ HTTP/1.1" 200 19107
+WARNING 2026-03-29 21:44:51,067 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-29 21:44:51,068 log "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 7264
+INFO 2026-03-29 21:49:07,774 log "GET /contributors/ HTTP/1.1" 200 19107
+WARNING 2026-03-29 21:49:07,976 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-29 21:49:07,977 log "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 7264
+INFO 2026-03-29 21:49:23,708 log "GET / HTTP/1.1" 200 9340
+WARNING 2026-03-29 21:49:23,913 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-29 21:49:23,914 log "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 7264
+INFO 2026-03-29 21:49:26,845 log "GET /contributors/ HTTP/1.1" 200 19107
+WARNING 2026-03-29 21:49:27,047 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-29 21:49:27,048 log "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 7264
+INFO 2026-03-29 21:50:58,187 log "GET /contributors/ HTTP/1.1" 200 19642
+WARNING 2026-03-29 21:50:58,408 log Not Found: /.well-known/appspecific/com.chrome.devtools.json
+WARNING 2026-03-29 21:50:58,408 log "GET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1" 404 7264
+INFO 2026-03-29 21:54:22,419 autoreload /home/cleven/Private/mwecau-ict-github/mwecau_digivote/src/election/migrations/0002_seed_election_and_candidates.py changed, reloading.
+INFO 2026-03-29 21:54:23,037 autoreload Watching for file changes with StatReloader
+INFO 2026-03-29 21:54:28,479 autoreload /home/cleven/Private/mwecau-ict-github/mwecau_digivote/src/election/migrations/0002_seed_election_and_candidates.py changed, reloading.
+INFO 2026-03-29 21:54:29,035 autoreload Watching for file changes with StatReloader
+INFO 2026-03-29 21:54:36,543 autoreload /home/cleven/Private/mwecau-ict-github/mwecau_digivote/src/election/tasks.py changed, reloading.
+INFO 2026-03-29 21:54:37,134 autoreload Watching for file changes with StatReloader
+INFO 2026-03-29 21:54:42,542 autoreload /home/cleven/Private/mwecau-ict-github/mwecau_digivote/src/core/tasks.py changed, reloading.
+INFO 2026-03-29 21:54:43,105 autoreload Watching for file changes with StatReloader
+INFO 2026-03-29 21:54:49,530 autoreload /home/cleven/Private/mwecau-ict-github/mwecau_digivote/src/core/tasks.py changed, reloading.
+INFO 2026-03-29 21:54:50,106 autoreload Watching for file changes with StatReloader
+INFO 2026-03-29 22:53:28,091 autoreload /home/cleven/Private/mwecau-ict-github/mwecau_digivote/src/core/migrations/0001_initial.py changed, reloading.
+INFO 2026-03-29 22:53:32,793 autoreload Watching for file changes with StatReloader
+INFO 2026-03-29 22:57:03,046 autoreload /home/cleven/Private/mwecau-ict-github/mwecau_digivote/src/mw_es/settings.py changed, reloading.
+INFO 2026-03-29 22:57:04,040 autoreload Watching for file changes with StatReloader
+INFO 2026-03-29 23:05:20,783 autoreload /home/cleven/Private/mwecau-ict-github/mwecau_digivote/src/mw_es/settings.py changed, reloading.
+INFO 2026-03-29 23:05:24,904 autoreload Watching for file changes with StatReloader
+INFO 2026-03-29 23:07:25,759 autoreload Watching for file changes with StatReloader
+INFO 2026-03-29 23:10:43,796 autoreload Watching for file changes with StatReloader
+INFO 2026-03-29 23:11:43,040 autoreload Watching for file changes with StatReloader
+INFO 2026-03-30 00:09:38,266 autoreload /home/cleven/Private/mwecau-ict-github/mwecau_digivote/src/mw_es/settings.py changed, reloading.
