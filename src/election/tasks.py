@@ -8,185 +8,100 @@ from .models import Election, ElectionLevel, Position, VoterToken, Vote
 import uuid
 
 
-@shared_task(queue='email_queue')
-def send_verification_email(user_id):
-    """
-    Send verification email to user when they are verified.
-    Generates tokens for all active elections they're eligible for.
-    """
-    try:
-        user = User.objects.get(id=user_id)
-        
-        if not user.email:
-            print(f"User {user_id} has no email, skipping verification email")
-            return
-        
-        if not user.is_verified:
-            print(f"User {user_id} is not verified, skipping token generation")
-            return
-        
-        # Get all active elections
-        active_elections = Election.objects.filter(is_active=True, has_ended=False)
-        
-        if not active_elections.exists():
-            # No active elections, send simple verification email
-            subject = "MWECAU DigiVote - Registration Confirmed"
-            message = (
-                f"Dear {user.get_full_name()},\n\n"
-                f"Welcome to the MWECAU DigiVote!\n\n"
-                f"Your account has been verified. You are now registered as a voter.\n"
-                f"Your Voter ID: {user.voter_id}\n\n"
-                f"You will receive notification emails when new elections are activated.\n\n"
-                f"Regards,\nMWECAU Election Commission"
-            )
-        else:
-            # Generate tokens for active elections and include in email
-            tokens_by_election = {}
-            for election in active_elections:
-                tokens = []
-                for level in election.levels.select_related('course', 'state').all():
-                    eligible = _check_eligibility(user, level)
-                    if eligible:
-                        expiry = election.end_date
-                        token, created = VoterToken.objects.get_or_create(
-                            user=user,
-                            election=election,
-                            election_level=level,
-                            defaults={
-                                'token': uuid.uuid4(),
-                                'expiry_date': expiry
-                            }
-                        )
-                        if not token.is_used:
-                            tokens.append((level.name, str(token.token)))
-                
-                if tokens:
-                    tokens_by_election[election.title] = tokens
-            
-            if tokens_by_election:
-                tokens_text = ""
-                for election_title, tokens in tokens_by_election.items():
-                    tokens_text += f"\n{election_title}:\n"
-                    for level_name, token in tokens:
-                        tokens_text += f"  - {level_name}: {token}\n"
-                
-                subject = "MWECAU DigiVote - Registration Confirmed"
-                message = (
-                    f"Dear {user.get_full_name()},\n\n"
-                    f"Welcome to the MWECAU DigiVote!\n\n"
-                    f"Your account has been verified. You are now registered as a voter.\n"
-                    f"Your Voter ID: {user.voter_id}\n\n"
-                    f"You have been assigned to the following active elections:\n"
-                    f"{tokens_text}\n"
-                    f"Keep your voter tokens secure and do not share them.\n"
-                    f"Vote at the election platform during the voting period.\n\n"
-                    f"Regards,\nMWECAU Election Commission"
-                )
-            else:
-                subject = "MWECAU DigiVote - Registration Confirmed"
-                message = (
-                    f"Dear {user.get_full_name()},\n\n"
-                    f"Welcome to the MWECAU DigiVote!\n\n"
-                    f"Your account has been verified. You are now registered as a voter.\n"
-                    f"Your Voter ID: {user.voter_id}\n\n"
-                    f"You will receive notification emails when you become eligible for elections.\n\n"
-                    f"Regards,\nMWECAU Election Commission"
-                )
-        
-        send_mail(
-            subject=subject,
-            message=message,
-            from_email=getattr(settings, 'DEFAULT_FROM_EMAIL', None) or 'mwecauictclub@gmail.com',
-            recipient_list=[user.email],
-            fail_silently=False
-        )
-        print(f"Verification email sent to {user.email}")
-    except User.DoesNotExist:
-        print(f"User {user_id} not found")
-    except Exception as e:
-        print(f"Error sending verification email: {e}")
-
 
 @shared_task(queue='email_queue')
 def notify_voters_of_active_election(election_id):
     """
-    Send email notifications with per-level VoterTokens when an election is activated.
-    Creates tokens for all eligible voters and sends them via email.
+    Dispatcher: chunks all verified voters into batches of 50 and enqueues
+    a separate task per batch. This prevents a single monolithic task from
+    timing out when notifying thousands of voters.
     """
     try:
         election = Election.objects.get(id=election_id)
-        
         if not election.is_active:
             print(f"Election {election_id} is not active, skipping notifications")
             return
 
-        # Get all verified voters
-        voters = User.objects.filter(is_verified=True, voter_id__isnull=False)
-        
-        print(f"notify_voters_of_active_election: election={election.id} voters_count={voters.count()}")
+        voter_ids = list(
+            User.objects.filter(is_verified=True, voter_id__isnull=False)
+            .values_list('id', flat=True)
+        )
+
+        batch_size = 50
+        dispatched = 0
+        for i in range(0, len(voter_ids), batch_size):
+            batch = voter_ids[i:i + batch_size]
+            notify_voter_batch.delay(election_id, batch)
+            dispatched += 1
+
+        print(f"Election {election_id}: dispatched {dispatched} batches for {len(voter_ids)} voters")
+    except Election.DoesNotExist:
+        print(f"Election {election_id} not found")
+    except Exception as e:
+        print(f"Error in notify_voters_of_active_election dispatcher: {e}")
+
+
+@shared_task(queue='email_queue', bind=True, max_retries=3)
+def notify_voter_batch(self, election_id, voter_ids):
+    """
+    Sends election activation emails to a batch of voters.
+    Retries the entire batch up to 3 times on failure (60s back-off).
+    """
+    try:
+        election = Election.objects.get(id=election_id)
+        users = User.objects.filter(id__in=voter_ids).select_related('course', 'state')
 
         successful = 0
         failed = 0
-        
-        for user in voters:
+
+        for user in users:
+            if not user.email:
+                continue
+
             tokens = []
-            eligible_levels = []
-            
             for level in election.levels.select_related('course', 'state').all():
-                eligible = _check_eligibility(user, level)
-                eligible_levels.append((level, eligible))
-                
-                if eligible:
-                    expiry = election.end_date
-                    token, created = VoterToken.objects.get_or_create(
+                if _check_eligibility(user, level):
+                    token, _ = VoterToken.objects.get_or_create(
                         user=user,
                         election=election,
                         election_level=level,
-                        defaults={
-                            'token': uuid.uuid4(),
-                            'expiry_date': expiry
-                        }
+                        defaults={'token': uuid.uuid4(), 'expiry_date': election.end_date}
                     )
                     if not token.is_used:
                         tokens.append((level.name, str(token.token)))
 
-            if not user.email:
+            if not tokens:
                 continue
 
-            if tokens:
-                # Send email with tokens
-                subject = f"MWECAU DigiVote - New Election: {election.title}"
-                message = (
-                    f"Dear {user.get_full_name()},\n\n"
-                    f"A new election is now active: {election.title}\n"
-                    f"Description: {election.description or 'No description provided'}\n"
-                    f"Start Date: {election.start_date}\n"
-                    f"End Date: {election.end_date}\n\n"
-                    f"Your Voter Tokens:\n" +
-                    "\n".join([f"- {level_name}: {token}" for level_name, token in tokens]) +
-                    f"\n\nVote at the election platform during the voting period.\n"
-                    f"Note: Keep your voter tokens secure and do not share them.\n"
-                    f"Each token can only be used once.\n\n"
-                    f"Regards,\nMWECAU Election Commission"
+            subject = f"MWECAU DigiVote - New Election: {election.title}"
+            message = (
+                f"Dear {user.get_full_name()},\n\n"
+                f"A new election is now active: {election.title}\n"
+                f"Description: {election.description or 'No description provided'}\n"
+                f"Start Date: {election.start_date}\n"
+                f"End Date: {election.end_date}\n\n"
+                f"Your Voter Tokens:\n" +
+                "\n".join([f"- {level_name}: {token}" for level_name, token in tokens]) +
+                f"\n\nVote at the election platform during the voting period.\n"
+                f"Keep your voter tokens secure — each can only be used once.\n\n"
+                f"Regards,\nMWECAU Election Commission"
+            )
+            try:
+                send_mail(
+                    subject=subject,
+                    message=message,
+                    from_email=getattr(settings, 'DEFAULT_FROM_EMAIL', None) or 'mwecauictclub@gmail.com',
+                    recipient_list=[user.email],
+                    fail_silently=False,
                 )
-                try:
-                    send_mail(
-                        subject=subject,
-                        message=message,
-                        from_email=getattr(settings, 'DEFAULT_FROM_EMAIL', None) or 'mwecauictclub@gmail.com',
-                        recipient_list=[user.email],
-                        fail_silently=False
-                    )
-                    successful += 1
-                except Exception as e:
-                    print(f"Failed to send election notification to {user.email}: {str(e)}")
-                    failed += 1
-        
-        print(f"Election notification complete: {successful} sent, {failed} failed")
-    except Election.DoesNotExist:
-        print(f"Election {election_id} not found")
-    except Exception as e:
-        print(f"Error in notify_voters_of_active_election: {e}")
+                successful += 1
+            except Exception as e:
+                print(f"Failed to send to {user.email}: {e}")
+                failed += 1
+
+        print(f"Batch done for election {election_id}: {successful} sent, {failed} failed")
+    except Exception as exc:
+        raise self.retry(exc=exc, countdown=60)
 
 
 @shared_task(queue='email_queue')

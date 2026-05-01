@@ -122,11 +122,6 @@ class Election(models.Model):
             
         self.is_active = True
         self.save(update_fields=['is_active'])
-        
-        if notify_voters:
-            from .tasks import notify_voters_of_active_election
-            notify_voters_of_active_election(self.id)
-            
         return True
         
     def deactivate(self):

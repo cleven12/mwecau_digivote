@@ -1,6 +1,10 @@
 # core/urls.py
 from django.urls import path
-from .views_ui import home, login_view, logout_view, register_view, dashboard_view, profile_edit_view, contributors_view
+from .views_ui import (
+    home, login_view, logout_view, register_view, dashboard_view, profile_edit_view,
+    contributors_view, password_reset_request_view, password_reset_confirm_view,
+    password_reset_complete_view,
+)
 from .views_commissioner import (
     commissioner_dashboard,
     dashboard_stats_api,
@@ -27,6 +31,9 @@ urlpatterns = [
     path('register/', register_view, name='register'),
     path('dashboard/', dashboard_view, name='dashboard'),
     path('profile/edit/', profile_edit_view, name='profile_edit'),
+    path('password-reset/', password_reset_request_view, name='password_reset'),
+    path('password-reset/confirm/<uidb64>/<token>/', password_reset_confirm_view, name='password_reset_confirm'),
+    path('password-reset/complete/', password_reset_complete_view, name='password_reset_complete'),
     
     # Commissioner Dashboard
     path('commissioner/', commissioner_dashboard, name='commissioner_dashboard'),

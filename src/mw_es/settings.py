@@ -25,6 +25,13 @@ CSRF_COOKIE_SECURE = config('CSRF_COOKIE_SECURE', default='False').lower() == 't
 SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_HTTPONLY = True
 X_FRAME_OPTIONS = 'DENY'
+SECURE_CONTENT_TYPE_NOSNIFF = True
+REFERRER_POLICY = 'strict-origin-when-cross-origin'
+SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default='False').lower() == 'true'
+SECURE_HSTS_SECONDS = int(config('SECURE_HSTS_SECONDS', default='0'))
+SECURE_HSTS_INCLUDE_SUBDOMAINS = config('SECURE_HSTS_INCLUDE_SUBDOMAINS', default='False').lower() == 'true'
+SECURE_HSTS_PRELOAD = config('SECURE_HSTS_PRELOAD', default='False').lower() == 'true'
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # ============================================================
 # APPLICATIONS
@@ -85,17 +92,38 @@ TEMPLATES = [
 WSGI_APPLICATION = 'mw_es.wsgi.application'
 
 # ============================================================
+# CACHE (Redis)
+# ============================================================
+CACHES = {
+    'default': {
+        'BACKEND': 'django_redis.cache.RedisCache',
+        'LOCATION': config('REDIS_URL', default='redis://127.0.0.1:6379/1'),
+        'OPTIONS': {
+            'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+            'SOCKET_CONNECT_TIMEOUT': 5,
+            'SOCKET_TIMEOUT': 5,
+            'CONNECTION_POOL_KWARGS': {'max_connections': 100},
+        },
+        'KEY_PREFIX': 'digivote',
+        'TIMEOUT': 300,
+    }
+}
+SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+SESSION_CACHE_ALIAS = 'default'
+
+# ============================================================
 # DATABASE
 # ============================================================
 DATABASES = {
     'default': {
-        'ENGINE': config('DB_ENGINE', default='django.db.backends.postgresql'),
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST', default='localhost'),
-        'PORT': config('DB_PORT', default='5432'),
-        'CONN_MAX_AGE': 60,
+        'ENGINE': config('DB_ENGINE', default='django.db.backends.sqlite3'),
+        'NAME': config('DB_NAME', default= BASE_DIR / 'election.db'),
+        # 'USER': config('DB_USER'),
+        # 'PASSWORD': config('DB_PASSWORD'),
+        # 'HOST': config('DB_HOST', default='localhost'),
+        # 'PORT': config('DB_PORT', default='5432'),
+        # 'CONN_MAX_AGE': 600,
+        # 'OPTIONS': {'connect_timeout': 10},
     }
 }
 
@@ -119,6 +147,7 @@ AUTH_PASSWORD_VALIDATORS = [
 LOGIN_URL = '/login/'
 LOGOUT_REDIRECT_URL = '/login/'
 LOGIN_REDIRECT_URL = '/dashboard/'
+PASSWORD_RESET_TIMEOUT = 3600  # 1 hour
 
 # ============================================================
 # STATIC & MEDIA
@@ -169,6 +198,15 @@ REST_FRAMEWORK = {
     'DEFAULT_PARSER_CLASSES': [
         'rest_framework.parsers.JSONParser',
     ],
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '60/minute',
+        'user': '300/minute',
+        'vote_submit': '10/minute',
+    },
 }
 
 # ============================================================
@@ -191,9 +229,8 @@ SIMPLE_JWT = {
 # ============================================================
 # CELERY
 # ============================================================
-CELERY_BROKER_URL = config('CELERY_BROKER_URL', default='django://')
-CELERY_RESULT_BACKEND = config('CELERY_RESULT_BACKEND', default='django-db')
-CELERY_CACHE_BACKEND = 'django-cache'
+CELERY_BROKER_URL = config('CELERY_BROKER_URL', default='redis://127.0.0.1:6379/0')
+CELERY_RESULT_BACKEND = config('CELERY_RESULT_BACKEND', default='redis://127.0.0.1:6379/0')
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
@@ -201,7 +238,12 @@ CELERY_TIMEZONE = 'Africa/Nairobi'
 CELERY_TASK_DEFAULT_QUEUE = 'email_queue'
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
-CELERY_TASK_ALWAYS_EAGER = config('CELERY_ALWAYS_EAGER', default='True').lower() == 'true'
+CELERY_TASK_SOFT_TIME_LIMIT = 25 * 60
+CELERY_TASK_ALWAYS_EAGER = config('CELERY_ALWAYS_EAGER', default='False').lower() == 'true'
+CELERY_WORKER_PREFETCH_MULTIPLIER = 1
+CELERY_TASK_ACKS_LATE = True
+CELERY_WORKER_MAX_TASKS_PER_CHILD = 200
+CELERY_RESULT_EXPIRES = 3600 * 24
 
 # ============================================================
 # SITE

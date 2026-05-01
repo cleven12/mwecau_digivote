@@ -21,8 +21,12 @@
         </div>
       </a>
 
+      <button class="nav-mobile-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
+        <i class="fas fa-bars" id="navIcon"></i>
+      </button>
+
       {% if user.is_authenticated %}
-      <nav aria-label="Main navigation">
+      <nav aria-label="Main navigation" id="mainNav">
         <a href="{% url 'core:dashboard' %}" class="nav-link">
           <i class="fas fa-th-large"></i><span>Dashboard</span>
         </a>
@@ -45,7 +49,7 @@
         </span>
       </nav>
       {% else %}
-      <nav aria-label="Main navigation">
+      <nav aria-label="Main navigation" id="mainNav">
         <a href="{% url 'core:home' %}" class="nav-link">
           <i class="fas fa-home"></i><span>Home</span>
         </a>
@@ -135,6 +139,41 @@
       </span>
     </div>
   </footer>
+
+<div class="nav-overlay" id="navOverlay"></div>
+
+<script>
+(function () {
+  var toggle  = document.getElementById('navToggle');
+  var nav     = document.getElementById('mainNav');
+  var icon    = document.getElementById('navIcon');
+  var overlay = document.getElementById('navOverlay');
+  if (!toggle || !nav) return;
+
+  function open() {
+    nav.classList.add('open');
+    overlay.classList.add('active');
+    toggle.setAttribute('aria-expanded', 'true');
+    icon.className = 'fas fa-times';
+    document.body.style.overflow = 'hidden';
+  }
+  function close() {
+    nav.classList.remove('open');
+    overlay.classList.remove('active');
+    toggle.setAttribute('aria-expanded', 'false');
+    icon.className = 'fas fa-bars';
+    document.body.style.overflow = '';
+  }
+
+  toggle.addEventListener('click', function () {
+    nav.classList.contains('open') ? close() : open();
+  });
+  overlay.addEventListener('click', close);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') close();
+  });
+})();
+</script>
 
 </body>
 </html>

@@ -84,10 +84,12 @@
                 </div>
               </div>
               <div style="text-align:right; flex-shrink:0;">
-                <span style="font-size:1.2rem; font-weight:800; color:{% if forloop.counter == 1 %}#7a5e0a{% else %}var(--text-primary){% endif %};">
+                <span id="votes-{{ candidate_result.candidate.id }}"
+                      style="font-size:1.2rem; font-weight:800; color:{% if forloop.counter == 1 %}#7a5e0a{% else %}var(--text-primary){% endif %};">
                   {{ candidate_result.vote_count }}
                 </span>
-                <span style="font-size:.8rem; color:var(--text-muted);">
+                <span id="pct-{{ candidate_result.candidate.id }}"
+                      style="font-size:.8rem; color:var(--text-muted);">
                   ({{ candidate_result.percentage|floatformat:1 }}%)
                 </span>
               </div>
@@ -128,6 +130,38 @@
     </a>
   </div>
 </div>
+{% endif %}
+
+{% if not election.has_ended and can_view_results %}
+<script>
+(function () {
+  var INTERVAL = 30000;
+  var endpoint = '/elections/api/{{ election.id }}/results/';
+
+  function refresh() {
+    fetch(endpoint, {
+      headers: { 'Accept': 'application/json', 'X-CSRFToken': '{{ csrf_token }}' },
+      credentials: 'same-origin',
+    })
+    .then(function(r) { return r.ok ? r.json() : null; })
+    .then(function(data) {
+      if (!data) return;
+      data.forEach(function(posResult) {
+        if (!posResult.candidates) return;
+        posResult.candidates.forEach(function(c) {
+          var vEl = document.getElementById('votes-' + c.candidate_id);
+          var pEl = document.getElementById('pct-'   + c.candidate_id);
+          if (vEl) vEl.textContent = c.vote_count;
+          if (pEl) pEl.textContent = '(' + parseFloat(c.vote_percentage || 0).toFixed(1) + '%)';
+        });
+      });
+    })
+    .catch(function() {});
+  }
+
+  setInterval(refresh, INTERVAL);
+})();
+</script>
 {% endif %}
 
 {% endblock %}

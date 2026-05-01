@@ -3,9 +3,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from django.db.models import Count
+from django.core.cache import cache
 from .models import Election, Position, Candidate, Vote
 from .tasks import send_vote_confirmation_email
 from .serializers import VoteCreateSerializer, PositionResultSerializer, CandidateListSerializer
+from core.throttles import VoteSubmitThrottle
 
 
 class VoteView(APIView):
@@ -14,6 +16,7 @@ class VoteView(APIView):
     POST /api/election/{election_id}/submit/
     """
     permission_classes = [IsAuthenticated]
+    throttle_classes = [VoteSubmitThrottle]
 
     def post(self, request, election_id):
         serializer = VoteCreateSerializer(data=request.data, context={'request': request})
@@ -29,8 +32,8 @@ class VoteView(APIView):
             )
 
             token_obj.mark_as_used()
-
-            send_vote_confirmation_email(request.user.id, election.id, election_level.id) 
+            cache.delete(f'election_results:{election_id}')
+            send_vote_confirmation_email.delay(request.user.id, election.id, election_level.id)
 
             return Response({'message': 'Vote successfully cast.'}, status=status.HTTP_201_CREATED)
         else:

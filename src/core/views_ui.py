@@ -7,8 +7,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.views.decorators.http import require_http_methods
 from django.utils import timezone
+from django.utils.encoding import force_bytes, force_str
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.contrib.auth.forms import SetPasswordForm
+from django.core.cache import cache
 from datetime import timedelta
 from .models import User, CollegeData, State, Course
+from .forms import PasswordResetRequestForm
 from election.models import VoterToken, Election
 
 logger = logging.getLogger(__name__)
@@ -29,19 +35,33 @@ def login_view(request):
         return redirect('core:dashboard')
     
     if request.method == 'POST':
-        registration_number = request.POST.get('registration_number')
-        password = request.POST.get('password')
-        
-        # Authenticate using the custom backend
+        registration_number = request.POST.get('registration_number', '').strip()
+        password = request.POST.get('password', '')
+
+        lockout_key = f'login_lockout:{registration_number}'
+        attempts_key = f'login_attempts:{registration_number}'
+
+        if cache.get(lockout_key):
+            messages.error(request, 'Too many failed attempts. Account locked for 15 minutes.')
+            return render(request, 'core/login.html')
+
         user = authenticate(request, registration_number=registration_number, password=password)
-        
+
         if user is not None:
+            cache.delete(attempts_key)
             login(request, user)
             messages.success(request, f'Welcome back, {user.first_name}!')
             return redirect('core:dashboard')
         else:
-            messages.error(request, 'Invalid registration number or password.')
-    
+            attempts = cache.get(attempts_key, 0) + 1
+            cache.set(attempts_key, attempts, timeout=900)
+            if attempts >= 5:
+                cache.set(lockout_key, True, timeout=900)
+                messages.error(request, 'Too many failed attempts. Account locked for 15 minutes.')
+            else:
+                remaining = 5 - attempts
+                messages.error(request, f'Invalid registration number or password. {remaining} attempt(s) remaining before lockout.')
+
     return render(request, 'core/login.html')
 
 
@@ -338,5 +358,89 @@ def profile_edit_view(request):
         'upcoming_elections': upcoming_soon,
         'gender_choices': User.GENDER_CHOICES,
     }
-    
+
     return render(request, 'core/profile_edit.html', context)
+
+
+_token_generator = PasswordResetTokenGenerator()
+
+
+@require_http_methods(["GET", "POST"])
+def password_reset_request_view(request):
+    """Step 1: user enters registration number to receive a reset link."""
+    if request.user.is_authenticated:
+        return redirect('core:dashboard')
+
+    if request.method == 'POST':
+        form = PasswordResetRequestForm(request.POST)
+        if form.is_valid():
+            reg_num = form.cleaned_data['registration_number'].strip()
+            rate_key = f'pwd_reset_rate:{reg_num}'
+            count = cache.get(rate_key, 0)
+
+            if count >= 3:
+                messages.error(request, 'Too many reset requests. Please try again in an hour.')
+                return render(request, 'core/password_reset_request.html', {'form': form})
+
+            user = form.get_user()
+            if user is not None:
+                if not user.email:
+                    messages.error(
+                        request,
+                        'No email address is associated with this account. '
+                        'Please contact the Election Commissioner.',
+                    )
+                    return render(request, 'core/password_reset_request.html', {'form': form})
+                if not user.is_verified:
+                    messages.error(
+                        request,
+                        'Unverified accounts cannot reset passwords. '
+                        'Please contact the Election Commissioner to verify your account first.',
+                    )
+                    return render(request, 'core/password_reset_request.html', {'form': form})
+
+                uid = urlsafe_base64_encode(force_bytes(user.pk))
+                token = _token_generator.make_token(user)
+                from .tasks import send_password_reset_email
+                send_password_reset_email.delay(user.id, uid, token)
+
+            cache.set(rate_key, count + 1, timeout=3600)
+            messages.success(
+                request,
+                'If that registration number is registered, a reset link has been sent to the associated email.',
+            )
+            return redirect('core:password_reset')
+    else:
+        form = PasswordResetRequestForm()
+
+    return render(request, 'core/password_reset_request.html', {'form': form})
+
+
+@require_http_methods(["GET", "POST"])
+def password_reset_confirm_view(request, uidb64, token):
+    """Step 2: user sets a new password via the emailed link."""
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    valid = user is not None and _token_generator.check_token(user, token)
+
+    if not valid:
+        return render(request, 'core/password_reset_confirm.html', {'invalid': True})
+
+    if request.method == 'POST':
+        form = SetPasswordForm(user, request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('core:password_reset_complete')
+    else:
+        form = SetPasswordForm(user)
+
+    return render(request, 'core/password_reset_confirm.html', {'form': form, 'invalid': False})
+
+
+def password_reset_complete_view(request):
+    """Step 3: confirmation that the password was reset."""
+    return render(request, 'core/password_reset_complete.html')

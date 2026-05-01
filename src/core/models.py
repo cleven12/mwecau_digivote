@@ -171,7 +171,7 @@ class User(AbstractUser):
     )
     email = models.EmailField(
         _('email address'),
-        unique=True,
+        unique=False,
         null=True,
         blank=True,
         help_text="Required email for notifications and password resets",

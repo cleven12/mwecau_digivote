@@ -110,29 +110,33 @@ def send_verification_email(user_id):
 
 
 @shared_task(queue='email_queue')
-def send_password_reset_email(user_id, new_password):
-    """Send password reset email with new password."""
+def send_password_reset_email(user_id, uid, token):
+    """Send password reset email with a secure time-limited link."""
     try:
         user = User.objects.get(id=user_id)
     except User.DoesNotExist:
         print(f"User with ID {user_id} not found for password reset email.")
         return
-    
+
     if not user.email:
         return
-        
-    subject = "MWECAU DigiVote - Password Reset"
+
+    reset_url = f"{settings.SITE_URL}/password-reset/confirm/{uid}/{token}/"
+    subject = "MWECAU DigiVote - Password Reset Request"
     message = (
         f"Dear {user.get_full_name()},\n\n"
-        f"Your password has been reset:\n"
-        f"- Registration Number: {user.registration_number}\n"
-        f"- New Password: {new_password}\n"
-        f"Log in at the election platform with your new password."
+        f"A password reset was requested for your MWECAU DigiVote account "
+        f"({user.registration_number}).\n\n"
+        f"Click the link below to set a new password (expires in 1 hour):\n"
+        f"{reset_url}\n\n"
+        f"If you did not request a password reset, ignore this email — your "
+        f"account is safe and your password has not changed.\n\n"
+        f"Regards,\nMWECAU Election Commission"
     )
     send_mail(
         subject=subject,
         message=message,
-        from_email=settings.DEFAULT_FROM_EMAIL if hasattr(settings, 'DEFAULT_FROM_EMAIL') else 'mwecauictclub@gmail.com',
+        from_email=getattr(settings, 'DEFAULT_FROM_EMAIL', None) or 'mwecauictclub@gmail.com',
         recipient_list=[user.email],
         fail_silently=True,
     )

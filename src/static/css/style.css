@@ -590,12 +590,78 @@ footer ul a:hover { color: white; text-decoration: none; }
 /* ============================================================
    RESPONSIVE
    ============================================================ */
+
+/* Hamburger toggle — hidden on desktop */
+.nav-mobile-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px; height: 44px;
+  background: rgba(255,255,255,.12);
+  border: none; border-radius: var(--radius);
+  color: white; cursor: pointer; font-size: 1.15rem;
+  flex-shrink: 0;
+}
+.nav-mobile-toggle:hover { background: rgba(255,255,255,.22); }
+
+@media (max-width: 1024px) {
+  .candidates-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+  .header-inner    { padding: 0 1.25rem; }
+}
+
 @media (max-width: 768px) {
-  .header-inner { height: 60px; padding: 0 1rem; }
-  .brand-sub    { display: none; }
-  .user-badge   { display: none; }
-  .nav-link     { padding: 0.4rem 0.65rem; font-size: 0.8rem; }
-  .nav-link span{ display: none; }
+  /* Header */
+  .header-inner  { height: 60px; padding: 0 1rem; }
+  .brand-sub     { display: none; }
+  .nav-mobile-toggle { display: flex; }
+
+  /* Slide-out nav */
+  nav {
+    position: fixed;
+    top: 60px; right: -100%;
+    width: 260px; height: calc(100vh - 60px);
+    background: var(--blue-dark);
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem 0.75rem;
+    transition: right 0.26s ease;
+    z-index: 999;
+    box-shadow: -4px 0 24px rgba(0,0,0,.35);
+    gap: 0.3rem;
+    overflow-y: auto;
+  }
+  nav.open { right: 0; }
+
+  /* Nav links in mobile menu */
+  .nav-link {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 0.95rem;
+    border-radius: var(--radius);
+    min-height: 44px;
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+  .nav-link span { display: inline !important; }
+
+  /* User badge inside mobile menu */
+  .user-badge {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    margin: 0.5rem 0;
+    border-top: 1px solid rgba(255,255,255,.12);
+    padding-top: 0.75rem;
+  }
+
+  /* Overlay when nav is open */
+  .nav-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,.45);
+    z-index: 998;
+  }
+  .nav-overlay.active { display: block; }
+
   main          { margin: 1rem auto; padding: 0 1rem; }
   .hero         { padding: 3rem 1.25rem; border-radius: var(--radius-lg); }
   .profile-grid { grid-template-columns: 1fr; }
@@ -603,9 +669,14 @@ footer ul a:hover { color: white; text-decoration: none; }
   .auth-card    { padding: 1.75rem 1.25rem; }
   .footer-inner { grid-template-columns: 1fr; gap: 1.25rem; }
   .footer-bottom{ flex-direction: column; text-align: center; }
+
+  /* Touch targets */
+  .btn-sm { min-height: 44px; padding: 0.55rem 0.9rem; }
 }
+
 @media (max-width: 480px) {
   .stats-grid      { grid-template-columns: 1fr; }
-  .candidates-grid { grid-template-columns: 1fr; }
+  .candidates-grid { grid-template-columns: 1fr; width: 100%; overflow-x: hidden; }
+  .candidate-card  { padding: 1rem; }
   .cta-buttons     { flex-direction: column; align-items: center; }
 }

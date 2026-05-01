@@ -68,7 +68,7 @@
             <div class="candidate-avatars">
               <div>
                 {% if candidate.image %}
-                  <img src="{{ candidate.image.url }}" alt="{{ candidate.user.get_full_name }}" class="avatar">
+                  <img src="{{ candidate.image.url }}" alt="{{ candidate.user.get_full_name }}" class="avatar" loading="lazy">
                 {% else %}
                   <div class="avatar-initials">
                     {{ candidate.user.first_name|first }}{{ candidate.user.last_name|first }}
