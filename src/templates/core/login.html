@@ -48,7 +48,11 @@
         >
       </div>
 
-      <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top:1.5rem">
+      <div style="text-align:right; margin-top:-.25rem; margin-bottom:.75rem;">
+        <a href="{% url 'core:password_reset' %}" style="font-size:.8rem; color:var(--text-muted);">Forgot password?</a>
+      </div>
+
+      <button type="submit" class="btn btn-primary btn-block btn-lg" style="margin-top:.5rem">
         <i class="fas fa-sign-in-alt"></i> Sign In
       </button>
     </form>
