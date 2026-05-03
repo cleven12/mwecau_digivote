@@ -4,7 +4,7 @@
 [![Django](https://img.shields.io/badge/django-5.2-green.svg)](https://www.djangoproject.com/)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/status-Live-success.svg)]()
-[![MWECAU ICT Club](https://img.shields.io/badge/by-MWECAU%20ICT%20Club-purple.svg)](https://github.com/mwecauictclub)
+[![MWECAU ICT Club](https://img.shields.io/badge/by-MWECAU%20ICT%20Club-purple.svg)](https://github.com/mwecauict-club)
 [![Security](https://img.shields.io/badge/security-JWT%20%2B%20Session-yellow.svg)]()
 [![Async](https://img.shields.io/badge/async-Django%205.2%20%2B%20Uvicorn-blueviolet.svg)]()
 
@@ -100,7 +100,7 @@ Internet
 
 ```bash
 # Clone and enter the project
-git clone https://github.com/mwecauictclub/digivote.git
+git clone https://github.com/mwecauict-club/mwecau_digivote.git
 cd digivote
 
 # Create virtual environment
@@ -178,11 +178,9 @@ Configure Nginx to proxy to port 8000 and serve `/static/` and `/media/` directl
 
 ## Team
 
-- **[Cleven](https://github.com/cleven12)** — Project Manager & Lead Developer
-- **[Lajokjohn](https://github.com/Lajokjohn)** — Technical Lead
-- **[Faustine Emmanuel](https://github.com/FaustineEmmanuel)** — Feature Developer
-- **[almaleko2022@gmail.com](https://github.com/almaleko2022@gmail.com)** - User Research & Prototyping
-- **[MWECAU ICT Club](https://github.com/mwecauictclub)** — Institution
+- **[Lajokjohn](https://github.com/Lajokjohn)** — Contributor
+- **[Faustine Emmanuel](https://github.com/FaustineEmmanuel)** — Contributor
+- **[MWECAU ICT Club](https://github.com/mwecauict-club)** — Institution
 
 ---
 
