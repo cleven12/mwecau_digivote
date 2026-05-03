@@ -402,7 +402,11 @@ def password_reset_request_view(request):
                 uid = urlsafe_base64_encode(force_bytes(user.pk))
                 token = _token_generator.make_token(user)
                 from .tasks import send_password_reset_email
-                send_password_reset_email.delay(user.id, uid, token)
+                try:
+                    send_password_reset_email.delay(user.id, uid, token)
+                except Exception:
+                    # Broker unavailable (e.g. local dev without Redis) — run synchronously
+                    send_password_reset_email(user.id, uid, token)
 
             cache.set(rate_key, count + 1, timeout=3600)
             messages.success(
